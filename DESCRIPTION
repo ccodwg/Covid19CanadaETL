@@ -1,0 +1,17 @@
+Package: Covid19CanadaETL
+Title: A Pipeline for Canadian COVID-19 Data
+Version: 0.1.0
+Authors@R:
+    person(given = "Jean-Paul R.",
+           family = "Soucy",
+           role = c("aut", "cre"),
+           email = "jeanpaul.r.soucy@gmail.com",
+           comment = c(ORCID = "0000-0002-8422-2326"))
+Description: This package provides an ETL pipeline for automating Canadian
+    COVID-19 data collection.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    Covid19CanadaData
+RoxygenNote: 7.1.1
