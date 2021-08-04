@@ -470,12 +470,12 @@ e_t_datasets <- function(ds = NULL) {
   )
 
   # ## testing (prov)
-  # nt_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-  #   uuid = "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
-  #   val = "testing",
-  #   fmt = "prov_cum_current",
-  #   ds = ds[["e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb"]]
-  # )
+  nt_testing_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "66fbe91e-34c0-4f7f-aa94-cf6c14db0158",
+    val = "testing",
+    fmt = "prov_cum_current",
+    ds = NULL # uses webdriver
+  )
 
   ## vaccine_distribution (prov)
   nt_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -486,21 +486,21 @@ e_t_datasets <- function(ds = NULL) {
     prov = "NT"
   )
 
-  # ## vaccine_administration (prov)
-  # nt_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-  #   uuid = "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
-  #   val = "vaccine_administration",
-  #   fmt = "prov_cum_current",
-  #   ds = ds[["e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb"]]
-  # )
-  #
-  # ## vaccine_completion (prov)
-  # nt_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-  #   uuid = "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
-  #   val = "vaccine_completion",
-  #   fmt = "prov_cum_current",
-  #   ds = ds[["e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb"]]
-  # )
+  ## vaccine_administration (prov)
+  nt_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "454de458-f7b4-4814-96a6-5a426f8c8c60",
+    val = "vaccine_administration",
+    fmt = "prov_cum_current",
+    ds = NULL # uses webdriver
+  )
+
+  ## vaccine_completion (prov)
+  nt_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "454de458-f7b4-4814-96a6-5a426f8c8c60",
+    val = "vaccine_completion",
+    fmt = "prov_cum_current",
+    ds = NULL # uses webdriver
+  )
 
   # NU
 
