@@ -53,7 +53,6 @@ dl_datasets <- function() {
     "170057c4-3231-4f15-9438-2165c5438dda",
     # pe
     "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455",
-    # "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", # xlsx, have to read separately by sheet
     # qc
     "0c577d5e-999e-42c5-b4c1-66b3787c3a04",
     "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5",
