@@ -13,6 +13,7 @@
 #' @param date_today Today's date.
 #' @param id The ID of the Google Sheet document to load.
 #' @param sheet Optional. The specific sheet within the Google Sheet document to load.
+#' @param opt Optional. Other options passed to the function.
 #' @param ... Other arguments.
 #'
 #' @name process_funs
@@ -44,7 +45,7 @@ process_prov_names <- function(d) {
 #' @rdname process_funs
 #'
 #' @export
-process_hr_names <- function(d, prov, date_today = Sys.Date()) {
+process_hr_names <- function(d, prov, date_today = Sys.Date(), opt = NULL) {
 
   # fix HR names
   if (!prov %in% c("BC", "MB", "NB", "ON", "QC", "SK")) {
@@ -85,33 +86,64 @@ process_hr_names <- function(d, prov, date_today = Sys.Date()) {
         )
       },
       "ON" = {
-        hr <- data.frame(
-          health_region = c("Algoma", "Brant", "Chatham-Kent",
-                            "Durham", "Eastern", "Grey Bruce",
-                            "Haldimand-Norfolk", "Haliburton Kawartha Pineridge", "Halton",
-                            "Hamilton", "Hastings Prince Edward", "Huron Perth",
-                            "Kingston Frontenac Lennox & Addington", "Lambton", "Leeds Grenville and Lanark",
-                            "Middlesex-London", "Niagara", "North Bay Parry Sound",
-                            "Northwestern", "Ottawa", "Peel",
-                            "Peterborough", "Porcupine", "Renfrew",
-                            "Simcoe Muskoka", "Southwestern", "Sudbury",
-                            "Thunder Bay", "Timiskaming", "Toronto",
-                            "Waterloo", "Wellington Dufferin Guelph", "Windsor-Essex",
-                            "York", "Not Reported"),
-          health_region_esri = c("Algoma Public Health Unit", "Brant County Health Unit", "Chatham-Kent Health Unit",
-                                 "Durham Region Health Department", "Eastern Ontario Health Unit", "Grey Bruce Health Unit",
-                                 "Haldimand-Norfolk Health Unit", "Haliburton, Kawartha, Pine Ridge District Health Unit", "Halton Region Health Department",
-                                 "Hamilton Public Health Services", "Hastings and Prince Edward Counties Health Unit", "Huron Perth District Health Unit",
-                                 "Kingston, Frontenac and Lennox & Addington Public Health", "Lambton Public Health", "Leeds, Grenville and Lanark District Health Unit",
-                                 "Middlesex-London Health Unit", "Niagara Region Public Health Department", "North Bay Parry Sound District Health Unit",
-                                 "Northwestern Health Unit", "Ottawa Public Health", "Peel Public Health",
-                                 "Peterborough Public Health", "Porcupine Health Unit", "Renfrew County and District Health Unit",
-                                 "Simcoe Muskoka District Health Unit", "Southwestern Public Health", "Sudbury & District Health Unit",
-                                 "Thunder Bay District Health Unit", "Timiskaming Health Unit", "Toronto Public Health",
-                                 "Region of Waterloo, Public Health", "Wellington-Dufferin-Guelph Public Health", "Windsor-Essex County Health Unit",
-                                 "York Region Public Health Services", "Not Reported"
+        match.arg(opt, choices = c("moh", "esri"), several.ok = FALSE)
+        if (opt == "moh") {
+          hr <- data.frame(
+            health_region = c("Algoma", "Brant", "Chatham-Kent",
+                              "Durham", "Eastern", "Grey Bruce",
+                              "Haldimand-Norfolk", "Haliburton Kawartha Pineridge", "Halton",
+                              "Hamilton", "Hastings Prince Edward", "Huron Perth",
+                              "Kingston Frontenac Lennox & Addington", "Lambton", "Leeds Grenville and Lanark",
+                              "Middlesex-London", "Niagara", "North Bay Parry Sound",
+                              "Northwestern", "Ottawa", "Peel",
+                              "Peterborough", "Porcupine", "Renfrew",
+                              "Simcoe Muskoka", "Southwestern", "Sudbury",
+                              "Thunder Bay", "Timiskaming", "Toronto",
+                              "Waterloo", "Wellington Dufferin Guelph", "Windsor-Essex",
+                              "York", "Not Reported"),
+            health_region_esri = c("ALGOMA DISTRICT", "BRANT COUNTY", "CHATHAM-KENT",
+                                   "DURHAM REGION", "EASTERN ONTARIO", "GREY BRUCE",
+                                   "HALDIMAND-NORFOLK", "HALIBURTON, KAWARTHA, PINE RIDGE", "HALTON REGION",
+                                   "CITY OF HAMILTON", "HASTINGS & PRINCE EDWARD COUNTIES", "HURON PERTH",
+                                   "KINGSTON, FRONTENAC, LENNOX & ADDINGTON", "LAMBTON COUNTY", "LEEDS, GRENVILLE AND LANARK DISTRICT",
+                                   "MIDDLESEX-LONDON", "NIAGARA REGION", "NORTH BAY PARRY SOUND DISTRICT",
+                                   "NORTHWESTERN", "CITY OF OTTAWA", "PEEL REGION",
+                                   "PETERBOROUGH COUNTY-CITY", "PORCUPINE", "RENFREW COUNTY AND DISTRICT",
+                                   "SIMCOE MUSKOKA DISTRICT", "OXFORD ELGIN-ST.THOMAS", "SUDBURY AND DISTRICT",
+                                   "THUNDER BAY DISTRICT", "TIMISKAMING", "TORONTO",
+                                   "WATERLOO REGION", "WELLINGTON-DUFFERIN-GUELPH", "WINDSOR-ESSEX COUNTY",
+                                   "YORK REGION", "Not Reported"
+            )
           )
-        )
+        } else if (opt == "esri") {
+          hr <- data.frame(
+            health_region = c("Algoma", "Brant", "Chatham-Kent",
+                              "Durham", "Eastern", "Grey Bruce",
+                              "Haldimand-Norfolk", "Haliburton Kawartha Pineridge", "Halton",
+                              "Hamilton", "Hastings Prince Edward", "Huron Perth",
+                              "Kingston Frontenac Lennox & Addington", "Lambton", "Leeds Grenville and Lanark",
+                              "Middlesex-London", "Niagara", "North Bay Parry Sound",
+                              "Northwestern", "Ottawa", "Peel",
+                              "Peterborough", "Porcupine", "Renfrew",
+                              "Simcoe Muskoka", "Southwestern", "Sudbury",
+                              "Thunder Bay", "Timiskaming", "Toronto",
+                              "Waterloo", "Wellington Dufferin Guelph", "Windsor-Essex",
+                              "York", "Not Reported"),
+            health_region_esri = c("Algoma Public Health Unit", "Brant County Health Unit", "Chatham-Kent Health Unit",
+                                   "Durham Region Health Department", "Eastern Ontario Health Unit", "Grey Bruce Health Unit",
+                                   "Haldimand-Norfolk Health Unit", "Haliburton, Kawartha, Pine Ridge District Health Unit", "Halton Region Health Department",
+                                   "Hamilton Public Health Services", "Hastings and Prince Edward Counties Health Unit", "Huron Perth District Health Unit",
+                                   "Kingston, Frontenac and Lennox & Addington Public Health", "Lambton Public Health", "Leeds, Grenville and Lanark District Health Unit",
+                                   "Middlesex-London Health Unit", "Niagara Region Public Health Department", "North Bay Parry Sound District Health Unit",
+                                   "Northwestern Health Unit", "Ottawa Public Health", "Peel Public Health",
+                                   "Peterborough Public Health", "Porcupine Health Unit", "Renfrew County and District Health Unit",
+                                   "Simcoe Muskoka District Health Unit", "Southwestern Public Health", "Sudbury & District Health Unit",
+                                   "Thunder Bay District Health Unit", "Timiskaming Health Unit", "Toronto Public Health",
+                                   "Region of Waterloo, Public Health", "Wellington-Dufferin-Guelph Public Health", "Windsor-Essex County Health Unit",
+                                   "York Region Public Health Services", "Not Reported"
+            )
+          )
+        }
       },
       "QC" = {
         hr <- get_hr_data(sknew = TRUE) %>%
@@ -217,6 +249,19 @@ process_prov2hr <- function(d, prov) {
     ) %>%
     dplyr::select(.data$name, .data$province, .data$sub_region_1,
                          .data$date, .data$value)
+}
+
+#' process_funs: Get current cumulative value(s)
+#'
+#' @rdname process_funs
+#'
+#' @export
+process_cum_current <- function(d) {
+  max_date <- max(d$date)
+  current_date <- Sys.Date()
+  d %>%
+    dplyr::filter(.data$date == max_date) %>%
+    dplyr::mutate(date = current_date)
 }
 
 #' process_funs: Collate data by value

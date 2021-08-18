@@ -6,6 +6,7 @@
 \alias{process_hr_names}
 \alias{process_agg2prov}
 \alias{process_prov2hr}
+\alias{process_cum_current}
 \alias{process_collate}
 \alias{sheets_load}
 \alias{process_format_sheets}
@@ -14,11 +15,13 @@
 \usage{
 process_prov_names(d)
 
-process_hr_names(d, prov, date_today = Sys.Date())
+process_hr_names(d, prov, date_today = Sys.Date(), opt = NULL)
 
 process_agg2prov(d)
 
 process_prov2hr(d, prov)
+
+process_cum_current(d)
 
 process_collate(d, pattern)
 
@@ -34,6 +37,8 @@ process_format_dates(...)
 \item{prov}{Two-letter province abbreviation (e.g., "ON").}
 
 \item{date_today}{Today's date.}
+
+\item{opt}{Optional. Other options passed to the function.}
 
 \item{pattern}{The pattern of values to collate (e.g., "_cases_").}
 
