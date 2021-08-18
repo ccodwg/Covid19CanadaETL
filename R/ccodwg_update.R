@@ -77,7 +77,7 @@ ccodwg_update <- function(email = NULL) {
 
   ## vaccine completion
   prov_vaccine_completion <- prov_vaccine_completion %>%
-    dplyr::filter(!(.data$province %in% c("Nova Scotia", "Quebec")))
+    dplyr::filter(!(.data$province %in% c("Nova Scotia")))
 
   # upload to Google Sheets
 
