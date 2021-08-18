@@ -48,7 +48,7 @@ dl_datasets <- function() {
     "04ab3773-f535-42ad-8ee4-4d584ec23523",
     "bd18a4e4-bc22-47c6-b601-1aae39667a03",
     # on
-    "921649fa-c6c0-43af-a112-23760da4d622",
+    "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
     "a8b1be1a-561a-47f5-9456-c553ea5b2279",
     "170057c4-3231-4f15-9438-2165c5438dda",
     # pe
@@ -56,7 +56,6 @@ dl_datasets <- function() {
     # qc
     "0c577d5e-999e-42c5-b4c1-66b3787c3a04",
     "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5",
-    "aee3bd38-b782-4880-9033-db76f84cef5b",
     "4e04442d-f372-4357-ba15-3b64f4e03fbe",
     # sk
     "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
