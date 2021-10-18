@@ -1,8 +1,8 @@
 # Covid19CanadaETL: A Pipeline for Canadian COVID-19 Data
 
-A package used to automate time series data collection for the
-[COVID-19 Canada Open Data Working Group](https://opencovid.ca/)
-[dataset](https://github.com/ccodwg/Covid19Canada).
+A package used to automate the collection of time series data for COVID-19 in Canada.
+
+The automated data collection from this package is used to assemble the [`Covid19Canada`](https://github.com/ccodwg/Covid19Canada) dataset from the [COVID-19 Canada Open Data Working Group](https://opencovid.ca/). It is also used in the [Timeline of COVID-19 in Canada](https://github.com/ccodwg/CovidTimelineCanada), one component of the **[What Happened? COVID-19 in Canada](https://whathappened.coronavirus.icu/)** project.
 
 The data automation pipeline involves three packages:
 
