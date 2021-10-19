@@ -15,12 +15,27 @@ ccodwg_update <- function(email = NULL) {
   # download data
   ds <- dl_datasets()
 
-  # process data
-  d <- e_t_datasets(ds)
-
   # set today's date
   date_today <- Sys.Date()
   date_today_2 <- format.Date(date_today, "%d-%m-%Y")
+
+  # process data
+  d <- e_t_datasets(ds)
+
+  # add Ontario recovered
+  d$on_recovered_prov <- sheets_load(
+    "1kiN6BmshBHKRiBTmljUQqd4RdSmUMvuYg5sZA3cmCNA",
+    "recovered_timeseries_phu") %>%
+    dplyr::select(dplyr::one_of(date_today_2)) %>%
+    `[[`(1) %>%
+    as.integer() %>%
+    sum() %>%
+    data.frame(
+      name = "recovered",
+      province = "ON",
+      date = date_today,
+      value = .
+    )
 
   # collate data and add "repatriated" row as needed
   hr_cases <- process_collate(d, "_cases_") %>%
@@ -88,7 +103,7 @@ ccodwg_update <- function(email = NULL) {
                        "prov_vaccine_administration",
                        "prov_vaccine_completion")
 
-  ##  format data for uploading
+  ## format data for uploading
   hr_cases <- process_format_sheets(hr_cases, "hr")
   hr_mortality <- process_format_sheets(hr_mortality, "hr")
   prov_recovered <- process_format_sheets(prov_recovered, "prov")

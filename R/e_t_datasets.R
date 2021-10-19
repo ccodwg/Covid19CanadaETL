@@ -355,18 +355,18 @@ e_t_datasets <- function(ds = NULL) {
 
   ## vaccine_administration (prov)
   nl_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "3c0bcd2e-e563-4426-b2d8-3928cbce9f37",
+    uuid = "25ca2057-978c-49b8-a9e6-1a1f70732659",
     val = "vaccine_administration",
     fmt = "prov_cum_current",
-    ds = ds[["3c0bcd2e-e563-4426-b2d8-3928cbce9f37"]]
+    ds = ds[["25ca2057-978c-49b8-a9e6-1a1f70732659"]]
   )
 
   ## vaccine_completion (prov)
   nl_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "3c0bcd2e-e563-4426-b2d8-3928cbce9f37",
+    uuid = "25ca2057-978c-49b8-a9e6-1a1f70732659",
     val = "vaccine_completion",
     fmt = "prov_cum_current",
-    ds = ds[["3c0bcd2e-e563-4426-b2d8-3928cbce9f37"]]
+    ds = ds[["25ca2057-978c-49b8-a9e6-1a1f70732659"]]
   )
 
   # NS
@@ -586,16 +586,16 @@ e_t_datasets <- function(ds = NULL) {
   # ) %>%
   #   process_hr_names("ON", opt = "moh") %>%
   #   process_cum_current()
-
-  ## recovered (prov)
-  on_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
-    val = "recovered",
-    fmt = "hr_ts",
-    ds = ds[["73fffd44-fbad-4de8-8d32-00cc5ae180a6"]]
-  ) %>%
-    process_agg2prov() %>%
-    process_cum_current()
+  #
+  # ## recovered (prov)
+  # on_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
+  #   uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
+  #   val = "recovered",
+  #   fmt = "hr_ts",
+  #   ds = ds[["73fffd44-fbad-4de8-8d32-00cc5ae180a6"]]
+  # ) %>%
+  #   process_agg2prov() %>%
+  #   process_cum_current()
 
   ## testing (prov)
   on_testing_prov <- Covid19CanadaDataProcess::process_dataset(
