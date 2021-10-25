@@ -436,10 +436,10 @@ e_t_datasets <- function(ds = NULL) {
 
   ## vaccine_completion (prov)
   ns_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "70214276-8616-488c-b53a-b514608e3146",
+    uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
     val = "vaccine_completion",
     fmt = "prov_cum_current",
-    ds = ds[["70214276-8616-488c-b53a-b514608e3146"]]
+    ds = ds[["7b7be246-cd65-4f35-b354-faa705cacecc"]]
   )
 
   # NT

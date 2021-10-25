@@ -90,10 +90,6 @@ ccodwg_update <- function(email = NULL) {
   hr_mortality <- hr_mortality %>%
     dplyr::filter(!(.data$province %in% c("Ontario", "Saskatchewan")))
 
-  ## vaccine completion
-  prov_vaccine_completion <- prov_vaccine_completion %>%
-    dplyr::filter(!(.data$province %in% c("Nova Scotia")))
-
   # upload to Google Sheets
 
   ## convert date format
