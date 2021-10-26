@@ -551,18 +551,18 @@ e_t_datasets <- function(ds = NULL) {
 
   ## vaccine_administration (prov)
   nu_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "bd18a4e4-bc22-47c6-b601-1aae39667a03",
+    uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
     val = "vaccine_administration",
     fmt = "prov_cum_current",
-    ds = ds[["bd18a4e4-bc22-47c6-b601-1aae39667a03"]]
+    ds = ds[["04ab3773-f535-42ad-8ee4-4d584ec23523"]]
   )
 
   ## vaccine_completion (prov)
   nu_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "bd18a4e4-bc22-47c6-b601-1aae39667a03",
+    uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
     val = "vaccine_completion",
     fmt = "prov_cum_current",
-    ds = ds[["bd18a4e4-bc22-47c6-b601-1aae39667a03"]]
+    ds = ds[["04ab3773-f535-42ad-8ee4-4d584ec23523"]]
   )
 
   # ON
