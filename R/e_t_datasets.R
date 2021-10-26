@@ -75,6 +75,14 @@ e_t_datasets <- function(ds = NULL) {
     ds = ds[["24a572ea-0de3-4f83-b9b7-8764ea203eb6"]]
   )
 
+  ## vaccine_dose3 (prov)
+  ab_vaccine_dose3_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
+    val = "vaccine_dose3",
+    fmt = "prov_cum_current",
+    ds = ds[["24a572ea-0de3-4f83-b9b7-8764ea203eb6"]]
+  )
+
   # BC
 
   ## cases (hr)
@@ -442,6 +450,14 @@ e_t_datasets <- function(ds = NULL) {
     ds = ds[["7b7be246-cd65-4f35-b354-faa705cacecc"]]
   )
 
+  ## vaccine_dose3 (prov)
+  ns_vaccine_dose3_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
+    val = "vaccine_dose3",
+    fmt = "prov_cum_current",
+    ds = ds[["7b7be246-cd65-4f35-b354-faa705cacecc"]]
+  )
+
   # NT
 
   ## cases (hr)
@@ -470,7 +486,7 @@ e_t_datasets <- function(ds = NULL) {
     ds = ds[["e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb"]]
   )
 
-  # ## testing (prov)
+  ## testing (prov)
   nt_testing_prov <- Covid19CanadaDataProcess::process_dataset(
     uuid = "66fbe91e-34c0-4f7f-aa94-cf6c14db0158",
     val = "testing",
@@ -899,6 +915,14 @@ e_t_datasets <- function(ds = NULL) {
   yt_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
     uuid = "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e",
     val = "vaccine_completion",
+    fmt = "prov_cum_current",
+    ds = ds[["4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e"]]
+  )
+
+  ## vaccine_dose3 (prov)
+  yt_vaccine_dose3_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e",
+    val = "vaccine_dose3",
     fmt = "prov_cum_current",
     ds = ds[["4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e"]]
   )

@@ -79,6 +79,7 @@ ccodwg_update <- function(email = NULL) {
   prov_vaccine_distribution <- process_collate(d, "_vaccine_distribution_")
   prov_vaccine_administration <- process_collate(d, "_vaccine_administration_")
   prov_vaccine_completion <- process_collate(d, "_vaccine_completion_")
+  prov_vaccine_dose3 <- process_collate(d, "_vaccine_dose3_")
 
   # filter out data to be replaced by manual data
 
@@ -97,7 +98,8 @@ ccodwg_update <- function(email = NULL) {
                        "prov_recovered", "prov_testing",
                        "prov_vaccine_distribution",
                        "prov_vaccine_administration",
-                       "prov_vaccine_completion")
+                       "prov_vaccine_completion",
+                       "prov_vaccine_dose3")
 
   ## format data for uploading
   hr_cases <- process_format_sheets(hr_cases, "hr")
@@ -107,6 +109,7 @@ ccodwg_update <- function(email = NULL) {
   prov_vaccine_distribution <- process_format_sheets(prov_vaccine_distribution, "prov")
   prov_vaccine_administration <- process_format_sheets(prov_vaccine_administration, "prov")
   prov_vaccine_completion <- process_format_sheets(prov_vaccine_completion, "prov")
+  prov_vaccine_dose3 <- process_format_sheets(prov_vaccine_dose3, "prov")
 
   ## combine with existing data
   hr_cases <- sheets_load(
@@ -186,6 +189,17 @@ ccodwg_update <- function(email = NULL) {
     dplyr::select(.data$province, as.character(date_today_2),
                   !dplyr::matches(paste0("province", as.character(date_today_2))))
 
+  prov_vaccine_dose3 <- sheets_load(
+    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "vaccine_dose3_timeseries_prov") %>%
+    ## drop today's data if re-doing data update
+    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
+    dplyr::left_join(
+      prov_vaccine_dose3,
+      by = c("province" = "province")) %>%
+    dplyr::select(.data$province, as.character(date_today_2),
+                  !dplyr::matches(paste0("province", as.character(date_today_2))))
+
   ## write newest data to Google Sheets
   googlesheets4::sheet_write(
     hr_cases,
@@ -215,5 +229,9 @@ ccodwg_update <- function(email = NULL) {
     prov_vaccine_completion,
     "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
     "vaccine_completion_timeseries_prov")
+  googlesheets4::sheet_write(
+    prov_vaccine_dose3,
+    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "vaccine_dose3_timeseries_prov")
 
 }
