@@ -66,20 +66,42 @@ dl_datasets <- function() {
   )
   # read in datasets
   ds <- lapply(covid_datasets, FUN = function(x) {
-    d <- Covid19CanadaData::dl_dataset(x)
-    cat(x, fill = TRUE)
-    return(d)}
+    tryCatch(
+      {
+        d <- Covid19CanadaData::dl_dataset(x)
+        cat(x, fill = TRUE)
+        return(d)
+      },
+      error = function(e) {
+        print(e)
+        cat("FAILED:", x, fill = TRUE)
+        return(NA)
+      }
+    )
+    }
   )
   # name datasets according to UUID
   names(ds) <- covid_datasets
 
   # add datasets requiring additional options
-  ds["3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Total-Doses"] <- Covid19CanadaData::dl_dataset(
-    "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", sheet = "Total Doses")
-  cat("3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Total-Doses", fill = TRUE)
-  ds["3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Fully-Immunized"] <- Covid19CanadaData::dl_dataset(
-    "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", sheet = "Fully Immunized")
-  cat("3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Fully-Immunized", fill = TRUE)
+  dl_xlsx_sheet <- function(ds, uuid, sheet) {
+    ds_name <- paste(uuid, gsub(" ", "-", sheet), sep = "-")
+    ds[ds_name] <- tryCatch(
+      {
+        d <- Covid19CanadaData::dl_dataset(uuid, sheet = sheet)
+        cat(ds_name, fill = TRUE)
+        d
+      },
+      error = function(e) {
+        print(e)
+        cat("FAILED:", ds_name, fill = TRUE)
+        NA
+      }
+    )
+    return(ds)
+  }
+  ds <- dl_xlsx_sheet(ds, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Total Doses")
+  ds <- dl_xlsx_sheet(ds, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Fully Immunized")
 
   # return list of datasets
   return(ds)
