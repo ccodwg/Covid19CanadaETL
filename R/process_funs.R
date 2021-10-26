@@ -26,7 +26,7 @@ NULL
 #' @export
 process_prov_names <- function(d) {
   # check for NA
-  if (is.na(d)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # get prov names
   provs <- get_prov_data() %>%
     dplyr::select(.data$province, .data$province_short)
@@ -49,7 +49,7 @@ process_prov_names <- function(d) {
 #' @export
 process_hr_names <- function(d, prov, date_today = Sys.Date(), opt = NULL) {
   # check for NA
-  if (is.na(d)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # fix HR names
   if (!prov %in% c("BC", "MB", "NB", "ON", "QC", "SK")) {
     # get HR names
@@ -227,7 +227,7 @@ process_hr_names <- function(d, prov, date_today = Sys.Date(), opt = NULL) {
 #' @export
 process_agg2prov <- function(d) {
   # check for NA
-  if (is.na(d)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   d %>%
     dplyr::select(!dplyr::matches("^sub_region_1$|^sub_region_2$")) %>%
     dplyr::group_by(dplyr::across(c(-.data$value))) %>%
@@ -241,7 +241,7 @@ process_agg2prov <- function(d) {
 #' @export
 process_prov2hr <- function(d, prov) {
   # check for NA
-  if (is.na(d)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # check args
   match.arg(prov,
             choices = c("NT", "NU", "PE", "YT"),
@@ -266,7 +266,7 @@ process_prov2hr <- function(d, prov) {
 #' @export
 process_cum_current <- function(d) {
   # check for NA
-  if (is.na(d)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # process
   max_date <- max(d$date)
   current_date <- Sys.Date()
@@ -282,7 +282,7 @@ process_cum_current <- function(d) {
 #' @export
 process_collate <- function(d, pattern) {
   # check for NA
-  if (is.na(d)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # collate
   d[grep(pattern, names(d))] %>%
     dplyr::bind_rows() %>%
