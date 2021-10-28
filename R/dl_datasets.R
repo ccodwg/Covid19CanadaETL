@@ -45,6 +45,8 @@ dl_datasets <- function() {
     "7b7be246-cd65-4f35-b354-faa705cacecc",
     # nt
     "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
+    "66fbe91e-34c0-4f7f-aa94-cf6c14db0158",
+    "454de458-f7b4-4814-96a6-5a426f8c8c60",
     # nu
     "04ab3773-f535-42ad-8ee4-4d584ec23523",
     # on

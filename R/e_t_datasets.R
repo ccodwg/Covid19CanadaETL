@@ -499,7 +499,7 @@ e_t_datasets <- function(ds = NULL) {
     uuid = "66fbe91e-34c0-4f7f-aa94-cf6c14db0158",
     val = "testing",
     fmt = "prov_cum_current",
-    ds = NULL # uses webdriver
+    ds = ds[["66fbe91e-34c0-4f7f-aa94-cf6c14db0158"]]
   )
 
   ## vaccine_distribution (prov)
@@ -516,7 +516,7 @@ e_t_datasets <- function(ds = NULL) {
     uuid = "454de458-f7b4-4814-96a6-5a426f8c8c60",
     val = "vaccine_administration",
     fmt = "prov_cum_current",
-    ds = NULL # uses webdriver
+    ds = ds[["454de458-f7b4-4814-96a6-5a426f8c8c60"]]
   )
 
   ## vaccine_completion (prov)
@@ -524,7 +524,7 @@ e_t_datasets <- function(ds = NULL) {
     uuid = "454de458-f7b4-4814-96a6-5a426f8c8c60",
     val = "vaccine_completion",
     fmt = "prov_cum_current",
-    ds = NULL # uses webdriver
+    ds = ds[["454de458-f7b4-4814-96a6-5a426f8c8c60"]]
   )
 
   # NU
