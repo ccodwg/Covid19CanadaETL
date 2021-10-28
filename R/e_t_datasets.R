@@ -156,6 +156,14 @@ e_t_datasets <- function(ds = NULL) {
     ds = ds[["9d940861-0252-4d33-b6e8-23a2eeb105bf"]]
   )
 
+  ## vaccine_additional_doses (prov)
+  bc_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "9d940861-0252-4d33-b6e8-23a2eeb105bf",
+    val = "vaccine_additional_doses",
+    fmt = "prov_cum_current",
+    ds = ds[["9d940861-0252-4d33-b6e8-23a2eeb105bf"]]
+  )
+
   # MB
 
   ## cases (hr)
@@ -856,6 +864,14 @@ e_t_datasets <- function(ds = NULL) {
     ds = ds[["15556169-0471-49ea-926e-20b5e8dbd25d"]]
   ) %>%
     process_agg2prov
+
+  ## vaccine_additional_doses (prov)
+  sk_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "28d7f978-9a7b-4933-a520-41b073868d05",
+    val = "vaccine_additional_doses",
+    fmt = "prov_cum_current",
+    ds = ds[["28d7f978-9a7b-4933-a520-41b073868d05"]]
+  )
 
   # YT
 

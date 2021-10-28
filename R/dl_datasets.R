@@ -61,6 +61,7 @@ dl_datasets <- function() {
     "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
     "9736bff9-4bd3-4c04-b9d9-87f60b3d5eb5",
     "15556169-0471-49ea-926e-20b5e8dbd25d",
+    "28d7f978-9a7b-4933-a520-41b073868d05",
     # yt
     "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e"
   )
