@@ -795,6 +795,14 @@ e_t_datasets <- function(ds = NULL) {
     ds = ds[["4e04442d-f372-4357-ba15-3b64f4e03fbe"]]
   )
 
+  ## vaccine_additional_doses (prov)
+  qc_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "4e04442d-f372-4357-ba15-3b64f4e03fbe",
+    val = "vaccine_additional_doses",
+    fmt = "prov_cum_current",
+    ds = ds[["4e04442d-f372-4357-ba15-3b64f4e03fbe"]]
+  )
+
   # SK
 
   ## cases (hr)
