@@ -92,9 +92,6 @@ ccodwg_update <- function(email = NULL) {
   d[["on_cases_hr"]] <- phu_cases
   d[["on_mortality_hr"]] <- phu_mortality
 
-  # filter out failed data
-  d <- d[unlist(lapply(d, function(x) !all(is.na(x))))]
-
   # collate data and add "repatriated" row as needed
   hr_cases <- process_collate(d, "_cases_") %>%
     dplyr::add_row(
