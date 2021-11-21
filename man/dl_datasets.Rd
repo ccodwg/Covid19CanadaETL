@@ -4,7 +4,10 @@
 \alias{dl_datasets}
 \title{Download datasets required for daily Canadian COVID-19 data collection}
 \usage{
-dl_datasets()
+dl_datasets(mode = c("main", "phu"))
+}
+\arguments{
+\item{mode}{Download which dataset? One of "main" or "phu".}
 }
 \value{
 A named list with required datasets for \link{e_t_datasets}. Names
@@ -15,8 +18,4 @@ The live version of each required dataset is downloaded from a URL using the
 function \link[Covid19CanadaData]{dl_dataset} in "Covid19CanadaData". Datasets are referred to by
 their UUID given in the datasets.json (\url{https://github.com/ccodwg/Covid19CanadaArchive/blob/master/datasets.json})
 file from "Covid19CanadaArchive" (\url{https://github.com/ccodwg/Covid19CanadaArchive}).
-}
-\details{
-Some datasets requiring additional options (e.g., Excel sheet number) must
-presently be supplied outside of this function.
 }

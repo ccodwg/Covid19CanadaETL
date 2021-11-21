@@ -12,22 +12,73 @@ ccodwg_update <- function(email = NULL) {
   # authenticate with Google Sheets
   auth_gs(email)
 
-  # download data
-  ds <- dl_datasets()
-
   # set today's date
   date_today <- Sys.Date()
   date_today_2 <- format.Date(date_today, "%d-%m-%Y")
 
+  ### UPDATE PHU DATA ###
+
+  # download data
+  ds_phu <- dl_datasets(mode = "phu")
+
   # process data
-  d <- e_t_datasets(ds)
+  d_phu <- e_t_datasets(ds_phu, mode = "phu")
+
+  # collate data
+  phu_cases <- process_collate(d_phu, "_cases_") %>%
+    dplyr::mutate(province = "ON")
+  phu_mortality <- process_collate(d_phu, "_mortality_") %>%
+    dplyr::mutate(province = "ON")
+  phu_recovered <- process_collate(d_phu, "_recovered_")
+
+  ### ON PHU recovered data ###
+
+  # convert date format
+  process_format_dates("phu_recovered")
+
+  # format data for uploading
+  phu_recovered <- process_format_sheets(phu_recovered, "hr")
+
+  # merge recovered with existing PHU recovered data
+  phu_recovered <- sheets_load(
+    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "recovered_timeseries_phu") %>%
+    ## drop today's data if re-doing data update
+    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
+    dplyr::left_join(
+      phu_recovered,
+      by = c("province" = "province", "health_region" = "sub_region_1")) %>%
+    dplyr::select(.data$province, .data$health_region, as.character(date_today_2),
+                  !dplyr::matches(paste0("province|health_region", as.character(date_today_2))))
+
+  # upload PHU recovered data
+  googlesheets4::sheet_write(
+    phu_recovered,
+    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "recovered_timeseries_phu")
+
+  ### UPDATE MAIN DATASET ###
+
+  # download data
+  ds <- dl_datasets(mode = "main")
+
+  # process data
+  d <- e_t_datasets(ds, mode = "main")
 
   # add Ontario recovered
-  d$on_recovered_prov <- sheets_load(
+  phu_rec <- phu_recovered %>%
+    dplyr::select(.data$province, .data$health_region, dplyr::all_of(date_today_2)) %>%
+    tidyr::drop_na()
+  phu_rec_man <- sheets_load(
     "1kiN6BmshBHKRiBTmljUQqd4RdSmUMvuYg5sZA3cmCNA",
     "recovered_timeseries_phu") %>%
+    dplyr::select(.data$province, .data$health_region, dplyr::all_of(date_today_2)) %>%
+    dplyr::filter(!.data$health_region %in% phu_rec$health_region)
+  phu_rec_man[[date_today_2]] <- as.numeric(phu_rec_man[[date_today_2]])
+  phu_rec <- dplyr::bind_rows(phu_rec, phu_rec_man)
+  d$on_recovered_prov <- phu_rec %>%
     dplyr::select(dplyr::one_of(date_today_2)) %>%
-    `[[`(1) %>%
+    dplyr::pull() %>%
     as.integer() %>%
     sum() %>%
     data.frame(
@@ -36,6 +87,13 @@ ccodwg_update <- function(email = NULL) {
       date = date_today,
       value = .
     )
+
+  # add Ontario cases and mortality data
+  d[["on_cases_hr"]] <- phu_cases
+  d[["on_mortality_hr"]] <- phu_mortality
+
+  # filter out failed data
+  d <- d[unlist(lapply(d, function(x) !all(is.na(x))))]
 
   # collate data and add "repatriated" row as needed
   hr_cases <- process_collate(d, "_cases_") %>%
@@ -85,11 +143,10 @@ ccodwg_update <- function(email = NULL) {
 
   ## cases
   hr_cases <- hr_cases %>%
-    dplyr::filter(!(.data$province %in% c("Ontario", "Saskatchewan")))
-
+    dplyr::filter(!(.data$province %in% c("Saskatchewan")))
   ## mortality
   hr_mortality <- hr_mortality %>%
-    dplyr::filter(!(.data$province %in% c("Ontario", "Saskatchewan")))
+    dplyr::filter(!(.data$province %in% c("Saskatchewan")))
 
   # upload to Google Sheets
 
@@ -199,6 +256,12 @@ ccodwg_update <- function(email = NULL) {
       by = c("province" = "province")) %>%
     dplyr::select(.data$province, as.character(date_today_2),
                   !dplyr::matches(paste0("province", as.character(date_today_2))))
+
+  ## fill in missing data for additional doses (not all PTs reoporting)
+  zero_today <- list(0)
+  names(zero_today) <- eval(date_today_2)
+  prov_vaccine_additional_doses <- prov_vaccine_additional_doses %>%
+    tidyr::replace_na(zero_today)
 
   ## write newest data to Google Sheets
   googlesheets4::sheet_write(
