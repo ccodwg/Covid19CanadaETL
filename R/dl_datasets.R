@@ -81,26 +81,58 @@ dl_datasets <- function(mode = c("main", "phu")) {
       c(
         # Algoma (ALG)
         "685df305-f6c7-4ac2-992b-ec707eb1f1cb", NA,
+        # Brant (BRN)
+        "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA,
+        # Chatham-Kent (CKH)
+        "fe08035c-2c03-4960-a642-bde1fe18c857", NA,
+        # Durham (DUR)
+        "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA,
         # Eastern (EOH)
         "cd1db4e8-c4e5-4b24-86a5-2294281919c6", NA,
         # Grey Bruce (GBH)
         "eac45a46-e5b5-4e75-9393-77995cd7e219", NA,
+        # Haldimand-Norfolk (HNH)
+        "07fcf6b9-6e61-433e-b1a8-a951ee15b01d", NA,
+        # Haliburton Kawartha Pineridge (HKP)
+        "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA,
+        # Halton (HAL)
+        "8d4067a7-4828-4b09-8396-089231cf2e94", NA,
+        # Hamilton (HAM)
+        "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA,
+        # Kingston Frontenac Lennox & Addington (KFL)
+        "83d1fa13-7fb3-4079-b3dc-5bc50c584fd3", NA,
+        # Lambton (LAM)
+        "8d0cf226-b9b7-4fc3-8100-a4f56dec6792", NA,
+        # Middlesex-London (MSL)
+        "b32a2f6b-7745-4bb1-9f9b-7ad0000d98a0", NA,
+        # Niagara (NIA)
+        "e1887eb2-538f-4610-bc00-bcd7d929a375", NA,
+        # North Bay Parry Sound (NPS)
+        "3178dd11-17af-4478-a72e-e1a35d7d1b2d", NA,
         # Northwestern (NWR)
         "4c56a58b-0cb3-4d71-bafe-9fdb42e5c1d5", NA,
         # Ottawa (OTT)
         "d8d4cbc6-d0a5-4544-ad3e-5a3c3060f973", NA,
+        # Peel (PEL)
+        "34b7dda2-1843-47e1-9c24-0c2a7ab78431", NA,
         # Peterborough (PET)
         "c3aa6a5e-2ff5-4158-83ab-dcde251bc365", NA,
         # Porcupine (PQP)
         "00cc3ae2-7bf8-4074-81b7-8e06e91c947a", NA,
         # Renfrew (REN)
         "688bf944-9be6-49c3-ae5d-848ae32bad92", NA,
+        # Simcoe Muskoka (SMD)
+        "7106106a-2f43-4ed2-b2a2-a75a7046ff81", NA,
         # Sudbury (SUD)
         "4b9c88a2-9487-4632-adc5-cfd4a2fddb3f", NA,
+        # Thunder Bay (THB)
+        "942e48c4-1148-46e1-a5d3-e25aa9bede05", NA,
         # Timiskaming (TSK)
         "9c7bbba4-33ba-493a-8ea1-4eedd5149bc0", NA,
         # Toronto (TOR)
         "ebad185e-9706-44f4-921e-fc89d5cfa334", "Status",
+        # Wellington Dufferin Guelph
+        "e00e2148-b0ea-458b-9f00-3533e0c5ae8e", NA,
         # Windsor-Essex (WEK)
         "01574538-062f-4a41-9dd5-8fdb72a0fe03", NA,
         # York (YRK)
