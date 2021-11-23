@@ -1,6 +1,6 @@
 Package: Covid19CanadaETL
 Title: A Pipeline for Canadian COVID-19 Data
-Version: 0.2.0
+Version: 0.3.0
 Authors@R:
     person(given = "Jean-Paul R.",
            family = "Soucy",

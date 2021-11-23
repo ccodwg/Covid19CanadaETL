@@ -5,7 +5,7 @@
 #' province and health region names and aggregating health region-level data up
 #' to the province level.
 #'
-#' @importFrom rlang .data
+#' @importFrom rlang .data :=
 #' @param d The dataset to process.
 #' @param prov Two-letter province abbreviation (e.g., "ON").
 #' @param loc Either "prov" or "hr".
@@ -14,7 +14,6 @@
 #' @param id The ID of the Google Sheet document to load.
 #' @param sheet Optional. The specific sheet within the Google Sheet document to load.
 #' @param opt Optional. Other options passed to the function.
-#' @param ... Other arguments.
 #'
 #' @name process_funs
 NULL
@@ -309,6 +308,46 @@ sheets_load <- function(id, sheet = NULL) {
   }
 }
 
+#' process_funs: Google Sheets download and merge
+#'
+#' @rdname process_funs
+#'
+#' @export
+sheets_merge <- function(d, id, loc = c("prov", "hr"), date_today, sheet = NULL) {
+  # convert date to character
+  date_today <- as.character(date_today)
+  # rename new column
+  d <- d %>% dplyr::rename(c("new_data" = date_today))
+  # check arg
+  match.arg(loc, c("prov", "hr", several.ok = FALSE))
+  # load sheet
+  d_merge <- if (!is.null(sheet)) {
+    sheets_load(id, sheet = sheet)
+  } else {
+    sheets_load(id)
+  }
+  # variables to merge by
+  loc_merge <- if (loc == "hr") {
+    c("province" = "province", "health_region" = "sub_region_1")
+  } else {
+    c("province" = "province")
+  }
+  # merge data
+  dplyr::left_join(
+    d_merge,
+    d,
+    by = loc_merge
+  ) %>%
+    dplyr::mutate(
+      !!rlang::sym(date_today) := dplyr::case_when(
+        !is.na(.data$new_data) ~ as.character(.data$new_data),
+        TRUE ~ !!rlang::sym(date_today)
+      )
+    ) %>%
+    # drop new data column
+    dplyr::select(-.data$new_data)
+}
+
 #' process_funs: Format datasets for upload to Google Sheets
 #'
 #' @rdname process_funs
@@ -335,20 +374,5 @@ process_format_sheets <- function(d, loc = c("prov", "hr")) {
       dplyr::arrange(.data$province, .data$sub_region_1)
   } else {
     stop('loc should be "prov" or "hr".')
-  }
-}
-
-#' process_funs: Format dates from %Y-%m-%d to %d-%m-%Y
-#'
-#' @rdname process_funs
-#'
-#' @export
-process_format_dates <- function(...) {
-  inputs <- unlist(list(...))
-  for (i in inputs) {
-    assign(i, get(i, envir = parent.frame()) %>%
-             dplyr::mutate(date = format(as.Date(.data$date), format = "%d-%m-%Y")),
-           envir = parent.frame()
-    )
   }
 }

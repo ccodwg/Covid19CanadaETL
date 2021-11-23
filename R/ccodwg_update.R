@@ -14,7 +14,6 @@ ccodwg_update <- function(email = NULL) {
 
   # set today's date
   date_today <- Sys.Date()
-  date_today_2 <- format.Date(date_today, "%d-%m-%Y")
 
   ### UPDATE PHU DATA ###
 
@@ -33,28 +32,20 @@ ccodwg_update <- function(email = NULL) {
 
   ### ON PHU recovered data ###
 
-  # convert date format
-  process_format_dates("phu_recovered")
-
   # format data for uploading
   phu_recovered <- process_format_sheets(phu_recovered, "hr")
 
-  # merge recovered with existing PHU recovered data
-  phu_recovered <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "recovered_timeseries_phu") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      phu_recovered,
-      by = c("province" = "province", "health_region" = "sub_region_1")) %>%
-    dplyr::select(.data$province, .data$health_region, as.character(date_today_2),
-                  !dplyr::matches(paste0("province|health_region", as.character(date_today_2))))
+  # merge data with existing data
+  phu_recovered <- sheets_merge(phu_recovered,
+                                "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+                                "hr",
+                                date_today,
+                                "recovered_timeseries_phu")
 
-  # upload PHU recovered data
+  # upload data
   googlesheets4::sheet_write(
     phu_recovered,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "recovered_timeseries_phu")
 
   ### UPDATE MAIN DATASET ###
@@ -66,21 +57,17 @@ ccodwg_update <- function(email = NULL) {
   d <- e_t_datasets(ds, mode = "main")
 
   # add Ontario recovered
+  col_today <- as.character(date_today)
+  col_today_manual <- paste0(col_today, "_manual")
   phu_rec <- phu_recovered %>%
-    dplyr::select(.data$province, .data$health_region, dplyr::all_of(date_today_2)) %>%
-    tidyr::drop_na()
-  phu_rec_man <- sheets_load(
-    "1kiN6BmshBHKRiBTmljUQqd4RdSmUMvuYg5sZA3cmCNA",
-    "recovered_timeseries_phu") %>%
-    dplyr::select(.data$province, .data$health_region, dplyr::all_of(date_today_2)) %>%
-    dplyr::filter(!.data$health_region %in% phu_rec$health_region)
-  phu_rec_man[[date_today_2]] <- as.numeric(phu_rec_man[[date_today_2]])
-  phu_rec <- dplyr::bind_rows(phu_rec, phu_rec_man)
-  d$on_recovered_prov <- phu_rec %>%
-    dplyr::select(dplyr::one_of(date_today_2)) %>%
+    dplyr::select(!!rlang::sym(col_today), !!rlang::sym(col_today_manual)) %>%
+    dplyr::transmute(
+      !!rlang::sym(col_today) := dplyr::case_when(
+        !is.na(!!rlang::sym(col_today_manual)) ~ !!rlang::sym(col_today_manual),
+        TRUE ~ !!rlang::sym(col_today))) %>%
     dplyr::pull() %>%
-    as.integer() %>%
-    sum() %>%
+    {sum(as.integer(.), na.rm = FALSE)}
+  d[["on_recovered_prov"]] <- phu_rec %>%
     data.frame(
       name = "recovered",
       province = "ON",
@@ -145,17 +132,7 @@ ccodwg_update <- function(email = NULL) {
   hr_mortality <- hr_mortality %>%
     dplyr::filter(!(.data$province %in% c("Saskatchewan")))
 
-  # upload to Google Sheets
-
-  ## convert date format
-  process_format_dates("hr_cases", "hr_mortality",
-                       "prov_recovered", "prov_testing",
-                       "prov_vaccine_distribution",
-                       "prov_vaccine_administration",
-                       "prov_vaccine_completion",
-                       "prov_vaccine_additional_doses")
-
-  ## format data for uploading
+  # format data for uploading
   hr_cases <- process_format_sheets(hr_cases, "hr")
   hr_mortality <- process_format_sheets(hr_mortality, "hr")
   prov_recovered <- process_format_sheets(prov_recovered, "prov")
@@ -165,133 +142,93 @@ ccodwg_update <- function(email = NULL) {
   prov_vaccine_completion <- process_format_sheets(prov_vaccine_completion, "prov")
   prov_vaccine_additional_doses <- process_format_sheets(prov_vaccine_additional_doses, "prov")
 
-  ## combine with existing data
-  hr_cases <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "cases_timeseries_hr") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      hr_cases,
-      by = c("province" = "province", "health_region" = "sub_region_1")) %>%
-    dplyr::select(.data$province, .data$health_region, as.character(date_today_2),
-                  !dplyr::matches(paste0("province|health_region", as.character(date_today_2))))
+  # merge data with existing data
+  hr_cases <- sheets_merge(
+    hr_cases,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "hr",
+    date_today,
+    "cases_timeseries_hr")
+  hr_mortality <- sheets_merge(
+    hr_mortality,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "hr",
+    date_today,
+    "mortality_timeseries_hr")
+  prov_recovered <- sheets_merge(
+    prov_recovered,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "prov",
+    date_today,
+    "recovered_timeseries_prov")
+  prov_testing <- sheets_merge(
+    prov_testing,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "prov",
+    date_today,
+    "testing_timeseries_prov")
+  prov_vaccine_distribution <- sheets_merge(
+    prov_vaccine_distribution,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "prov",
+    date_today,
+    "vaccine_distribution_timeseries_prov")
+  prov_vaccine_administration <- sheets_merge(
+    prov_vaccine_administration,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "prov",
+    date_today,
+    "vaccine_administration_timeseries_prov")
+  prov_vaccine_completion <- sheets_merge(
+    prov_vaccine_completion,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "prov",
+    date_today,
+    "vaccine_completion_timeseries_prov")
+  prov_vaccine_additional_doses <- sheets_merge(
+    prov_vaccine_additional_doses,
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    "prov",
+    date_today,
+    "vaccine_additional_doses_timeseries_prov")
 
-  hr_mortality <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "mortality_timeseries_hr") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      hr_mortality,
-      by = c("province" = "province", "health_region" = "sub_region_1")) %>%
-    dplyr::select(.data$province, .data$health_region, as.character(date_today_2),
-                  !dplyr::matches(paste0("province|health_region", as.character(date_today_2))))
-
-  prov_recovered <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "recovered_timeseries_prov") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      prov_recovered,
-      by = c("province" = "province")) %>%
-    dplyr::select(.data$province, as.character(date_today_2),
-                  !dplyr::matches(paste0("province", as.character(date_today_2))))
-
-  prov_testing <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "testing_timeseries_prov") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      prov_testing,
-      by = c("province" = "province")) %>%
-    dplyr::select(.data$province, as.character(date_today_2),
-                  !dplyr::matches(paste0("province", as.character(date_today_2))))
-
-  prov_vaccine_distribution<- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "vaccine_distribution_timeseries_prov") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      prov_vaccine_distribution,
-      by = c("province" = "province")) %>%
-    dplyr::select(.data$province, as.character(date_today_2),
-                  !dplyr::matches(paste0("province", as.character(date_today_2))))
-
-  prov_vaccine_administration<- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "vaccine_administration_timeseries_prov") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      prov_vaccine_administration,
-      by = c("province" = "province")) %>%
-    dplyr::select(.data$province, as.character(date_today_2),
-                  !dplyr::matches(paste0("province", as.character(date_today_2))))
-
-  prov_vaccine_completion <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "vaccine_completion_timeseries_prov") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      prov_vaccine_completion,
-      by = c("province" = "province")) %>%
-    dplyr::select(.data$province, as.character(date_today_2),
-                  !dplyr::matches(paste0("province", as.character(date_today_2))))
-
-  prov_vaccine_additional_doses <- sheets_load(
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
-    "vaccine_additional_doses_timeseries_prov") %>%
-    ## drop today's data if re-doing data update
-    dplyr::select(-dplyr::any_of(dplyr::sym(date_today_2))) %>%
-    dplyr::left_join(
-      prov_vaccine_additional_doses,
-      by = c("province" = "province")) %>%
-    dplyr::select(.data$province, as.character(date_today_2),
-                  !dplyr::matches(paste0("province", as.character(date_today_2))))
-
-  ## fill in missing data for additional doses (not all PTs reoporting)
+  # fill in missing data for additional doses (not all PTs reoporting)
   zero_today <- list(0)
-  names(zero_today) <- eval(date_today_2)
+  names(zero_today) <- eval(date_today)
   prov_vaccine_additional_doses <- prov_vaccine_additional_doses %>%
     tidyr::replace_na(zero_today)
 
-  ## write newest data to Google Sheets
+  # upload data
   googlesheets4::sheet_write(
     hr_cases,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "cases_timeseries_hr")
   googlesheets4::sheet_write(
     hr_mortality,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "mortality_timeseries_hr")
   googlesheets4::sheet_write(
     prov_recovered,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "recovered_timeseries_prov")
   googlesheets4::sheet_write(
     prov_testing,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "testing_timeseries_prov")
   googlesheets4::sheet_write(
     prov_vaccine_distribution,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "vaccine_distribution_timeseries_prov")
   googlesheets4::sheet_write(
     prov_vaccine_administration,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "vaccine_administration_timeseries_prov")
   googlesheets4::sheet_write(
     prov_vaccine_completion,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "vaccine_completion_timeseries_prov")
   googlesheets4::sheet_write(
     prov_vaccine_additional_doses,
-    "14Hs9R0d9HIRX5t86jw4SowZ_bQ2_cr6e9wgjZe2bfRA",
+    "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     "vaccine_additional_doses_timeseries_prov")
-
 }

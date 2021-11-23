@@ -9,8 +9,8 @@
 \alias{process_cum_current}
 \alias{process_collate}
 \alias{sheets_load}
+\alias{sheets_merge}
 \alias{process_format_sheets}
-\alias{process_format_dates}
 \title{Functions to further process COVID-19 data}
 \usage{
 process_prov_names(d)
@@ -27,9 +27,9 @@ process_collate(d, pattern)
 
 sheets_load(id, sheet = NULL)
 
-process_format_sheets(d, loc = c("prov", "hr"))
+sheets_merge(d, id, loc = c("prov", "hr"), date_today, sheet = NULL)
 
-process_format_dates(...)
+process_format_sheets(d, loc = c("prov", "hr"))
 }
 \arguments{
 \item{d}{The dataset to process.}
@@ -47,8 +47,6 @@ process_format_dates(...)
 \item{sheet}{Optional. The specific sheet within the Google Sheet document to load.}
 
 \item{loc}{Either "prov" or "hr".}
-
-\item{...}{Other arguments.}
 }
 \description{
 Functions to further process data downloaded via the `process_dataset`
