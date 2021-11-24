@@ -1032,10 +1032,13 @@ e_t_datasets <- function(ds = NULL, mode = c("main", "phu")) {
     onnr_recovered_hr <- onnr_cases_hr %>%
       dplyr::mutate(name = "recovered")
 
+    # remove objects no longer needed
+    rm(phu)
+
   }
 
   # return all objects created by the function as a list
-  rm(ds) # no longer needed
+  rm(ds, i, val, uuid, sheet, ds_name) # no longer needed
   values <- as.list(environment())
   values <- values[setdiff(names(values), names(formals()))]
   values <- rev(values) # alphabetical order
