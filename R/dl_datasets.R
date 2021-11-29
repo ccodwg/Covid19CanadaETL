@@ -186,23 +186,24 @@ dl_datasets <- function(mode = c("main", "phu")) {
       cat("WAITING 10 SECONDS BEFORE RETRY...", fill = TRUE)
       Sys.sleep(10)
       # get value of uuid and sheet
-      f <- covid_datasets[covid_datasets[, 3] == ds_failed[i], 1:2]
+      ds_name <- ds_failed[i]
+      f <- covid_datasets[covid_datasets[, 3] == ds_name, 1:2]
       uuid <- f[1]
       sheet <- f[2]
       # retry dataset download
-      ds[[ds_failed]] <- tryCatch(
+      ds[[ds_name]] <- tryCatch(
         {
           if (is.na(sheet)) {
             d <- Covid19CanadaData::dl_dataset(uuid)
           } else {
             d <- Covid19CanadaData::dl_dataset(uuid, sheet = sheet)
           }
-          cat("RETRY SUCCESSFUL: ", ds_failed, fill = TRUE)
+          cat("RETRY SUCCESSFUL: ", ds_name, fill = TRUE)
           d
         },
         error = function(e) {
           print(e)
-          cat("RETRY FAILED:", ds_failed, fill = TRUE)
+          cat("RETRY FAILED:", ds_name, fill = TRUE)
           d <- NA
         }
       )
