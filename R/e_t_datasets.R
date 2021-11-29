@@ -1024,7 +1024,7 @@ e_t_datasets <- function(ds = NULL, mode = c("main", "phu")) {
       name = "cases",
       province = "ON",
       sub_region_1 = "Not Reported",
-      date = Sys.Date(),
+      date = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")),
       value = 0
     )
     onnr_mortality_hr <- onnr_cases_hr %>%

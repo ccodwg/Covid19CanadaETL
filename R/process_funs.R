@@ -46,7 +46,7 @@ process_prov_names <- function(d) {
 #' @rdname process_funs
 #'
 #' @export
-process_hr_names <- function(d, prov, date_today = Sys.Date(), opt = NULL) {
+process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")), opt = NULL) {
   # check for NA
   if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # fix HR names
@@ -268,7 +268,7 @@ process_cum_current <- function(d) {
   if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # process
   max_date <- max(d$date)
-  current_date <- Sys.Date()
+  current_date <- lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto"))
   d %>%
     dplyr::filter(.data$date == max_date) %>%
     dplyr::mutate(date = current_date)

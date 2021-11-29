@@ -16,8 +16,8 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL) {
   # authenticate with Google Sheets
   auth_gs(email)
 
-  # set today's date
-  date_today <- Sys.Date()
+  # set today's date (in America/Toronto)
+  date_today <- lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto"))
 
   if (mode == "main") {
 

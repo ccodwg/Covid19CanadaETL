@@ -15,7 +15,12 @@
 \usage{
 process_prov_names(d)
 
-process_hr_names(d, prov, date_today = Sys.Date(), opt = NULL)
+process_hr_names(
+  d,
+  prov,
+  date_today = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")),
+  opt = NULL
+)
 
 process_agg2prov(d)
 

@@ -19,6 +19,7 @@ Imports:
     magrittr,
     dplyr,
     tidyr,
+    lubridate,
     googlesheets4,
     utils
 Remotes:
