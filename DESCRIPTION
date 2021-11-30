@@ -16,6 +16,7 @@ Imports:
     Covid19CanadaData,
     Covid19CanadaDataProcess,
     rlang,
+    xml2,
     magrittr,
     dplyr,
     tidyr,

@@ -4,12 +4,9 @@
 \alias{e_t_datasets}
 \title{Extract and transform data for the daily Canadian COVID-19 data collection}
 \usage{
-e_t_datasets(ds = NULL, mode = c("main", "phu"))
+e_t_datasets(mode = c("main", "phu"))
 }
 \arguments{
-\item{ds}{Datasets from \link{dl_datasets}. Optional, will be downloaded if not
-supplied to the function.}
-
 \item{mode}{Process which dataset? One of "main" or "phu".}
 }
 \description{

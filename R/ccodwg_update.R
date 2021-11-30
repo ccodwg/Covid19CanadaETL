@@ -21,11 +21,8 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL) {
 
   if (mode == "main") {
 
-    # download data
-    ds <- dl_datasets(mode = "main")
-
-    # process data
-    d <- e_t_datasets(ds, mode = "main")
+    # download and process data
+    d <- e_t_datasets(mode = "main")
 
     # filter out failed data
     d <- d[unlist(lapply(d, function(x) !all(is.na(x))))]
@@ -185,11 +182,8 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL) {
 
   } else {
 
-    # download data
-    ds_phu <- dl_datasets(mode = "phu")
-
-    # process data
-    d_phu <- e_t_datasets(ds_phu, mode = "phu")
+    # download and process data
+    d_phu <- e_t_datasets(mode = "phu")
 
     # filter out failed data
     d_phu <- d_phu[unlist(lapply(d_phu, function(x) !all(is.na(x))))]

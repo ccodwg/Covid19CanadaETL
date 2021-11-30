@@ -10,12 +10,14 @@ dl_datasets(mode = c("main", "phu"))
 \item{mode}{Download which dataset? One of "main" or "phu".}
 }
 \value{
-A named list with required datasets for \link{e_t_datasets}. Names
-correspond to the UUIDs assigned to the dataset in datasets.json.
+A character vector containing the path of the temporary directory
+containing the datasets required for \link{e_t_datasets}. Names correspond to
+the UUIDs assigned to the dataset in datasets.json.
 }
 \description{
 The live version of each required dataset is downloaded from a URL using the
-function \link[Covid19CanadaData]{dl_dataset} in "Covid19CanadaData". Datasets are referred to by
-their UUID given in the datasets.json (\url{https://github.com/ccodwg/Covid19CanadaArchive/blob/master/datasets.json})
+function \code{\link[Covid19CanadaData]{dl_dataset}}. Datasets are saved as
+.RData files and HTML files to a temporary directory. Datasets are referred
+to by their UUID given in the datasets.json (\url{https://github.com/ccodwg/Covid19CanadaArchive/blob/master/datasets.json})
 file from "Covid19CanadaArchive" (\url{https://github.com/ccodwg/Covid19CanadaArchive}).
 }
