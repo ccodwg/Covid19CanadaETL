@@ -23,6 +23,6 @@ Imports:
     googlesheets4,
     utils
 Remotes:
-    ccodwg/Covid19CanadaData
+    ccodwg/Covid19CanadaData,
     ccodwg/Covid19CanadaDataProcess
 RoxygenNote: 7.1.2
