@@ -6,15 +6,17 @@
 #' @param mode Update which dataset? One of "main" or "phu".
 #' @param email The email to authenticate with Google Sheets. If not provided,
 #' manual authentication will be requested.
+#' @param path Alternative to email authentication. JSON identifying service
+#' account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.
 #'
 #'@export
-ccodwg_update <- function(mode = c("main", "phu"), email = NULL) {
+ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
 
   # verify mode
   match.arg(mode, choices = c("main", "phu"), several.ok = FALSE)
 
   # authenticate with Google Sheets
-  auth_gs(email)
+  auth_gs(email, path)
 
   # set today's date (in America/Toronto)
   date_today <- lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto"))

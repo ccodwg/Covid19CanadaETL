@@ -55,11 +55,15 @@ get_prov_data <- function() {
 #' Authentication is required to access Google Sheets via the 'googlesheets4' package.
 #'
 #' @param email The email to authenticate with Google Sheets. If not provided,
-#' manual authentication will be requested.
+#' manual authentication will be requested (unless `path` is provided).
+#' @param path Alternative to email authentication. JSON identifying service
+#' account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.
 #' @export
-auth_gs <- function(email = NULL) {
-  if (!is.null(email)) {
-    googlesheets4::gs4_auth(email)
+auth_gs <- function(email = NULL, path = NULL) {
+  if (!is.null(path)) {
+    googlesheets4::gs4_auth(path = path)
+  } else if (!is.null(email)) {
+    googlesheets4::gs4_auth(email = email)
   } else {
     googlesheets4::gs4_auth()
   }

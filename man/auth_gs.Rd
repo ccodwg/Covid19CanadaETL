@@ -4,11 +4,14 @@
 \alias{auth_gs}
 \title{Authenticate with Google Sheets}
 \usage{
-auth_gs(email = NULL)
+auth_gs(email = NULL, path = NULL)
 }
 \arguments{
 \item{email}{The email to authenticate with Google Sheets. If not provided,
-manual authentication will be requested.}
+manual authentication will be requested (unless `path` is provided).}
+
+\item{path}{Alternative to email authentication. JSON identifying service
+account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.}
 }
 \description{
 Authentication is required to access Google Sheets via the 'googlesheets4' package.

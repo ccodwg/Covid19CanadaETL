@@ -4,13 +4,16 @@
 \alias{ccodwg_update}
 \title{Perform daily update for CCODWG dataset}
 \usage{
-ccodwg_update(mode = c("main", "phu"), email = NULL)
+ccodwg_update(mode = c("main", "phu"), email = NULL, path = NULL)
 }
 \arguments{
 \item{mode}{Update which dataset? One of "main" or "phu".}
 
 \item{email}{The email to authenticate with Google Sheets. If not provided,
 manual authentication will be requested.}
+
+\item{path}{Alternative to email authentication. JSON identifying service
+account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.}
 }
 \description{
 Daily update is based on today's cumulative totals for each value.
