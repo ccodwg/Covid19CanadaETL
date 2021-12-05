@@ -695,7 +695,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     )
 
     ## vaccine_additional_doses (prov)
-    on_vaccine_additionaL_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    on_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "170057c4-3231-4f15-9438-2165c5438dda",
       val = "vaccine_additional_doses",
       fmt = "prov_cum_current",
