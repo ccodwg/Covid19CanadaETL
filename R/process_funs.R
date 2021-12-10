@@ -49,6 +49,11 @@ process_prov_names <- function(d) {
 process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")), opt = NULL) {
   # check for NA
   if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  # misc fixes before joining
+  if (prov == "AB") {
+    d <- d %>%
+      dplyr::mutate(sub_region_1 = sub("zone", "Zone", .data$sub_region_1))
+  }
   # fix HR names
   if (!prov %in% c("BC", "MB", "NB", "ON", "QC", "SK")) {
     # get HR names

@@ -41,10 +41,10 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## mortality (hr)
     ab_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "59da1de8-3b4e-429a-9e18-b67ba3834002",
+      uuid = "d3b170a7-bb86-4bb0-b362-2adc5e6438c2",
       val = "mortality",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "59da1de8-3b4e-429a-9e18-b67ba3834002")
+      ds = load_ds(ds_dir, "d3b170a7-bb86-4bb0-b362-2adc5e6438c2")
     ) %>%
       process_hr_names("AB")
 
