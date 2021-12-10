@@ -44,7 +44,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       uuid = "d3b170a7-bb86-4bb0-b362-2adc5e6438c2",
       val = "mortality",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "d3b170a7-bb86-4bb0-b362-2adc5e6438c2")
+      ds = load_ds(ds_dir, "d3b170a7-bb86-4bb0-b362-2adc5e6438c2", "html")
     ) %>%
       process_hr_names("AB")
 
