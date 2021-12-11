@@ -343,6 +343,14 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
     )
 
+    ## vaccine_additional_doses (prov)
+    nb_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
+      val = "vaccine_additional_doses",
+      fmt = "prov_cum_current",
+      ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
+    )
+
     # NL
 
     ## cases (hr)
