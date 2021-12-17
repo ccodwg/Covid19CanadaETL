@@ -246,25 +246,22 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       error = function(e) {print(e); return(NA)})
 
     ## vaccine_administration (prov)
-    # note that this "topline" provincial total may exceed the sum of the HR totals
-    # if the "topline" dashboard is updated one day but the sub-dashboards are not
-    # the second information is only available in the sub-dashboards so in this case
-    # the share of doses administered that are second doses will be underestimated
     mb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "7a5ef226-2244-47e0-b964-28c2dc06d5ae",
+      uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
       val = "vaccine_administration",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "7a5ef226-2244-47e0-b964-28c2dc06d5ae")
-    )
+      fmt = "prov_ts",
+      ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
+    ) %>%
+      process_cum_current()
 
     ## vaccine_completion (prov)
     mb_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "a57dc10d-7139-4164-9042-eb2242716585",
+      uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
       val = "vaccine_completion",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "a57dc10d-7139-4164-9042-eb2242716585")
+      fmt = "prov_ts",
+      ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
     ) %>%
-      process_agg2prov()
+      process_cum_current()
 
     ## vaccine_additional_doses (prov)
     mb_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(

@@ -38,8 +38,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # mb
         "0261e07b-85ce-4952-99d1-6e1e9a440291", NA, NA,
         "1e9f40b2-853f-49d5-a9c4-ed04fee1bea2", NA, NA,
-        "a57dc10d-7139-4164-9042-eb2242716585", NA, NA,
-        "7a5ef226-2244-47e0-b964-28c2dc06d5ae", NA, NA,
         "a5801472-42ae-409e-aedd-9bf92831434a", NA, NA,
         # nb
         "4f194e3b-39fd-4fe0-b420-8cefa9001f7e", NA, NA,
