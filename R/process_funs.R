@@ -401,5 +401,5 @@ process_sk_new2old <- function(d) {
           TRUE ~ .data$sub_region_1)) %>%
     # aggregate values
     dplyr::group_by(.data$name, .data$province, .data$sub_region_1, .data$date) %>%
-    dplyr::summarize(value = sum(value), .groups = "drop")
+    dplyr::summarize(value = sum(.data$value), .groups = "drop")
 }
