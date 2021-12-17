@@ -884,36 +884,76 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     # SK
 
     ## cases (hr)
-    sk_cases_hr <- Covid19CanadaDataProcess::process_dataset(
+    today <- Covid19CanadaDataProcess::process_dataset(
       uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
       val = "cases",
       fmt = "hr_cum_current",
       ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
-    )
-    sk_cases_hr <- tryCatch(
-      {
-        sk_cases_hr %>%
-          process_hr_names("SK") %>%
-          dplyr::group_by(dplyr::across(c(-.data$value))) %>%
-          dplyr::summarize(value = sum(.data$value), .groups = "drop")
-      },
-      error = function(e) {print(e); return(NA)})
+    ) %>%
+      process_sk_new2old()
+    yesterday <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+      val = "cases",
+      fmt = "hr_cum_current",
+      ds = Covid19CanadaData::dl_archive("95de79d5-5e5c-45c2-bbab-41daf3dbee5d", date = "latest")[[1]]
+    ) %>%
+      process_sk_new2old()
+    sk_cases_hr <- tryCatch({
+      diff <- today$value - yesterday$value
+      current <- googlesheets4::read_sheet(
+        "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+        sheet = "cases_timeseries_hr",
+        range = "F96:F102",
+        col_names = "X2",
+        col_types = "i") %>%
+        dplyr::pull()
+      today %>%
+        dplyr::select(
+          .data$name,
+          .data$province,
+          .data$sub_region_1,
+          .data$date
+        ) %>%
+        dplyr::mutate(value = current + diff)
+    },
+    error = function(e) {print(e); return(NA)})
+    rm(today, yesterday, diff, current) # clean up
 
     ## mortality (hr)
-    sk_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
+    today <- Covid19CanadaDataProcess::process_dataset(
       uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
       val = "mortality",
       fmt = "hr_cum_current",
       ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
-    )
-    sk_mortality_hr <- tryCatch(
-      {
-        sk_mortality_hr %>%
-          process_hr_names("SK") %>%
-          dplyr::group_by(dplyr::across(c(-.data$value))) %>%
-          dplyr::summarize(value = sum(.data$value), .groups = "drop")
-      },
-      error = function(e) {print(e); return(NA)})
+    ) %>%
+      process_sk_new2old()
+    yesterday <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+      val = "mortality",
+      fmt = "hr_cum_current",
+      ds = Covid19CanadaData::dl_archive("95de79d5-5e5c-45c2-bbab-41daf3dbee5d", date = "latest")[[1]]
+    ) %>%
+      process_sk_new2old()
+    sk_mortality_hr <- tryCatch({
+      diff <- today$value - yesterday$value
+      current <- googlesheets4::read_sheet(
+        "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+        sheet = "mortality_timeseries_hr",
+        range = "F96:F102",
+        col_names = "X2",
+        col_types = "i") %>%
+        dplyr::pull()
+      today %>%
+        dplyr::select(
+          .data$name,
+          .data$province,
+          .data$sub_region_1,
+          .data$date
+        ) %>%
+        dplyr::mutate(value = current + diff)
+    },
+    error = function(e) {print(e); return(NA)})
+    rm(today, yesterday, diff, current) # clean up
 
     ## recovered (prov)
     sk_recovered_prov <- Covid19CanadaDataProcess::process_dataset(

@@ -381,3 +381,25 @@ process_format_sheets <- function(d, loc = c("prov", "hr")) {
     stop('loc should be "prov" or "hr".')
   }
 }
+
+#' process_funs: SK new HRs to old HRs
+#'
+#' @rdname process_funs
+#'
+#' @export
+process_sk_new2old <- function(d) {
+  # check for NA
+  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
+  d %>%
+    # convert SK HR names (new to old)
+    dplyr::mutate(
+      sub_region_1 = dplyr::case_when(
+          .data$sub_region_1 %in% c("Far North West", "Far North Central", "Far North East") ~ "Far North",
+          .data$sub_region_1 %in% c("North West", "North Central", "North East") ~ "North",
+          .data$sub_region_1 %in% c("Central West", "Central East") ~ "Central",
+          .data$sub_region_1 %in% c("South West", "South Central", "South East") ~ "South",
+          TRUE ~ .data$sub_region_1)) %>%
+    # aggregate values
+    dplyr::group_by(.data$name, .data$province, .data$sub_region_1, .data$date) %>%
+    dplyr::summarize(value = sum(value), .groups = "drop")
+}

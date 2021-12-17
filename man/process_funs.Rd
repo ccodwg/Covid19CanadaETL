@@ -11,6 +11,7 @@
 \alias{sheets_load}
 \alias{sheets_merge}
 \alias{process_format_sheets}
+\alias{process_sk_new2old}
 \title{Functions to further process COVID-19 data}
 \usage{
 process_prov_names(d)
@@ -35,6 +36,8 @@ sheets_load(id, sheet = NULL)
 sheets_merge(d, id, loc = c("prov", "hr"), date_today, sheet = NULL)
 
 process_format_sheets(d, loc = c("prov", "hr"))
+
+process_sk_new2old(d)
 }
 \arguments{
 \item{d}{The dataset to process.}

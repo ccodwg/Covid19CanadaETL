@@ -73,15 +73,6 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
     prov_vaccine_completion <- process_collate(d, "_vaccine_completion_")
     prov_vaccine_additional_doses <- process_collate(d, "_vaccine_additional_doses_")
 
-    # filter out data to be replaced by manual data
-
-    ## cases
-    hr_cases <- hr_cases %>%
-      dplyr::filter(!(.data$province %in% c("Saskatchewan")))
-    ## mortality
-    hr_mortality <- hr_mortality %>%
-      dplyr::filter(!(.data$province %in% c("Saskatchewan")))
-
     # format data for uploading
     hr_cases <- process_format_sheets(hr_cases, "hr")
     hr_mortality <- process_format_sheets(hr_mortality, "hr")
