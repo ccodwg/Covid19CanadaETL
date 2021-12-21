@@ -9,8 +9,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
   # verify mode
   match.arg(mode, choices = c("main", "phu"), several.ok = FALSE)
 
-  # set today's date (in America/Toronto)
+  # define dates
   date_today <- as.character(lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")))
+  date_yesterday <- as.character(lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")) - 1)
 
   # download datasets
   if (mode == "main") {
@@ -915,7 +916,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
         sheet = "cases_timeseries_hr") %>%
         dplyr::filter(.data$province == "Saskatchewan") %>%
-        dplyr::pull(dplyr::all_of(date_today)) %>%
+        dplyr::pull(dplyr::all_of(date_yesterday)) %>%
         as.integer()
       today %>%
         dplyr::select(
@@ -950,8 +951,8 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
         sheet = "mortality_timeseries_hr") %>%
         dplyr::filter(.data$province == "Saskatchewan") %>%
-          dplyr::pull(dplyr::all_of(date_today)) %>%
-          as.integer()
+        dplyr::pull(dplyr::all_of(date_yesterday)) %>%
+        as.integer()
       today %>%
         dplyr::select(
           .data$name,
