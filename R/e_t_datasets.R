@@ -1177,7 +1177,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
   # process errors
   readLines(e) %>%
     # filter messages from googlesheets4 (begin with a checkmark, auth token)
-    grep("^\u2713|^Auto-refreshing stale OAuth token\\.$", ., invert = TRUE, value = TRUE) %>%
+    grep("^\u2713|^\u2714|^Auto-refreshing stale OAuth token\\.$", ., invert = TRUE, value = TRUE) %>%
     paste(collapse = "\n") %>%
     # if there are errors, write to error log
     log_error()
