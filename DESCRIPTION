@@ -22,6 +22,8 @@ Imports:
     tidyr,
     lubridate,
     googlesheets4,
+    jsonlite,
+    httr,
     utils
 Remotes:
     ccodwg/Covid19CanadaData,

@@ -18,6 +18,14 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
   # authenticate with Google Sheets
   auth_gs(email, path)
 
+  # setup log file
+  log_path <- file.path(tempdir(), "COVID19CanadaETL.log")
+  # create empty log
+  if (file.exists(log_path)) {
+    file.remove(log_path)
+  }
+  file.create(log_path)
+
   # set today's date (in America/Toronto)
   date_today <- lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto"))
 
@@ -259,5 +267,14 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
         "recovered_timeseries_prov")
 
     }
+  }
+  # email error log
+  error_log <- readLines(log_path)
+  if (!identical(error_log, character(0))) {
+    error_log <- paste(error_log, collapse = "\n")
+    # print
+    cat(error_log, fill = TRUE)
+    # send email
+    send_email(subject = "CCODWG update errors", body = error_log)
   }
 }

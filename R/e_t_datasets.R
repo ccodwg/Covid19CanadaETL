@@ -30,6 +30,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
   }
 
   # process datasets
+  e <- tempfile()
+  ef <- file(e, open = "wt")
+  sink(file = ef, type = "message")
   if (mode == "main") {
 
     # AB
@@ -159,10 +162,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       {
         bc_vaccine_distribution_prov %>%
           dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value)) %>%
-          dplyr::ungroup()
+          dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
-      error = function(e) {print(e); return(NA)})
+      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     bc_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -244,10 +246,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       {
         mb_vaccine_distribution_prov %>%
           dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value)) %>%
-          dplyr::ungroup()
+          dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
-      error = function(e) {print(e); return(NA)})
+      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     mb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -332,10 +333,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       {
         nb_vaccine_distribution_prov %>%
           dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value)) %>%
-          dplyr::ungroup()
+          dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
-      error = function(e) {print(e); return(NA)})
+      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     nb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -417,10 +417,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       {
         nl_vaccine_distribution_prov %>%
           dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value)) %>%
-          dplyr::ungroup()
+          dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
-      error = function(e) {print(e); return(NA)})
+      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     nl_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -503,10 +502,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       {
         ns_vaccine_distribution_prov %>%
           dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value)) %>%
-          dplyr::ungroup()
+          dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
-      error = function(e) {print(e); return(NA)})
+      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -866,8 +864,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       )
     ) %>%
       dplyr::group_by(.data$name, .data$province, .data$date) %>%
-      dplyr::summarize(value = max(.data$value)) %>%
-      dplyr::ungroup()
+      dplyr::summarize(value = max(.data$value), .groups = "drop")
 
     ## vaccine_administration (prov)
     qc_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -927,7 +924,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         ) %>%
         dplyr::mutate(value = current + diff)
     },
-    error = function(e) {print(e); return(NA)})
+    error = function(e) {message(e); return(NA)})
     rm(today, yesterday, diff, current) # clean up
 
     ## mortality (hr)
@@ -962,7 +959,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         ) %>%
         dplyr::mutate(value = current + diff)
     },
-    error = function(e) {print(e); return(NA)})
+    error = function(e) {message(e); return(NA)})
     rm(today, yesterday, diff, current) # clean up
 
     ## recovered (prov)
@@ -1145,7 +1142,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
           "ebad185e-9706-44f4-921e-fc89d5cfa334-Status",
           # York
           "3821cc66-f88d-4f12-99ca-d36d368872cd"
-          )) {
+        )) {
           type <- NULL
         } else {
           type <- "html"
@@ -1175,6 +1172,15 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     rm(phu)
 
   }
+  # close sink
+  sink(NULL, type = "message")
+  # process errors
+  readLines(e) %>%
+    # filter messages from googlesheets4 (begin with a checkmark, auth token)
+    grep("^\u2713|^Auto-refreshing stale OAuth token\\.$", ., invert = TRUE, value = TRUE) %>%
+    paste(collapse = "\n") %>%
+    # if there are errors, write to error log
+    log_error()
 
   # return all data frames created by the function as a list
   Filter(function(x) is.data.frame(x), mget(ls()))

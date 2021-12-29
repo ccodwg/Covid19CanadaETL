@@ -68,3 +68,21 @@ auth_gs <- function(email = NULL, path = NULL) {
     googlesheets4::gs4_auth()
   }
 }
+
+#' Log error
+#'
+#' @param e Error to write to log.
+#' Write errors to a temporary file called COVID19CanadaETL.log.
+log_error <- function(e) {
+  # check if there are any errors
+  if (identical(e, character(0))) {
+    return(invisible(NULL))
+  }
+  log_path <- file.path(tempdir(), "COVID19CanadaETL.log")
+  # ensure log file exists, if not, create it
+  if (!file.exists(log_path)) {
+    file.create(log_path)
+  }
+  # write error to log file
+  write(paste0(e, "\n"), file = log_path, append = TRUE)
+}
