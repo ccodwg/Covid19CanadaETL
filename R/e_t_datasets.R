@@ -29,10 +29,12 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     }
   }
 
-  # process datasets
+  # open sink for error messages
   e <- tempfile()
   ef <- file(e, open = "wt")
   sink(file = ef, type = "message")
+
+  # process datasets
   if (mode == "main") {
 
     # AB
@@ -1172,8 +1174,10 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     rm(phu)
 
   }
+
   # close sink
   sink(NULL, type = "message")
+  close(ef)
   # process errors
   readLines(e) %>%
     # filter messages from googlesheets4 (begin with a checkmark, auth token)

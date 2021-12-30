@@ -273,8 +273,10 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
   if (!identical(error_log, character(0))) {
     error_log <- paste(error_log, collapse = "\n")
     # print
-    cat(error_log, fill = TRUE)
+    cat("\n", error_log, fill = TRUE, sep = "")
     # send email
     send_email(subject = "CCODWG update errors", body = error_log)
+  } else {
+    cat("\nNo errors to report.", fill = TRUE)
   }
 }
