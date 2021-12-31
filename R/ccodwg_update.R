@@ -270,6 +270,8 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
   }
   # email error log
   error_log <- readLines(log_path)
+  # remove blank entries ("")
+  error_log <- error_log[error_log != ""]
   if (!identical(error_log, character(0))) {
     error_log <- paste(error_log, collapse = "\n")
     # print
