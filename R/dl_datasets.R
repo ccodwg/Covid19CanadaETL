@@ -90,8 +90,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "685df305-f6c7-4ac2-992b-ec707eb1f1cb", NA, NA,
         # Brant (BRN)
         "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA, NA,
-        # Chatham-Kent (CKH)
-        "fe08035c-2c03-4960-a642-bde1fe18c857", NA, NA,
         # Durham (DUR)
         "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA, NA,
         # Eastern (EOH)
@@ -143,7 +141,11 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # Windsor-Essex (WEK)
         "01574538-062f-4a41-9dd5-8fdb72a0fe03", NA, NA,
         # York (YRK)
-        "3821cc66-f88d-4f12-99ca-d36d368872cd", NA, NA
+        "3821cc66-f88d-4f12-99ca-d36d368872cd", NA, NA,
+        # Ontario Ministry of Health Time Series by PHU
+        # used for:
+        # Chatham-Kent (CKH)
+        "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA
       ),
       ncol = 3,
       byrow = TRUE

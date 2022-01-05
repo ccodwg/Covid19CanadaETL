@@ -1095,7 +1095,6 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       c(
         "Algoma", "ALG", "685df305-f6c7-4ac2-992b-ec707eb1f1cb", NA,
         "Brant", "BRN", "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA,
-        "Chatham-Kent", "CKH", "fe08035c-2c03-4960-a642-bde1fe18c857", NA,
         "Durham", "DUR", "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA,
         "Eastern", "EOH", "cd1db4e8-c4e5-4b24-86a5-2294281919c6", NA,
         "Grey Bruce", "GBH", "eac45a46-e5b5-4e75-9393-77995cd7e219", NA,
@@ -1156,6 +1155,55 @@ e_t_datasets <- function(mode = c("main", "phu")) {
           hr = phu[i, 1],
           ds = load_ds(ds_dir, ds_name, type)
         ))}}
+
+    # add data from # Ontario Ministry of Health Time Series by PHU
+    on_cases_hr <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
+      val = "cases",
+      fmt = "hr_ts",
+      ds = load_ds(ds_dir, "73fffd44-fbad-4de8-8d32-00cc5ae180a6")) %>%
+      process_hr_names("ON", opt = "moh") %>%
+      process_cum_current()
+    on_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
+      val = "mortality",
+      fmt = "hr_ts",
+      ds = load_ds(ds_dir, "73fffd44-fbad-4de8-8d32-00cc5ae180a6")) %>%
+      process_hr_names("ON", opt = "moh") %>%
+      process_cum_current()
+    on_recovered_hr <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
+      val = "recovered",
+      fmt = "hr_ts",
+      ds = load_ds(ds_dir, "73fffd44-fbad-4de8-8d32-00cc5ae180a6")) %>%
+      process_hr_names("ON", opt = "moh") %>%
+      process_cum_current()
+
+    # Chatham-Kent (CKH)
+    tryCatch(
+      {
+        ckh_cases_hr <- on_cases_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+    tryCatch(
+      {
+        ckh_mortality_hr <- on_mortality_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+    tryCatch(
+      {
+        ckh_recovered_hr <- on_recovered_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+
+    # clean up
+    rm(on_cases_hr, on_mortality_hr, on_recovered_hr)
 
     # add ON Not Reported
     onnr_cases_hr <- data.frame(
