@@ -510,10 +510,10 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## vaccine_administration (prov)
     ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "70214276-8616-488c-b53a-b514608e3146",
+      uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
       val = "vaccine_administration",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
+      ds = load_ds(ds_dir, "7b7be246-cd65-4f35-b354-faa705cacecc")
     )
 
     ## vaccine_completion (prov)
