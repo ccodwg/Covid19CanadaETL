@@ -513,7 +513,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
       val = "vaccine_administration",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "7b7be246-cd65-4f35-b354-faa705cacecc")
+      ds = load_ds(ds_dir, "7b7be246-cd65-4f35-b354-faa705cacecc", "html")
     )
 
     ## vaccine_completion (prov)
