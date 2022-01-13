@@ -510,26 +510,26 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## vaccine_administration (prov)
     ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
+      uuid = "70214276-8616-488c-b53a-b514608e3146",
       val = "vaccine_administration",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "7b7be246-cd65-4f35-b354-faa705cacecc", "html")
+      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
     )
 
     ## vaccine_completion (prov)
     ns_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
+      uuid = "70214276-8616-488c-b53a-b514608e3146",
       val = "vaccine_completion",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "7b7be246-cd65-4f35-b354-faa705cacecc", "html")
+      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
     )
 
     ## vaccine_additional_doses (prov)
     ns_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "7b7be246-cd65-4f35-b354-faa705cacecc",
+      uuid = "70214276-8616-488c-b53a-b514608e3146",
       val = "vaccine_additional_doses",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "7b7be246-cd65-4f35-b354-faa705cacecc", "html")
+      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
     )
 
     # NT
