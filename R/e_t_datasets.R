@@ -1202,6 +1202,29 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       error = function(e) {message(e); return(NA)}
     )
 
+    # Leeds Grenville and Lanark (LGL)
+    tryCatch(
+      {
+        lgl_cases_hr <- on_cases_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Leeds Grenville and Lanark")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+    tryCatch(
+      {
+        lgl_mortality_hr <- on_mortality_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Leeds Grenville and Lanark")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+    tryCatch(
+      {
+        lgl_recovered_hr <- on_recovered_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Leeds Grenville and Lanark")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+
     # clean up
     rm(on_cases_hr, on_mortality_hr, on_recovered_hr)
 

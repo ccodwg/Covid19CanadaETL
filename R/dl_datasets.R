@@ -144,6 +144,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # Ontario Ministry of Health Time Series by PHU
         # used for:
         # Chatham-Kent (CKH)
+        # Leeds Grenville and Lanark (LGL)
         "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA
       ),
       ncol = 3,
