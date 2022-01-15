@@ -103,8 +103,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "8d4067a7-4828-4b09-8396-089231cf2e94", NA, NA,
         # Hamilton (HAM)
         "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA, NA,
-        # Kingston Frontenac Lennox & Addington (KFL)
-        "83d1fa13-7fb3-4079-b3dc-5bc50c584fd3", NA, NA,
         # Lambton (LAM)
         "8d0cf226-b9b7-4fc3-8100-a4f56dec6792", NA, NA,
         # Middlesex-London (MSL)
