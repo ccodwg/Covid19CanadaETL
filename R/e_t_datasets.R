@@ -86,7 +86,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     ab_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "24a572ea-0de3-4f83-b9b7-8764ea203eb6", "html")
     )
@@ -94,7 +94,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     ab_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "24a572ea-0de3-4f83-b9b7-8764ea203eb6", "html")
     )
@@ -171,7 +171,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     bc_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "9d940861-0252-4d33-b6e8-23a2eeb105bf",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "9d940861-0252-4d33-b6e8-23a2eeb105bf")
     )
@@ -179,7 +179,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     bc_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "9d940861-0252-4d33-b6e8-23a2eeb105bf",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "9d940861-0252-4d33-b6e8-23a2eeb105bf")
     )
@@ -255,7 +255,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     mb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_ts",
       ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
     ) %>%
@@ -264,7 +264,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     mb_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_ts",
       ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
     ) %>%
@@ -342,7 +342,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     nb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
     )
@@ -350,7 +350,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     nb_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
     )
@@ -426,7 +426,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     nl_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
     )
@@ -434,7 +434,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     nl_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
     )
@@ -511,7 +511,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "70214276-8616-488c-b53a-b514608e3146",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
     )
@@ -519,7 +519,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     ns_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "70214276-8616-488c-b53a-b514608e3146",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
     )
@@ -580,7 +580,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     nt_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "454de458-f7b4-4814-96a6-5a426f8c8c60",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "454de458-f7b4-4814-96a6-5a426f8c8c60", "html")
     )
@@ -588,7 +588,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     nt_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "454de458-f7b4-4814-96a6-5a426f8c8c60",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "454de458-f7b4-4814-96a6-5a426f8c8c60", "html")
     )
@@ -650,7 +650,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     nu_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
     )
@@ -658,7 +658,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     nu_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
     )
@@ -715,7 +715,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     on_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "170057c4-3231-4f15-9438-2165c5438dda",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "170057c4-3231-4f15-9438-2165c5438dda")
     )
@@ -723,7 +723,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     on_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "170057c4-3231-4f15-9438-2165c5438dda",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "170057c4-3231-4f15-9438-2165c5438dda")
     )
@@ -784,7 +784,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     pe_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Total-Doses")
     )
@@ -792,7 +792,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     pe_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Fully-Immunized")
     )
@@ -871,7 +871,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     qc_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "4e04442d-f372-4357-ba15-3b64f4e03fbe",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "4e04442d-f372-4357-ba15-3b64f4e03fbe")
     )
@@ -879,7 +879,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     qc_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "4e04442d-f372-4357-ba15-3b64f4e03fbe",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "4e04442d-f372-4357-ba15-3b64f4e03fbe")
     )
@@ -995,7 +995,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     sk_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "15556169-0471-49ea-926e-20b5e8dbd25d",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "hr_cum_current",
       ds = load_ds(ds_dir, "15556169-0471-49ea-926e-20b5e8dbd25d")
     ) %>%
@@ -1004,7 +1004,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     sk_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "15556169-0471-49ea-926e-20b5e8dbd25d",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "hr_cum_current",
       ds = load_ds(ds_dir, "15556169-0471-49ea-926e-20b5e8dbd25d")
     ) %>%
@@ -1067,7 +1067,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_administration (prov)
     yt_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e",
-      val = "vaccine_administration",
+      val = "vaccine_total_doses",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e", "html")
     )
@@ -1075,7 +1075,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_completion (prov)
     yt_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
       uuid = "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e",
-      val = "vaccine_completion",
+      val = "vaccine_dose_2",
       fmt = "prov_cum_current",
       ds = load_ds(ds_dir, "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e", "html")
     )
