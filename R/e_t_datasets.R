@@ -449,39 +449,39 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     # NS
 
-    ## cases (hr)
-    ns_cases_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "d0f05ef1-419f-4f4c-bc2d-17446c10059f",
-      val = "cases",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "d0f05ef1-419f-4f4c-bc2d-17446c10059f")
-    ) %>%
-      process_hr_names("NS")
-
-    ## mortality (hr)
-    ns_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "d0f05ef1-419f-4f4c-bc2d-17446c10059f",
-      val = "mortality",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "d0f05ef1-419f-4f4c-bc2d-17446c10059f")
-    ) %>%
-      process_hr_names("NS")
-
-    ## recovered (prov)
-    ns_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "d0f05ef1-419f-4f4c-bc2d-17446c10059f",
-      val = "recovered",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "d0f05ef1-419f-4f4c-bc2d-17446c10059f")
-    ) %>%
-      process_agg2prov()
+    # ## cases (hr)
+    # ns_cases_hr <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "d0f05ef1-419f-4f4c-bc2d-17446c10059f",
+    #   val = "cases",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "d0f05ef1-419f-4f4c-bc2d-17446c10059f")
+    # ) %>%
+    #   process_hr_names("NS")
+    #
+    # ## mortality (hr)
+    # ns_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "d0f05ef1-419f-4f4c-bc2d-17446c10059f",
+    #   val = "mortality",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "d0f05ef1-419f-4f4c-bc2d-17446c10059f")
+    # ) %>%
+    #   process_hr_names("NS")
+    #
+    # ## recovered (prov)
+    # ns_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "d0f05ef1-419f-4f4c-bc2d-17446c10059f",
+    #   val = "recovered",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "d0f05ef1-419f-4f4c-bc2d-17446c10059f")
+    # ) %>%
+    #   process_agg2prov()
 
     ## testing (prov)
     ns_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "0e7a1f46-5d31-4267-be97-831172fa7081",
+      uuid = "009dab7c-df60-4c48-8bbe-c666dbd0ff74",
       val = "testing",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "0e7a1f46-5d31-4267-be97-831172fa7081")
+      ds = load_ds(ds_dir, "009dab7c-df60-4c48-8bbe-c666dbd0ff74")
     )
 
     ## vaccine_distribution (prov)
