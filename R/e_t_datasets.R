@@ -485,51 +485,36 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     )
 
     ## vaccine_distribution (prov)
-    ns_vaccine_distribution_prov <- dplyr::bind_rows(
-      Covid19CanadaDataProcess::process_dataset(
-        uuid = "70214276-8616-488c-b53a-b514608e3146",
-        val = "vaccine_distribution",
-        fmt = "prov_cum_current",
-        ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
-      ),
-      Covid19CanadaDataProcess::process_dataset(
+    ns_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
         uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
         val = "vaccine_distribution",
         fmt = "prov_cum_current",
         ds = load_ds(ds_dir, "fa3f2917-6553-438c-9a6f-2af8d077f47f", "html"),
         prov = "NS"
-      )
     )
-    ns_vaccine_distribution_prov <- tryCatch(
-      {
-        ns_vaccine_distribution_prov %>%
-          dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value), .groups = "drop")
-      },
-      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "70214276-8616-488c-b53a-b514608e3146",
+      uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
       val = "vaccine_total_doses",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
+      ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
     )
 
     ## vaccine_completion (prov)
     ns_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "70214276-8616-488c-b53a-b514608e3146",
+      uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
       val = "vaccine_dose_2",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
+      ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
     )
 
     ## vaccine_additional_doses (prov)
     ns_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "70214276-8616-488c-b53a-b514608e3146",
-      val = "vaccine_additional_doses",
+      uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
+      val = "vaccine_dose_3",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "70214276-8616-488c-b53a-b514608e3146")
+      ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
     )
 
     # NT
