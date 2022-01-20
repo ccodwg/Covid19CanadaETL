@@ -616,12 +616,18 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## testing (prov)
     nu_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+      uuid = "f7db31d0-6504-4a55-86f7-608664517bdb",
       val = "testing",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html"),
-      testing_type = "n_people_tested"
+      fmt = "prov_ts",
+      ds = load_ds(ds_dir, "f7db31d0-6504-4a55-86f7-608664517bdb"),
+      testing_type = "n_tests_completed"
     )
+      nu_testing_prov <- tryCatch(
+        {
+          dplyr::filter(nu_testing_prov, .data$province == "NU")
+          },
+        error = function(e) {message(e); return(NA)}) %>%
+      process_cum_current()
 
     ## vaccine_distribution (prov)
     nu_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
