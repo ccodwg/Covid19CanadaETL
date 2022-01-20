@@ -1081,7 +1081,6 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "Algoma", "ALG", "685df305-f6c7-4ac2-992b-ec707eb1f1cb", NA,
         "Brant", "BRN", "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA,
         "Durham", "DUR", "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA,
-        "Eastern", "EOH", "cd1db4e8-c4e5-4b24-86a5-2294281919c6", NA,
         "Grey Bruce", "GBH", "eac45a46-e5b5-4e75-9393-77995cd7e219", NA,
         "Haldimand-Norfolk", "HNH", "07fcf6b9-6e61-433e-b1a8-a951ee15b01d", NA,
         "Haliburton Kawartha Pineridge", "HKP", "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA,
@@ -1182,6 +1181,29 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       {
         ckh_recovered_hr <- on_recovered_hr %>%
           dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+
+    # Eastern (EOH)
+    tryCatch(
+      {
+        eoh_cases_hr <- on_cases_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Eastern")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+    tryCatch(
+      {
+        eoh_mortality_hr <- on_mortality_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Eastern")
+      },
+      error = function(e) {message(e); return(NA)}
+    )
+    tryCatch(
+      {
+        eoh_recovered_hr <- on_recovered_hr %>%
+          dplyr::filter(.data$sub_region_1 == "Eastern")
       },
       error = function(e) {message(e); return(NA)}
     )

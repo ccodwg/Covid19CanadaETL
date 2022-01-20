@@ -90,8 +90,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA, NA,
         # Durham (DUR)
         "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA, NA,
-        # Eastern (EOH)
-        "cd1db4e8-c4e5-4b24-86a5-2294281919c6", NA, NA,
         # Grey Bruce (GBH)
         "eac45a46-e5b5-4e75-9393-77995cd7e219", NA, NA,
         # Haldimand-Norfolk (HNH)
@@ -141,6 +139,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # Ontario Ministry of Health Time Series by PHU
         # used for:
         # Chatham-Kent (CKH)
+        # Eastern (EOH)
         # Leeds Grenville and Lanark (LGL)
         "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA
       ),
