@@ -141,6 +141,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # used for:
         # Chatham-Kent (CKH)
         # Eastern (EOH)
+        # Huron Perth (HPH)
         # Leeds Grenville and Lanark (LGL)
         "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA
       ),

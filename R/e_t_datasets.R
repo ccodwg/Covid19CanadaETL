@@ -1168,74 +1168,36 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       process_hr_names("ON", opt = "moh") %>%
       process_cum_current()
 
+    # function: use MoH data for PHU
+    on_phu_moh <- function(hr, hr_abb) {
+      # cases
+      tryCatch({assign(paste0(tolower(hr_abb), "_cases_hr"),
+                       on_cases_hr %>% dplyr::filter(.data$sub_region_1 == hr),
+                       envir = parent.frame())},
+               error = function(e) {message(e); return(NA)})
+      # mortality
+      tryCatch({assign(paste0(tolower(hr_abb), "_mortality_hr"),
+                       on_mortality_hr %>% dplyr::filter(.data$sub_region_1 == hr),
+                       envir = parent.frame())},
+               error = function(e) {message(e); return(NA)})
+      # recovered
+      tryCatch({assign(paste0(tolower(hr_abb), "_recovered_hr"),
+                       on_recovered_hr %>% dplyr::filter(.data$sub_region_1 == hr),
+                       envir = parent.frame())},
+               error = function(e) {message(e); return(NA)})
+    }
+
     # Chatham-Kent (CKH)
-    tryCatch(
-      {
-        ckh_cases_hr <- on_cases_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
-    tryCatch(
-      {
-        ckh_mortality_hr <- on_mortality_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
-    tryCatch(
-      {
-        ckh_recovered_hr <- on_recovered_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Chatham-Kent")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
+    on_phu_moh("Chatham-Kent", "CKH")
 
     # Eastern (EOH)
-    tryCatch(
-      {
-        eoh_cases_hr <- on_cases_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Eastern")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
-    tryCatch(
-      {
-        eoh_mortality_hr <- on_mortality_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Eastern")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
-    tryCatch(
-      {
-        eoh_recovered_hr <- on_recovered_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Eastern")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
+    on_phu_moh("Eastern", "EOH")
+
+    # Huron Perth (HPH)
+    on_phu_moh("Huron Perth", "HPH")
 
     # Leeds Grenville and Lanark (LGL)
-    tryCatch(
-      {
-        lgl_cases_hr <- on_cases_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Leeds Grenville and Lanark")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
-    tryCatch(
-      {
-        lgl_mortality_hr <- on_mortality_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Leeds Grenville and Lanark")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
-    tryCatch(
-      {
-        lgl_recovered_hr <- on_recovered_hr %>%
-          dplyr::filter(.data$sub_region_1 == "Leeds Grenville and Lanark")
-      },
-      error = function(e) {message(e); return(NA)}
-    )
+    on_phu_moh("Leeds Grenville and Lanark", "LGL")
 
     # clean up
     rm(on_cases_hr, on_mortality_hr, on_recovered_hr)
