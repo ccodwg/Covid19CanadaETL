@@ -41,10 +41,10 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## cases (hr)
     ab_cases_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
+      uuid = "d3b170a7-bb86-4bb0-b362-2adc5e6438c2",
       val = "cases",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "24a572ea-0de3-4f83-b9b7-8764ea203eb6", "html")
+      ds = load_ds(ds_dir, "d3b170a7-bb86-4bb0-b362-2adc5e6438c2", "html")
     ) %>%
       process_hr_names("AB")
 
@@ -128,13 +128,22 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       process_hr_names("BC")
 
     ## recovered (prov)
-    bc_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
-      val = "recovered",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "91367e1d-8b79-422c-b314-9b3441ba4f42")
-    ) %>%
-      process_agg2prov()
+    bc_recovered_prov <- tryCatch(
+      {
+        bc_active_prov <- Covid19CanadaDataProcess::process_dataset(
+          uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
+          val = "active",
+          fmt = "hr_cum_current",
+          ds = load_ds(ds_dir, "91367e1d-8b79-422c-b314-9b3441ba4f42")
+        ) %>% process_agg2prov()
+        bc_recovered_prov <- bc_active_prov
+        bc_recovered_prov[, "name"] <- "recovered"
+        bc_recovered_prov[, "value"] <- bc_cases_hr %>% process_agg2prov() %>% dplyr::pull(.data$value) -
+          bc_mortality_hr %>% process_agg2prov() %>% dplyr::pull(.data$value) -
+          bc_active_prov %>% process_agg2prov() %>% dplyr::pull(.data$value)
+        bc_recovered_prov
+      },
+      error = function(e) {message(e); return(NA)})
 
     ## testing (prov)
     bc_testing_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -318,11 +327,11 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ## vaccine_distribution (prov)
     nb_vaccine_distribution_prov <- dplyr::bind_rows(
       Covid19CanadaDataProcess::process_dataset(
-        uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
+        uuid = "719bbb12-d493-4427-8896-e823c2a9833a",
         val = "vaccine_distribution",
-        fmt = "prov_cum_current",
-        ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
-      ),
+        fmt = "prov_ts",
+      ) %>%
+        process_cum_current(),
       Covid19CanadaDataProcess::process_dataset(
         uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
         val = "vaccine_distribution",
@@ -341,27 +350,30 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## vaccine_administration (prov)
     nb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
+      uuid = "719bbb12-d493-4427-8896-e823c2a9833a",
       val = "vaccine_total_doses",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
-    )
+      fmt = "prov_ts",
+      ds = load_ds(ds_dir, "719bbb12-d493-4427-8896-e823c2a9833a")
+    ) %>%
+      process_cum_current()
 
     ## vaccine_completion (prov)
     nb_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
+      uuid = "719bbb12-d493-4427-8896-e823c2a9833a",
       val = "vaccine_dose_2",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
-    )
+      fmt = "prov_ts",
+      ds = load_ds(ds_dir, "719bbb12-d493-4427-8896-e823c2a9833a")
+    ) %>%
+      process_cum_current()
 
     ## vaccine_additional_doses (prov)
     nb_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "6996a762-56cc-4a27-8e77-1c8734752793",
-      val = "vaccine_additional_doses",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "6996a762-56cc-4a27-8e77-1c8734752793")
-    )
+      uuid = "719bbb12-d493-4427-8896-e823c2a9833a",
+      val = "vaccine_dose_3",
+      fmt = "prov_ts",
+      ds = load_ds(ds_dir, "719bbb12-d493-4427-8896-e823c2a9833a")
+    ) %>%
+      process_cum_current()
 
     # NL
 
