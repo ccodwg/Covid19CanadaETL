@@ -330,6 +330,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         uuid = "719bbb12-d493-4427-8896-e823c2a9833a",
         val = "vaccine_distribution",
         fmt = "prov_ts",
+        ds = load_ds(ds_dir, "719bbb12-d493-4427-8896-e823c2a9833a")
       ) %>%
         process_cum_current(),
       Covid19CanadaDataProcess::process_dataset(
