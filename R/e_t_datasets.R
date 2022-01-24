@@ -1120,7 +1120,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "Timiskaming", "TSK", "9c7bbba4-33ba-493a-8ea1-4eedd5149bc0", NA,
         "Toronto", "TOR", "ebad185e-9706-44f4-921e-fc89d5cfa334", "Status",
         "Wellington Dufferin Guelph", "WDG", "e00e2148-b0ea-458b-9f00-3533e0c5ae8e", NA,
-        "Windsor-Essex", "WEK", "01574538-062f-4a41-9dd5-8fdb72a0fe03", NA,
+        "Windsor-Essex", "WEK", "fb6ccf1c-498f-40d0-b70c-8fce37603be1", NA,
         "York", "YRK", "3821cc66-f88d-4f12-99ca-d36d368872cd",  NA
       ),
       ncol = 4,

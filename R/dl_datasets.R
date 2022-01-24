@@ -132,7 +132,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # Wellington Dufferin Guelph
         "e00e2148-b0ea-458b-9f00-3533e0c5ae8e", NA, NA,
         # Windsor-Essex (WEK)
-        "01574538-062f-4a41-9dd5-8fdb72a0fe03", NA, NA,
+        "fb6ccf1c-498f-40d0-b70c-8fce37603be1", NA, NA,
         # York (YRK)
         "3821cc66-f88d-4f12-99ca-d36d368872cd", NA, NA,
         # Ontario Ministry of Health Time Series by PHU
