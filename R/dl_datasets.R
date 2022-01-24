@@ -93,8 +93,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA, NA,
         # Grey Bruce (GBH)
         "eac45a46-e5b5-4e75-9393-77995cd7e219", NA, NA,
-        # Haldimand-Norfolk (HNH)
-        "07fcf6b9-6e61-433e-b1a8-a951ee15b01d", NA, NA,
         # Haliburton Kawartha Pineridge (HKP)
         "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA, NA,
         # Halton (HAL)
@@ -141,6 +139,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # used for:
         # Chatham-Kent (CKH)
         # Eastern (EOH)
+        # Haldimand-Norfolk (HNH)
         # Huron Perth (HPH)
         # Leeds Grenville and Lanark (LGL)
         "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA
