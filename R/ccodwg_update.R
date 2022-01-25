@@ -141,12 +141,6 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
       date_today,
       "vaccine_additional_doses_timeseries_prov")
 
-    # fill in missing data for additional doses (not all PTs reoporting)
-    zero_today <- list(0)
-    names(zero_today) <- eval(date_today)
-    prov_vaccine_additional_doses <- prov_vaccine_additional_doses %>%
-      tidyr::replace_na(zero_today)
-
     # upload data
     googlesheets4::sheet_write(
       hr_cases,
