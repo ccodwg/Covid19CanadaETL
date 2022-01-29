@@ -761,13 +761,13 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       process_prov2hr("PE")
 
     ## mortality (hr)
-    # pe_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
-    #   uuid = "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455",
-    #   val = "mortality",
-    #   fmt = "prov_cum_current",
-    #   ds = load_ds(ds_dir, "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455", "html")
-    # ) %>%
-    #   process_prov2hr("PE")
+    pe_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455",
+      val = "mortality",
+      fmt = "prov_cum_current",
+      ds = load_ds(ds_dir, "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455", "html")
+    ) %>%
+      process_prov2hr("PE")
 
     ## recovered (prov)
     pe_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
