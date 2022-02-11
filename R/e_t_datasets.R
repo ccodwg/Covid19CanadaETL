@@ -907,94 +907,94 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     # SK
 
-    ## cases (hr)
-    today <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
-      val = "cases",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
-    ) %>%
-      process_sk_new2old()
-    yesterday <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
-      val = "cases",
-      fmt = "hr_cum_current",
-      ds = Covid19CanadaData::dl_archive("95de79d5-5e5c-45c2-bbab-41daf3dbee5d", date = "latest")[[1]]
-    ) %>%
-      process_sk_new2old()
-    sk_cases_hr <- tryCatch({
-      diff <- today$value - yesterday$value
-      current <- googlesheets4::read_sheet(
-        "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
-        sheet = "cases_timeseries_hr") %>%
-        dplyr::filter(.data$province == "Saskatchewan") %>%
-        dplyr::pull(dplyr::all_of(date_yesterday)) %>%
-        as.integer()
-      today %>%
-        dplyr::select(
-          .data$name,
-          .data$province,
-          .data$sub_region_1,
-          .data$date
-        ) %>%
-        dplyr::mutate(value = current + diff)
-    },
-    error = function(e) {message(e); return(NA)})
-    rm(today, yesterday, diff, current) # clean up
+    # ## cases (hr)
+    # today <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+    #   val = "cases",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
+    # ) %>%
+    #   process_sk_new2old()
+    # yesterday <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+    #   val = "cases",
+    #   fmt = "hr_cum_current",
+    #   ds = Covid19CanadaData::dl_archive("95de79d5-5e5c-45c2-bbab-41daf3dbee5d", date = "latest")[[1]]
+    # ) %>%
+    #   process_sk_new2old()
+    # sk_cases_hr <- tryCatch({
+    #   diff <- today$value - yesterday$value
+    #   current <- googlesheets4::read_sheet(
+    #     "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    #     sheet = "cases_timeseries_hr") %>%
+    #     dplyr::filter(.data$province == "Saskatchewan") %>%
+    #     dplyr::pull(dplyr::all_of(date_yesterday)) %>%
+    #     as.integer()
+    #   today %>%
+    #     dplyr::select(
+    #       .data$name,
+    #       .data$province,
+    #       .data$sub_region_1,
+    #       .data$date
+    #     ) %>%
+    #     dplyr::mutate(value = current + diff)
+    # },
+    # error = function(e) {message(e); return(NA)})
+    # rm(today, yesterday, diff, current) # clean up
 
-    ## mortality (hr)
-    today <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
-      val = "mortality",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
-    ) %>%
-      process_sk_new2old()
-    yesterday <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
-      val = "mortality",
-      fmt = "hr_cum_current",
-      ds = Covid19CanadaData::dl_archive("95de79d5-5e5c-45c2-bbab-41daf3dbee5d", date = "latest")[[1]]
-    ) %>%
-      process_sk_new2old()
-    sk_mortality_hr <- tryCatch({
-      diff <- today$value - yesterday$value
-      current <- googlesheets4::read_sheet(
-        "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
-        sheet = "mortality_timeseries_hr") %>%
-        dplyr::filter(.data$province == "Saskatchewan") %>%
-        dplyr::pull(dplyr::all_of(date_yesterday)) %>%
-        as.integer()
-      today %>%
-        dplyr::select(
-          .data$name,
-          .data$province,
-          .data$sub_region_1,
-          .data$date
-        ) %>%
-        dplyr::mutate(value = current + diff)
-    },
-    error = function(e) {message(e); return(NA)})
-    rm(today, yesterday, diff, current) # clean up
+    # ## mortality (hr)
+    # today <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+    #   val = "mortality",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
+    # ) %>%
+    #   process_sk_new2old()
+    # yesterday <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+    #   val = "mortality",
+    #   fmt = "hr_cum_current",
+    #   ds = Covid19CanadaData::dl_archive("95de79d5-5e5c-45c2-bbab-41daf3dbee5d", date = "latest")[[1]]
+    # ) %>%
+    #   process_sk_new2old()
+    # sk_mortality_hr <- tryCatch({
+    #   diff <- today$value - yesterday$value
+    #   current <- googlesheets4::read_sheet(
+    #     "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
+    #     sheet = "mortality_timeseries_hr") %>%
+    #     dplyr::filter(.data$province == "Saskatchewan") %>%
+    #     dplyr::pull(dplyr::all_of(date_yesterday)) %>%
+    #     as.integer()
+    #   today %>%
+    #     dplyr::select(
+    #       .data$name,
+    #       .data$province,
+    #       .data$sub_region_1,
+    #       .data$date
+    #     ) %>%
+    #     dplyr::mutate(value = current + diff)
+    # },
+    # error = function(e) {message(e); return(NA)})
+    # rm(today, yesterday, diff, current) # clean up
 
-    ## recovered (prov)
-    sk_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
-      val = "recovered",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
-    ) %>%
-      process_agg2prov()
+    # ## recovered (prov)
+    # sk_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "95de79d5-5e5c-45c2-bbab-41daf3dbee5d",
+    #   val = "recovered",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "95de79d5-5e5c-45c2-bbab-41daf3dbee5d")
+    # ) %>%
+    #   process_agg2prov()
 
-    ## testing (prov)
-    sk_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "9736bff9-4bd3-4c04-b9d9-87f60b3d5eb5",
-      val = "testing",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "9736bff9-4bd3-4c04-b9d9-87f60b3d5eb5"),
-      testing_type = "n_people_tested"
-    ) %>%
-      process_agg2prov()
+    # ## testing (prov)
+    # sk_testing_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "9736bff9-4bd3-4c04-b9d9-87f60b3d5eb5",
+    #   val = "testing",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "9736bff9-4bd3-4c04-b9d9-87f60b3d5eb5"),
+    #   testing_type = "n_people_tested"
+    # ) %>%
+    #   process_agg2prov()
 
     ## vaccine_distribution (prov)
     sk_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
@@ -1005,23 +1005,23 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       prov = "SK"
     )
 
-    ## vaccine_administration (prov)
-    sk_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "15556169-0471-49ea-926e-20b5e8dbd25d",
-      val = "vaccine_total_doses",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "15556169-0471-49ea-926e-20b5e8dbd25d")
-    ) %>%
-      process_agg2prov()
+    # ## vaccine_administration (prov)
+    # sk_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "15556169-0471-49ea-926e-20b5e8dbd25d",
+    #   val = "vaccine_total_doses",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "15556169-0471-49ea-926e-20b5e8dbd25d")
+    # ) %>%
+    #   process_agg2prov()
 
-    ## vaccine_completion (prov)
-    sk_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "15556169-0471-49ea-926e-20b5e8dbd25d",
-      val = "vaccine_dose_2",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "15556169-0471-49ea-926e-20b5e8dbd25d")
-    ) %>%
-      process_agg2prov()
+    # ## vaccine_completion (prov)
+    # sk_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "15556169-0471-49ea-926e-20b5e8dbd25d",
+    #   val = "vaccine_dose_2",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "15556169-0471-49ea-926e-20b5e8dbd25d")
+    # ) %>%
+    #   process_agg2prov()
 
     # ## vaccine_additional_doses (prov)
     # sk_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
