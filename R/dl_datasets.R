@@ -91,8 +91,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "eac45a46-e5b5-4e75-9393-77995cd7e219", NA, NA,
         # Haliburton Kawartha Pineridge (HKP)
         "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA, NA,
-        # Halton (HAL)
-        "8d4067a7-4828-4b09-8396-089231cf2e94", NA, NA,
         # Hamilton (HAM)
         "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA, NA,
         # Lambton (LAM)

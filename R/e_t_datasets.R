@@ -1111,7 +1111,6 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "Durham", "DUR", "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA,
         "Grey Bruce", "GBH", "eac45a46-e5b5-4e75-9393-77995cd7e219", NA,
         "Haliburton Kawartha Pineridge", "HKP", "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA,
-        "Halton", "HAL", "8d4067a7-4828-4b09-8396-089231cf2e94", NA,
         "Hamilton", "HAM", "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA,
         "Lambton", "LAM", "8d0cf226-b9b7-4fc3-8100-a4f56dec6792", NA,
         "Middlesex-London", "MSL", "b32a2f6b-7745-4bb1-9f9b-7ad0000d98a0", NA,
@@ -1216,6 +1215,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     # Haldimand-Norfolk (HNH)
     on_phu_moh("Haldimand-Norfolk", "HNH")
+
+    # Halton (HAL)
+    on_phu_moh("Halton", "HAL")
 
     # Huron Perth (HPH)
     on_phu_moh("Huron Perth", "HPH")
