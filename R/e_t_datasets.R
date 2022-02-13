@@ -399,19 +399,21 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## recovered (prov)
     nl_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "8419f6f1-b80b-4247-84e5-6414ab0154d8",
+      uuid = "f0e10f54-a4db-48d8-9c4e-8571e663ca28",
       val = "recovered",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "8419f6f1-b80b-4247-84e5-6414ab0154d8")
-    )
+      fmt = "hr_cum_current",
+      ds = load_ds(ds_dir, "f0e10f54-a4db-48d8-9c4e-8571e663ca28")
+    ) %>%
+      process_agg2prov()
 
     ## testing (prov)
     nl_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "8419f6f1-b80b-4247-84e5-6414ab0154d8",
+      uuid = "f0e10f54-a4db-48d8-9c4e-8571e663ca28",
       val = "testing",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "8419f6f1-b80b-4247-84e5-6414ab0154d8")
-    )
+      fmt = "hr_cum_current",
+      ds = load_ds(ds_dir, "f0e10f54-a4db-48d8-9c4e-8571e663ca28")
+    ) %>%
+      process_agg2prov()
 
     ## vaccine_distribution (prov)
     nl_vaccine_distribution_prov <- dplyr::bind_rows(
