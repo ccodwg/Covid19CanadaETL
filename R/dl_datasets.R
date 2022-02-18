@@ -72,7 +72,9 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "4e04442d-f372-4357-ba15-3b64f4e03fbe", NA, NA,
         # sk
         # yt
-        "4cdeff57-3cbd-4d58-b0a9-c66d8c0c197e", NA, NA
+        "9c29c29f-fd38-45d5-a471-9bfb95abb683", NA, NA,
+        "4a33ab2c-32a4-4630-8f6b-2bac2b1ce7ca", NA, NA,
+        "387473c7-bcb9-4712-82fb-cd0355793cdc", NA, NA
       ),
       ncol = 3,
       byrow = TRUE
