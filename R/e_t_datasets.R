@@ -1112,7 +1112,6 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "Algoma", "ALG", "685df305-f6c7-4ac2-992b-ec707eb1f1cb", NA,
         "Brant", "BRN", "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA,
         "Durham", "DUR", "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA,
-        "Grey Bruce", "GBH", "eac45a46-e5b5-4e75-9393-77995cd7e219", NA,
         "Haliburton Kawartha Pineridge", "HKP", "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA,
         "Hamilton", "HAM", "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA,
         "Lambton", "LAM", "8d0cf226-b9b7-4fc3-8100-a4f56dec6792", NA,
@@ -1215,6 +1214,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     # Eastern (EOH)
     on_phu_moh("Eastern", "EOH")
+
+    # Grey Bruce (GBH)
+    on_phu_moh("Grey Bruce", "GBH")
 
     # Haldimand-Norfolk (HNH)
     on_phu_moh("Haldimand-Norfolk", "HNH")

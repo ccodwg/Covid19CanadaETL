@@ -88,8 +88,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA, NA,
         # Durham (DUR)
         "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA, NA,
-        # Grey Bruce (GBH)
-        "eac45a46-e5b5-4e75-9393-77995cd7e219", NA, NA,
         # Haliburton Kawartha Pineridge (HKP)
         "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA, NA,
         # Hamilton (HAM)
