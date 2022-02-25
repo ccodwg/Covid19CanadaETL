@@ -128,22 +128,22 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       process_hr_names("BC")
 
     ## recovered (prov)
-    bc_recovered_prov <- tryCatch(
-      {
-        bc_active_prov <- Covid19CanadaDataProcess::process_dataset(
-          uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
-          val = "active",
-          fmt = "hr_cum_current",
-          ds = load_ds(ds_dir, "91367e1d-8b79-422c-b314-9b3441ba4f42")
-        ) %>% process_agg2prov()
-        bc_recovered_prov <- bc_active_prov
-        bc_recovered_prov[, "name"] <- "recovered"
-        bc_recovered_prov[, "value"] <- bc_cases_hr %>% process_agg2prov() %>% dplyr::pull(.data$value) -
-          bc_mortality_hr %>% process_agg2prov() %>% dplyr::pull(.data$value) -
-          bc_active_prov %>% process_agg2prov() %>% dplyr::pull(.data$value)
-        bc_recovered_prov
-      },
-      error = function(e) {message(e); return(NA)})
+    # bc_recovered_prov <- tryCatch(
+    #   {
+    #     bc_active_prov <- Covid19CanadaDataProcess::process_dataset(
+    #       uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
+    #       val = "active",
+    #       fmt = "hr_cum_current",
+    #       ds = load_ds(ds_dir, "91367e1d-8b79-422c-b314-9b3441ba4f42")
+    #     ) %>% process_agg2prov()
+    #     bc_recovered_prov <- bc_active_prov
+    #     bc_recovered_prov[, "name"] <- "recovered"
+    #     bc_recovered_prov[, "value"] <- bc_cases_hr %>% process_agg2prov() %>% dplyr::pull(.data$value) -
+    #       bc_mortality_hr %>% process_agg2prov() %>% dplyr::pull(.data$value) -
+    #       bc_active_prov %>% process_agg2prov() %>% dplyr::pull(.data$value)
+    #     bc_recovered_prov
+    #   },
+    #   error = function(e) {message(e); return(NA)})
 
     ## testing (prov)
     bc_testing_prov <- Covid19CanadaDataProcess::process_dataset(
