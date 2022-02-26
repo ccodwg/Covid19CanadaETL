@@ -1114,7 +1114,6 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "Durham", "DUR", "ba7b0d74-5fe2-41d8-aadb-6320ff9acb21", NA,
         "Haliburton Kawartha Pineridge", "HKP", "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA,
         "Hamilton", "HAM", "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA,
-        "Lambton", "LAM", "8d0cf226-b9b7-4fc3-8100-a4f56dec6792", NA,
         "Middlesex-London", "MSL", "b32a2f6b-7745-4bb1-9f9b-7ad0000d98a0", NA,
         "Niagara", "NIA", "e1887eb2-538f-4610-bc00-bcd7d929a375", NA,
         "North Bay Parry Sound", "NPS", "3178dd11-17af-4478-a72e-e1a35d7d1b2d", NA,
@@ -1226,6 +1225,9 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     # Huron Perth (HPH)
     on_phu_moh("Huron Perth", "HPH")
+
+    # Lambton (LAM)
+    on_phu_moh("Lambton", "LAM")
 
     # Leeds Grenville and Lanark (LGL)
     on_phu_moh("Leeds Grenville and Lanark", "LGL")

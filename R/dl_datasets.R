@@ -92,8 +92,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "c1cd96db-69c3-4970-9a4b-e7bcdc12d39b", NA, NA,
         # Hamilton (HAM)
         "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA, NA,
-        # Lambton (LAM)
-        "8d0cf226-b9b7-4fc3-8100-a4f56dec6792", NA, NA,
         # Middlesex-London (MSL)
         "b32a2f6b-7745-4bb1-9f9b-7ad0000d98a0", NA, NA,
         # Niagara (NIA)
