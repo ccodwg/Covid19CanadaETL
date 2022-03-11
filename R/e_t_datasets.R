@@ -492,13 +492,13 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     # ) %>%
     #   process_agg2prov()
 
-    ## testing (prov)
-    ns_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "009dab7c-df60-4c48-8bbe-c666dbd0ff74",
-      val = "testing",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "009dab7c-df60-4c48-8bbe-c666dbd0ff74")
-    )
+    # ## testing (prov)
+    # ns_testing_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "009dab7c-df60-4c48-8bbe-c666dbd0ff74",
+    #   val = "testing",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "009dab7c-df60-4c48-8bbe-c666dbd0ff74")
+    # )
 
     ## vaccine_distribution (prov)
     ns_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
