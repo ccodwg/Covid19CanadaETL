@@ -509,29 +509,29 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         prov = "NS"
     )
 
-    ## vaccine_administration (prov)
-    ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
-      val = "vaccine_total_doses",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
-    )
-
-    ## vaccine_completion (prov)
-    ns_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
-      val = "vaccine_dose_2",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
-    )
-
-    ## vaccine_additional_doses (prov)
-    ns_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
-      val = "vaccine_dose_3",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
-    )
+    # ## vaccine_administration (prov)
+    # ns_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
+    #   val = "vaccine_total_doses",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
+    # )
+    #
+    # ## vaccine_completion (prov)
+    # ns_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
+    #   val = "vaccine_dose_2",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
+    # )
+    #
+    # ## vaccine_additional_doses (prov)
+    # ns_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e",
+    #   val = "vaccine_dose_3",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "d025e7c2-b0bd-48b8-a30f-1ae240e78e7e")
+    # )
 
     # NT
 
