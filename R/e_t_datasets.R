@@ -381,87 +381,72 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## cases (hr)
     nl_cases_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "f0e10f54-a4db-48d8-9c4e-8571e663ca28",
+      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
       val = "cases",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "f0e10f54-a4db-48d8-9c4e-8571e663ca28")
+      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
     ) %>%
       process_hr_names("NL")
 
     ## mortality (hr)
     nl_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "f0e10f54-a4db-48d8-9c4e-8571e663ca28",
+      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
       val = "mortality",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "f0e10f54-a4db-48d8-9c4e-8571e663ca28")
+      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
     ) %>%
       process_hr_names("NL")
 
     ## recovered (prov)
     nl_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "f0e10f54-a4db-48d8-9c4e-8571e663ca28",
+      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
       val = "recovered",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "f0e10f54-a4db-48d8-9c4e-8571e663ca28")
+      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
     ) %>%
       process_agg2prov()
 
     ## testing (prov)
     nl_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "f0e10f54-a4db-48d8-9c4e-8571e663ca28",
+      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
       val = "testing",
       fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "f0e10f54-a4db-48d8-9c4e-8571e663ca28")
+      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
     ) %>%
       process_agg2prov()
 
     ## vaccine_distribution (prov)
-    nl_vaccine_distribution_prov <- dplyr::bind_rows(
-      Covid19CanadaDataProcess::process_dataset(
-        uuid = "6d1b0f2e-0ac0-4ad8-a383-619065ec5a52",
-        val = "vaccine_distribution",
-        fmt = "prov_cum_current",
-        ds = load_ds(ds_dir, "6d1b0f2e-0ac0-4ad8-a383-619065ec5a52")
-      ),
-      Covid19CanadaDataProcess::process_dataset(
+    nl_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
         uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
         val = "vaccine_distribution",
         fmt = "prov_cum_current",
         ds = load_ds(ds_dir, "fa3f2917-6553-438c-9a6f-2af8d077f47f", "html"),
         prov = "NL"
-      )
-    )
-    nl_vaccine_distribution_prov <- tryCatch(
-      {
-        nl_vaccine_distribution_prov %>%
-          dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value), .groups = "drop")
-      },
-      error = function(e) {message(e); return(NA)})
-
-    ## vaccine_administration (prov)
-    nl_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
-      val = "vaccine_total_doses",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
     )
 
-    ## vaccine_completion (prov)
-    nl_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
-      val = "vaccine_dose_2",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
-    )
-
-    ## vaccine_additional_doses (prov)
-    nl_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
-      val = "vaccine_additional_doses",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
-    )
+    # ## vaccine_administration (prov)
+    # nl_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
+    #   val = "vaccine_total_doses",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
+    # )
+    #
+    # ## vaccine_completion (prov)
+    # nl_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
+    #   val = "vaccine_dose_2",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
+    # )
+    #
+    # ## vaccine_additional_doses (prov)
+    # nl_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8",
+    #   val = "vaccine_additional_doses",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "64d10e59-6b60-474f-9a4f-6c6a2c71b1a8")
+    # )
 
     # NS
 

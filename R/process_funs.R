@@ -55,7 +55,7 @@ process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::wi
       dplyr::mutate(sub_region_1 = sub("zone", "Zone", .data$sub_region_1))
   }
   # fix HR names
-  if (!prov %in% c("BC", "MB", "NB", "ON", "QC", "SK")) {
+  if (!prov %in% c("BC", "MB", "NB", "NL", "ON", "QC", "SK")) {
     # get HR names
     hr <- get_hr_data(sknew = TRUE) %>%
       dplyr::filter(.data$province_short == prov) %>%
@@ -90,6 +90,16 @@ process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::wi
                                  "Zone 3: Central West Region (Fredericton)", "Zone 4: North West Region (Edmundston)",
                                  "Zone 5: North Central Region (Campbellton)", "Zone 6: North East Region (Bathurst)",
                                  "Zone 7: Central East Region (Miramichi)", "Not Reported")
+        )
+      },
+      "NL" = {
+        hr <- data.frame(
+          health_region = c("Central", "Eastern",
+                            "Labrador-Grenfell", "Western",
+                            "Not Reported"),
+          health_region_esri = c("Central Health Authority", "Eastern Health Authority",
+                                 "Labrador-Grenfell Health Authority", "Western Health Authority",
+                                 "Not Reported")
         )
       },
       "ON" = {
