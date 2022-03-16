@@ -379,14 +379,14 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     # NL
 
-    ## cases (hr)
-    nl_cases_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
-      val = "cases",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
-    ) %>%
-      process_hr_names("NL")
+    # ## cases (hr)
+    # nl_cases_hr <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
+    #   val = "cases",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
+    # ) %>%
+    #   process_hr_names("NL")
 
     ## mortality (hr)
     nl_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
@@ -397,23 +397,23 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     ) %>%
       process_hr_names("NL")
 
-    ## recovered (prov)
-    nl_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
-      val = "recovered",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
-    ) %>%
-      process_agg2prov()
-
-    ## testing (prov)
-    nl_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
-      val = "testing",
-      fmt = "hr_cum_current",
-      ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
-    ) %>%
-      process_agg2prov()
+    # ## recovered (prov)
+    # nl_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
+    #   val = "recovered",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
+    # ) %>%
+    #   process_agg2prov()
+    #
+    # ## testing (prov)
+    # nl_testing_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
+    #   val = "testing",
+    #   fmt = "hr_cum_current",
+    #   ds = load_ds(ds_dir, "34f45670-34ed-415c-86a6-e14d77fcf6db")
+    # ) %>%
+    #   process_agg2prov()
 
     ## vaccine_distribution (prov)
     nl_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
