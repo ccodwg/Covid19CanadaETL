@@ -98,7 +98,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         # Peel (PEL)
         "34b7dda2-1843-47e1-9c24-0c2a7ab78431", NA, NA,
         # Peterborough (PET)
-        "c3aa6a5e-2ff5-4158-83ab-dcde251bc365", NA, NA,
+        "821645cf-acbb-49d1-ae28-0e65037c61bf", NA, NA,
         # Porcupine (PQP)
         "00cc3ae2-7bf8-4074-81b7-8e06e91c947a", NA, NA,
         # Renfrew (REN)

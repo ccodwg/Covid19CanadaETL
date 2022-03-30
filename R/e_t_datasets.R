@@ -1104,7 +1104,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         "Northwestern", "NWR", "4c56a58b-0cb3-4d71-bafe-9fdb42e5c1d5", NA,
         "Ottawa", "OTT", "d8d4cbc6-d0a5-4544-ad3e-5a3c3060f973", NA,
         "Peel", "PEL", "34b7dda2-1843-47e1-9c24-0c2a7ab78431", NA,
-        "Peterborough", "PET", "c3aa6a5e-2ff5-4158-83ab-dcde251bc365", NA,
+        "Peterborough", "PET", "821645cf-acbb-49d1-ae28-0e65037c61bf", NA,
         "Porcupine", "PQP", "00cc3ae2-7bf8-4074-81b7-8e06e91c947a", NA,
         "Renfrew", "REN", "688bf944-9be6-49c3-ae5d-848ae32bad92", NA,
         "Simcoe Muskoka", "SMD", "7106106a-2f43-4ed2-b2a2-a75a7046ff81", NA,
