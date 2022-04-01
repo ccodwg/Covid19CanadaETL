@@ -507,28 +507,28 @@ e_t_datasets <- function(mode = c("main", "phu")) {
 
     ## cases (hr)
     nt_cases_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
+      uuid = "9ed0f5cd-2c45-40a1-94c9-25b0c9df8f48",
       val = "cases",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb", "html")
+      ds = load_ds(ds_dir, "9ed0f5cd-2c45-40a1-94c9-25b0c9df8f48", "html")
     ) %>%
       process_prov2hr("NT")
 
     ## mortality (hr)
     nt_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
+      uuid = "9ed0f5cd-2c45-40a1-94c9-25b0c9df8f48",
       val = "mortality",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb", "html")
+      ds = load_ds(ds_dir, "9ed0f5cd-2c45-40a1-94c9-25b0c9df8f48", "html")
     ) %>%
       process_prov2hr("NT")
 
     ## recovered (prov)
     nt_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb",
+      uuid = "9ed0f5cd-2c45-40a1-94c9-25b0c9df8f48",
       val = "recovered",
       fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "e008ba6f-7b09-4af4-afc5-63ec3c3bbfbb", "html")
+      ds = load_ds(ds_dir, "9ed0f5cd-2c45-40a1-94c9-25b0c9df8f48", "html")
     )
 
     # ## testing (prov)
