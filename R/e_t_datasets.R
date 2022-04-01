@@ -247,32 +247,32 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       prov = "MB"
     )
 
-    ## vaccine_administration (prov)
-    mb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
-      val = "vaccine_total_doses",
-      fmt = "prov_ts",
-      ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
-    ) %>%
-      process_cum_current()
-
-    ## vaccine_completion (prov)
-    mb_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
-      val = "vaccine_dose_2",
-      fmt = "prov_ts",
-      ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
-    ) %>%
-      process_cum_current()
-
-    ## vaccine_additional_doses (prov)
-    mb_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
-      val = "vaccine_additional_doses",
-      fmt = "prov_ts",
-      ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
-    ) %>%
-      process_cum_current()
+    # ## vaccine_administration (prov)
+    # mb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
+    #   val = "vaccine_total_doses",
+    #   fmt = "prov_ts",
+    #   ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
+    # ) %>%
+    #   process_cum_current()
+    #
+    # ## vaccine_completion (prov)
+    # mb_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
+    #   val = "vaccine_dose_2",
+    #   fmt = "prov_ts",
+    #   ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
+    # ) %>%
+    #   process_cum_current()
+    #
+    # ## vaccine_additional_doses (prov)
+    # mb_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "a5801472-42ae-409e-aedd-9bf92831434a",
+    #   val = "vaccine_additional_doses",
+    #   fmt = "prov_ts",
+    #   ds = load_ds(ds_dir, "a5801472-42ae-409e-aedd-9bf92831434a")
+    # ) %>%
+    #   process_cum_current()
 
     # NB
 
