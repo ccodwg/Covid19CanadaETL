@@ -239,28 +239,13 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     )
 
     ## vaccine_distribution (prov)
-    mb_vaccine_distribution_prov <- dplyr::bind_rows(
-      Covid19CanadaDataProcess::process_dataset(
-        uuid = "1e9f40b2-853f-49d5-a9c4-ed04fee1bea2",
-        val = "vaccine_distribution",
-        fmt = "prov_cum_current",
-        ds = load_ds(ds_dir, "1e9f40b2-853f-49d5-a9c4-ed04fee1bea2")
-      ),
-      Covid19CanadaDataProcess::process_dataset(
-        uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
-        val = "vaccine_distribution",
-        fmt = "prov_cum_current",
-        ds = load_ds(ds_dir, "fa3f2917-6553-438c-9a6f-2af8d077f47f", "html"),
-        prov = "MB"
-      )
+    mb_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
+      uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
+      val = "vaccine_distribution",
+      fmt = "prov_cum_current",
+      ds = load_ds(ds_dir, "fa3f2917-6553-438c-9a6f-2af8d077f47f", "html"),
+      prov = "MB"
     )
-    mb_vaccine_distribution_prov <- tryCatch(
-      {
-        mb_vaccine_distribution_prov %>%
-          dplyr::group_by(.data$name, .data$province, .data$date) %>%
-          dplyr::summarize(value = max(.data$value), .groups = "drop")
-      },
-      error = function(e) {message(e); return(NA)})
 
     ## vaccine_administration (prov)
     mb_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
