@@ -572,81 +572,81 @@ e_t_datasets <- function(mode = c("main", "phu")) {
       ds = load_ds(ds_dir, "454de458-f7b4-4814-96a6-5a426f8c8c60", "html")
     )
 
-    # NU
-
-    ## cases (hr)
-    nu_cases_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "cases",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
-    ) %>%
-      process_prov2hr("NU")
-
-    ## mortality (hr)
-    nu_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "mortality",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
-    ) %>%
-      process_prov2hr("NU")
-
-    ## recovered (prov)
-    nu_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "recovered",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
-    )
-
-    ## testing (prov)
-    nu_testing_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "f7db31d0-6504-4a55-86f7-608664517bdb",
-      val = "testing",
-      fmt = "prov_ts",
-      ds = load_ds(ds_dir, "f7db31d0-6504-4a55-86f7-608664517bdb"),
-      testing_type = "n_tests_completed"
-    )
-      nu_testing_prov <- tryCatch(
-        {
-          dplyr::filter(nu_testing_prov, .data$province == "NU")
-          },
-        error = function(e) {message(e); return(NA)}) %>%
-      process_cum_current()
-
-    ## vaccine_distribution (prov)
-    nu_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
-      val = "vaccine_distribution",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "fa3f2917-6553-438c-9a6f-2af8d077f47f", "html"),
-      prov = "NU"
-    )
-
-    ## vaccine_administration (prov)
-    nu_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "vaccine_total_doses",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
-    )
-
-    ## vaccine_completion (prov)
-    nu_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "vaccine_dose_2",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
-    )
-
-    ## vaccine_additional_doses (prov)
-    nu_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
-      val = "vaccine_dose_3",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
-    )
+    # # NU
+    #
+    # ## cases (hr)
+    # nu_cases_hr <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+    #   val = "cases",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
+    # ) %>%
+    #   process_prov2hr("NU")
+    #
+    # ## mortality (hr)
+    # nu_mortality_hr <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+    #   val = "mortality",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
+    # ) %>%
+    #   process_prov2hr("NU")
+    #
+    # ## recovered (prov)
+    # nu_recovered_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+    #   val = "recovered",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
+    # )
+    #
+    # ## testing (prov)
+    # nu_testing_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "f7db31d0-6504-4a55-86f7-608664517bdb",
+    #   val = "testing",
+    #   fmt = "prov_ts",
+    #   ds = load_ds(ds_dir, "f7db31d0-6504-4a55-86f7-608664517bdb"),
+    #   testing_type = "n_tests_completed"
+    # )
+    #   nu_testing_prov <- tryCatch(
+    #     {
+    #       dplyr::filter(nu_testing_prov, .data$province == "NU")
+    #       },
+    #     error = function(e) {message(e); return(NA)}) %>%
+    #   process_cum_current()
+    #
+    # ## vaccine_distribution (prov)
+    # nu_vaccine_distribution_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "fa3f2917-6553-438c-9a6f-2af8d077f47f",
+    #   val = "vaccine_distribution",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "fa3f2917-6553-438c-9a6f-2af8d077f47f", "html"),
+    #   prov = "NU"
+    # )
+    #
+    # ## vaccine_administration (prov)
+    # nu_vaccine_administration_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+    #   val = "vaccine_total_doses",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
+    # )
+    #
+    # ## vaccine_completion (prov)
+    # nu_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+    #   val = "vaccine_dose_2",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
+    # )
+    #
+    # ## vaccine_additional_doses (prov)
+    # nu_vaccine_additional_doses_prov <- Covid19CanadaDataProcess::process_dataset(
+    #   uuid = "04ab3773-f535-42ad-8ee4-4d584ec23523",
+    #   val = "vaccine_dose_3",
+    #   fmt = "prov_cum_current",
+    #   ds = load_ds(ds_dir, "04ab3773-f535-42ad-8ee4-4d584ec23523", "html")
+    # )
 
     # ON
 
