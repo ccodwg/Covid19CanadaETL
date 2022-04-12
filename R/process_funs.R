@@ -28,16 +28,17 @@ process_prov_names <- function(d) {
   if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
   # get prov names
   provs <- get_prov_data() %>%
-    dplyr::select(.data$province, .data$province_short)
+    dplyr::select(.data$province, .data$province_short) %>%
+    dplyr::rename(region = .data$province)
   provs <- d %>%
     dplyr::left_join(
       provs,
-      by = c("province" = "province_short")
+      by = c("region" = "province_short")
     )
   # convert prov names
   d %>%
     dplyr::mutate(
-      province = provs$province.y
+      region = provs$region.y
     )
 }
 
@@ -214,7 +215,7 @@ process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::wi
         .,
         data.frame(
           name = .[["name"]][1],
-          province = prov,
+          region = prov,
           sub_region_1 = "Not Reported",
           date = date_today,
           value = 0
@@ -229,7 +230,7 @@ process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::wi
       hr,
       by = c("sub_region_1" = "health_region_esri")
     ) %>%
-    dplyr::select(.data$name, .data$province, .data$health_region,
+    dplyr::select(.data$name, .data$region, .data$health_region,
                   .data$date, .data$value) %>%
     dplyr::rename(sub_region_1 = .data$health_region)
 }
@@ -269,7 +270,7 @@ process_prov2hr <- function(d, prov) {
         prov == "YT" ~ "Yukon"
       )
     ) %>%
-    dplyr::select(.data$name, .data$province, .data$sub_region_1,
+    dplyr::select(.data$name, .data$region, .data$sub_region_1,
                          .data$date, .data$value)
 }
 
@@ -343,9 +344,9 @@ sheets_merge <- function(d, id, loc = c("prov", "hr"), date_today, sheet = NULL)
   }
   # variables to merge by
   loc_merge <- if (loc == "hr") {
-    c("province" = "province", "health_region" = "sub_region_1")
+    c("province" = "region", "health_region" = "sub_region_1")
   } else {
-    c("province" = "province")
+    c("province" = "region")
   }
   # merge data
   dplyr::left_join(
@@ -376,17 +377,17 @@ process_format_sheets <- function(d, loc = c("prov", "hr")) {
   if (loc == "prov") {
     d %>%
       tidyr::pivot_wider(
-        id_cols = c(.data$province),
+        id_cols = c(.data$region),
         names_from = .data$date,
         values_from = .data$value) %>%
-      dplyr::arrange(.data$province)
+      dplyr::arrange(.data$region)
   } else if (loc == "hr") {
     d %>%
       tidyr::pivot_wider(
-        id_cols = c(.data$province, .data$sub_region_1),
+        id_cols = c(.data$region, .data$sub_region_1),
         names_from = .data$date,
         values_from = .data$value) %>%
-      dplyr::arrange(.data$province, .data$sub_region_1)
+      dplyr::arrange(.data$region, .data$sub_region_1)
   } else {
     stop('loc should be "prov" or "hr".')
   }
@@ -410,6 +411,6 @@ process_sk_new2old <- function(d) {
           .data$sub_region_1 %in% c("South West", "South Central", "South East") ~ "South",
           TRUE ~ .data$sub_region_1)) %>%
     # aggregate values
-    dplyr::group_by(.data$name, .data$province, .data$sub_region_1, .data$date) %>%
+    dplyr::group_by(.data$name, .data$region, .data$sub_region_1, .data$date) %>%
     dplyr::summarize(value = sum(.data$value), .groups = "drop")
 }

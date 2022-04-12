@@ -42,7 +42,7 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
       dplyr::add_row(
         data.frame(
           name = "cases",
-          province = "Repatriated",
+          region = "Repatriated",
           sub_region_1 = "Not Reported",
           date = date_today,
           value = 13
@@ -52,7 +52,7 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
       dplyr::add_row(
         data.frame(
           name = "mortality",
-          province = "Repatriated",
+          region = "Repatriated",
           sub_region_1 = "Not Reported",
           date = date_today,
           value = 0
@@ -62,7 +62,7 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
       dplyr::add_row(
         data.frame(
           name = "recovered",
-          province = "Repatriated",
+          region = "Repatriated",
           date = date_today,
           value = 13
         )
@@ -71,7 +71,7 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
       dplyr::add_row(
         data.frame(
           name = "testing",
-          province = "Repatriated",
+          region = "Repatriated",
           date = date_today,
           value = 0
         )

@@ -172,7 +172,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     bc_vaccine_distribution_prov <- tryCatch(
       {
         bc_vaccine_distribution_prov %>%
-          dplyr::group_by(.data$name, .data$province, .data$date) %>%
+          dplyr::group_by(.data$name, .data$region, .data$date) %>%
           dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
       error = function(e) {message(e); return(NA)})
@@ -330,7 +330,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     nb_vaccine_distribution_prov <- tryCatch(
       {
         nb_vaccine_distribution_prov %>%
-          dplyr::group_by(.data$name, .data$province, .data$date) %>%
+          dplyr::group_by(.data$name, .data$region, .data$date) %>%
           dplyr::summarize(value = max(.data$value), .groups = "drop")
       },
       error = function(e) {message(e); return(NA)})
@@ -610,7 +610,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     # )
     #   nu_testing_prov <- tryCatch(
     #     {
-    #       dplyr::filter(nu_testing_prov, .data$province == "NU")
+    #       dplyr::filter(nu_testing_prov, .data$region == "NU")
     #       },
     #     error = function(e) {message(e); return(NA)}) %>%
     #   process_cum_current()
@@ -850,7 +850,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
         ds = load_ds(ds_dir, "aee3bd38-b782-4880-9033-db76f84cef5b")
       )
     ) %>%
-      dplyr::group_by(.data$name, .data$province, .data$date) %>%
+      dplyr::group_by(.data$name, .data$region, .data$date) %>%
       dplyr::summarize(value = max(.data$value), .groups = "drop")
 
     ## vaccine_administration (prov)
@@ -899,13 +899,13 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     #   current <- googlesheets4::read_sheet(
     #     "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     #     sheet = "cases_timeseries_hr") %>%
-    #     dplyr::filter(.data$province == "Saskatchewan") %>%
+    #     dplyr::filter(.data$region == "Saskatchewan") %>%
     #     dplyr::pull(dplyr::all_of(date_yesterday)) %>%
     #     as.integer()
     #   today %>%
     #     dplyr::select(
     #       .data$name,
-    #       .data$province,
+    #       .data$region,
     #       .data$sub_region_1,
     #       .data$date
     #     ) %>%
@@ -934,13 +934,13 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     #   current <- googlesheets4::read_sheet(
     #     "1dTfl_3Zwf7HgRFfwqjsOlvHyDh-sCwgly2YDdHTKaSU",
     #     sheet = "mortality_timeseries_hr") %>%
-    #     dplyr::filter(.data$province == "Saskatchewan") %>%
+    #     dplyr::filter(.data$region == "Saskatchewan") %>%
     #     dplyr::pull(dplyr::all_of(date_yesterday)) %>%
     #     as.integer()
     #   today %>%
     #     dplyr::select(
     #       .data$name,
-    #       .data$province,
+    #       .data$region,
     #       .data$sub_region_1,
     #       .data$date
     #     ) %>%
