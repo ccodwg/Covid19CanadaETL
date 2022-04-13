@@ -242,7 +242,7 @@ ccodwg_update <- function(mode = c("main", "phu"), email = NULL, path = NULL) {
       {sum(as.integer(.), na.rm = FALSE)} %>%
       data.frame(
         name = "recovered",
-        province = "ON",
+        region = "ON",
         date = date_today,
         value = .
       )

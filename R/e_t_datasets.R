@@ -1195,7 +1195,7 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     # add ON Not Reported
     onnr_cases_hr <- data.frame(
       name = "cases",
-      province = "ON",
+      region = "ON",
       sub_region_1 = "Not Reported",
       date = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")),
       value = 0
