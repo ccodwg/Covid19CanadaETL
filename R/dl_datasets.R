@@ -51,6 +51,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
         "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455", NA, NA,
         "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Total Doses", NA,
         "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Fully Immunized", NA,
+        "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Fully Immunized 5-11", NA,
         "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Third Doses", NA,
         # qc
         "0c577d5e-999e-42c5-b4c1-66b3787c3a04", NA, NA,

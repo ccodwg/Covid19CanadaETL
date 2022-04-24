@@ -758,11 +758,22 @@ e_t_datasets <- function(mode = c("main", "phu")) {
     )
 
     ## vaccine_completion (prov)
-    pe_vaccine_completion_prov <- Covid19CanadaDataProcess::process_dataset(
-      uuid = "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5",
-      val = "vaccine_dose_2",
-      fmt = "prov_cum_current",
-      ds = load_ds(ds_dir, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Fully-Immunized")
+    pe_vaccine_completion_prov <- tryCatch(
+      Covid19CanadaDataProcess::process_dataset(
+        uuid = "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5",
+        val = "vaccine_dose_2",
+        fmt = "prov_cum_current",
+        ds = load_ds(ds_dir, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Fully-Immunized")) %>%
+        dplyr::mutate(
+          value = .data$value +
+            Covid19CanadaDataProcess::process_dataset(
+              uuid = "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5",
+              val = "vaccine_dose_2",
+              fmt = "prov_cum_current",
+              ds = load_ds(ds_dir, "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5-Fully-Immunized-5-11")) %>%
+            dplyr::pull(.data$value)
+          ),
+      error = function(e) {message(e); return(NA)}
     )
 
     ## vaccine_additional_doses (prov)
