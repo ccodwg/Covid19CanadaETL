@@ -68,7 +68,8 @@ update_covid19tracker <- function(val) {
       pt <- get_pt()[["region"]]
       if (val == "hospitalizations") {
         lapply(pt, function(x) {
-          url <- paste0("https://api.covid19tracker.ca/reports/province/", x, "?stat=hospitalizations&fill_dates=false")
+          # url <- paste0("https://api.covid19tracker.ca/reports/province/", x, "?stat=hospitalizations&fill_dates=false")
+          url <- paste0("https://api.covid19tracker.ca/reports/province/", x)
           jsonlite::fromJSON(url)$data %>%
             dplyr::transmute(
               name = "hospitalizations",
@@ -81,7 +82,8 @@ update_covid19tracker <- function(val) {
           utils::write.csv("raw_data/covid19tracker/can_hospitalizations_pt_ts.csv", row.names = FALSE)
       } else if (val == "icu") {
         lapply(pt, function(x) {
-          url <- paste0("https://api.covid19tracker.ca/reports/province/", x, "?stat=criticals&fill_dates=false")
+          # url <- paste0("https://api.covid19tracker.ca/reports/province/", x, "?stat=criticals&fill_dates=false")
+          url <- paste0("https://api.covid19tracker.ca/reports/province/", x)
           jsonlite::fromJSON(url)$data %>%
             dplyr::transmute(
               name = "icu",
