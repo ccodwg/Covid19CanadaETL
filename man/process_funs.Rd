@@ -2,59 +2,59 @@
 % Please edit documentation in R/process_funs.R
 \name{process_funs}
 \alias{process_funs}
-\alias{process_prov_names}
-\alias{process_hr_names}
-\alias{process_agg2prov}
-\alias{process_prov2hr}
-\alias{process_cum_current}
-\alias{process_collate}
-\alias{sheets_load}
-\alias{sheets_merge}
-\alias{process_format_sheets}
-\alias{process_sk_new2old}
+\alias{convert_hr_names}
+\alias{date_shift}
+\alias{add_name_col}
+\alias{drop_sub_regions}
+\alias{report_pluck}
+\alias{append_daily_d}
+\alias{collate_datasets}
+\alias{add_hr_col}
+\alias{agg2pt}
+\alias{agg2can}
+\alias{dataset_format}
 \title{Functions to further process COVID-19 data}
 \usage{
-process_prov_names(d)
+convert_hr_names(d)
 
-process_hr_names(
-  d,
-  prov,
-  date_today = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")),
-  opt = NULL
-)
+date_shift(d, n_days)
 
-process_agg2prov(d)
+add_name_col(d, name)
 
-process_prov2hr(d, prov)
+drop_sub_regions(d, sr)
 
-process_cum_current(d)
+report_pluck(d, name, val, out_col, geo)
 
-process_collate(d, pattern)
+append_daily_d(d1, d2)
 
-sheets_load(id, sheet = NULL)
+collate_datasets(val)
 
-sheets_merge(d, id, loc = c("prov", "hr"), date_today, sheet = NULL)
+add_hr_col(d, name)
 
-process_format_sheets(d, loc = c("prov", "hr"))
+agg2pt(d)
 
-process_sk_new2old(d)
+agg2can(d)
+
+dataset_format(d, geo = c("pt", "hr", "sub-hr"))
 }
 \arguments{
 \item{d}{The dataset to process.}
 
-\item{prov}{Two-letter province abbreviation (e.g., "ON").}
+\item{n_days}{The number of days to shift dates forward by.}
 
-\item{date_today}{Today's date.}
+\item{name}{The value name to add.}
 
-\item{opt}{Optional. Other options passed to the function.}
+\item{sr}{A vector of sub-regions to drop.}
 
-\item{pattern}{The pattern of values to collate (e.g., "_cases_").}
+\item{val}{The value to select.}
 
-\item{id}{The ID of the Google Sheet document to load.}
+\item{out_col}{The name of the value column in the output dataset.}
 
-\item{sheet}{Optional. The specific sheet within the Google Sheet document to load.}
+\item{geo}{The geographic level of the data. One of "pt", "hr", "sub-hr".}
 
-\item{loc}{Either "prov" or "hr".}
+\item{d1}{Dataset to append to. A cumulative value dataset.}
+
+\item{d2}{Dataset being appended. A daily value dataset.}
 }
 \description{
 Functions to further process data downloaded via the `process_dataset`
