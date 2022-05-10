@@ -431,18 +431,4 @@ assemble_datasets <- function() {
   write_dataset(icu_can, "can", "icu_can")
   write_dataset(tests_completed_pt, "pt", "tests_completed_pt")
   write_dataset(tests_completed_can, "can", "tests_completed_can")
-
-  # write update time
-  tryCatch(
-    {
-      cat("Writing update time...", fill = TRUE)
-      update_time <- lubridate::with_tz(Sys.time(), tzone = "America/Toronto") %>%
-        format.Date("%Y-%m-%d %H:%M %Z")
-      cat(paste0(update_time, "\n"), file = "update_time.txt")
-    },
-    error = function(e) {
-      print(e)
-      cat("Error in writing update time", fill = TRUE)
-    }
-  )
 }
