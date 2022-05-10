@@ -2,13 +2,12 @@
 % Please edit documentation in R/e_t_datasets.R
 \name{e_t_datasets}
 \alias{e_t_datasets}
-\title{Extract and transform data for the daily Canadian COVID-19 data collection}
+\title{Extract and transform data for the daily Canadian COVID-19 data collection,
+then upload to Google Sheets and/or write it locally}
 \usage{
-e_t_datasets(mode = c("main", "phu"))
-}
-\arguments{
-\item{mode}{Process which dataset? One of "main" or "phu".}
+e_t_datasets()
 }
 \description{
-Extract and transform data for the daily Canadian COVID-19 data collection
+Extract and transform data for the daily Canadian COVID-19 data collection,
+then upload to Google Sheets and/or write it locally
 }

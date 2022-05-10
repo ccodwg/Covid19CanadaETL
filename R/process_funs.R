@@ -5,412 +5,371 @@
 #' province and health region names and aggregating health region-level data up
 #' to the province level.
 #'
-#' @importFrom rlang .data :=
 #' @param d The dataset to process.
-#' @param prov Two-letter province abbreviation (e.g., "ON").
-#' @param loc Either "prov" or "hr".
-#' @param pattern The pattern of values to collate (e.g., "_cases_").
-#' @param date_today Today's date.
-#' @param id The ID of the Google Sheet document to load.
-#' @param sheet Optional. The specific sheet within the Google Sheet document to load.
-#' @param opt Optional. Other options passed to the function.
+#' @param n_days The number of days to shift dates forward by.
+#' @param name The value name to add.
+#' @param val The value to select.
+#' @param out_col The name of the value column in the output dataset.
+#' @param sr A vector of sub-regions to drop.
+#' @param geo The geographic level of the data. One of "pt", "hr", "sub-hr".
+#' @param d1 Dataset to append to. A cumulative value dataset.
+#' @param d2 Dataset being appended. A daily value dataset.
 #'
 #' @name process_funs
 NULL
 
-#' process_funs: Normalize province names to comport with CCODWG dataset
+#' Convert health region names to HRUIDs
 #'
 #' @rdname process_funs
 #'
 #' @export
-process_prov_names <- function(d) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  # get prov names
-  provs <- get_prov_data() %>%
-    dplyr::select(.data$province, .data$province_short) %>%
-    dplyr::rename(region = .data$province)
-  provs <- d %>%
-    dplyr::left_join(
-      provs,
-      by = c("region" = "province_short")
-    )
-  # convert prov names
-  d %>%
-    dplyr::mutate(
-      region = provs$region.y
-    )
-}
-
-#' process_funs: Normalize health region names to comport with CCODWG dataset
-#'
-#' @rdname process_funs
-#'
-#' @export
-process_hr_names <- function(d, prov, date_today = lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto")), opt = NULL) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  # misc fixes before joining
-  if (prov == "AB") {
-    d <- d %>%
-      dplyr::mutate(sub_region_1 = sub("zone", "Zone", .data$sub_region_1))
-  }
-  # fix HR names
-  if (!prov %in% c("BC", "MB", "NB", "NL", "ON", "QC", "SK")) {
-    # get HR names
-    hr <- get_hr_data(sknew = TRUE) %>%
-      dplyr::filter(.data$province_short == prov) %>%
-      dplyr::select(.data$health_region, .data$health_region_esri)
-    hr[hr$health_region == "Not Reported", "health_region_esri"] <- "Not Reported"
-  } else {
-    switch(
-      prov,
-      "BC" = {
-        hr <- data.frame(
-          health_region = c("Interior", "Fraser", "Vancouver Coastal",
-                            "Island", "Northern", "Not Reported"),
-          health_region_esri = c("Interior", "Fraser", "Vancouver Coastal",
-                                 "Vancouver Island", "Northern", "Not Reported")
-        )
-      },
-      "MB" = {
-        hr <- data.frame(
-          health_region = c("Interlake-Eastern", "Northern", "Prairie Mountain",
-                            "Southern Health", "Winnipeg", "Not Reported"),
-          health_region_esri = c("Interlake-Eastern", "Northern", "Prairie Mountain Health",
-                                 "Southern Health-Sant\u00E9 Sud", "Winnipeg", "Not Reported")
-        )
-      },
-      "NB" = {
-        hr <- data.frame(
-          health_region = c("Zone 1 (Moncton area)", "Zone 2 (Saint John area)",
-                            "Zone 3 (Fredericton area)", "Zone 4 (Edmundston area)",
-                            "Zone 5 (Campbellton area)", "Zone 6 (Bathurst area)",
-                            "Zone 7 (Miramichi area)", "Not Reported"),
-          health_region_esri = c("Zone 1: South East Region (Moncton)", "Zone 2: South Central Region (Saint John)",
-                                 "Zone 3: Central West Region (Fredericton)", "Zone 4: North West Region (Edmundston)",
-                                 "Zone 5: North Central Region (Campbellton)", "Zone 6: North East Region (Bathurst)",
-                                 "Zone 7: Central East Region (Miramichi)", "Not Reported")
-        )
-      },
-      "NL" = {
-        hr <- data.frame(
-          health_region = c("Central", "Eastern",
-                            "Labrador-Grenfell", "Western",
-                            "Not Reported"),
-          health_region_esri = c("Central Health Authority", "Eastern Health Authority",
-                                 "Labrador-Grenfell Health Authority", "Western Health Authority",
-                                 "Not Reported")
-        )
-      },
-      "ON" = {
-        match.arg(opt, choices = c("moh", "esri"), several.ok = FALSE)
-        if (opt == "moh") {
-          hr <- data.frame(
-            health_region = c("Algoma", "Brant", "Chatham-Kent",
-                              "Durham", "Eastern", "Grey Bruce",
-                              "Haldimand-Norfolk", "Haliburton Kawartha Pineridge", "Halton",
-                              "Hamilton", "Hastings Prince Edward", "Huron Perth",
-                              "Kingston Frontenac Lennox & Addington", "Lambton", "Leeds Grenville and Lanark",
-                              "Middlesex-London", "Niagara", "North Bay Parry Sound",
-                              "Northwestern", "Ottawa", "Peel",
-                              "Peterborough", "Porcupine", "Renfrew",
-                              "Simcoe Muskoka", "Southwestern", "Sudbury",
-                              "Thunder Bay", "Timiskaming", "Toronto",
-                              "Waterloo", "Wellington Dufferin Guelph", "Windsor-Essex",
-                              "York", "Not Reported"),
-            health_region_esri = c("ALGOMA DISTRICT", "BRANT COUNTY", "CHATHAM-KENT",
-                                   "DURHAM REGION", "EASTERN ONTARIO", "GREY BRUCE",
-                                   "HALDIMAND-NORFOLK", "HALIBURTON, KAWARTHA, PINE RIDGE", "HALTON REGION",
-                                   "CITY OF HAMILTON", "HASTINGS & PRINCE EDWARD COUNTIES", "HURON PERTH",
-                                   "KINGSTON, FRONTENAC, LENNOX & ADDINGTON", "LAMBTON COUNTY", "LEEDS, GRENVILLE AND LANARK DISTRICT",
-                                   "MIDDLESEX-LONDON", "NIAGARA REGION", "NORTH BAY PARRY SOUND DISTRICT",
-                                   "NORTHWESTERN", "CITY OF OTTAWA", "PEEL REGION",
-                                   "PETERBOROUGH COUNTY-CITY", "PORCUPINE", "RENFREW COUNTY AND DISTRICT",
-                                   "SIMCOE MUSKOKA DISTRICT", "OXFORD ELGIN-ST.THOMAS", "SUDBURY AND DISTRICT",
-                                   "THUNDER BAY DISTRICT", "TIMISKAMING", "TORONTO",
-                                   "WATERLOO REGION", "WELLINGTON-DUFFERIN-GUELPH", "WINDSOR-ESSEX COUNTY",
-                                   "YORK REGION", "Not Reported"
-            )
-          )
-        } else if (opt == "esri") {
-          hr <- data.frame(
-            health_region = c("Algoma", "Brant", "Chatham-Kent",
-                              "Durham", "Eastern", "Grey Bruce",
-                              "Haldimand-Norfolk", "Haliburton Kawartha Pineridge", "Halton",
-                              "Hamilton", "Hastings Prince Edward", "Huron Perth",
-                              "Kingston Frontenac Lennox & Addington", "Lambton", "Leeds Grenville and Lanark",
-                              "Middlesex-London", "Niagara", "North Bay Parry Sound",
-                              "Northwestern", "Ottawa", "Peel",
-                              "Peterborough", "Porcupine", "Renfrew",
-                              "Simcoe Muskoka", "Southwestern", "Sudbury",
-                              "Thunder Bay", "Timiskaming", "Toronto",
-                              "Waterloo", "Wellington Dufferin Guelph", "Windsor-Essex",
-                              "York", "Not Reported"),
-            health_region_esri = c("Algoma Public Health Unit", "Brant County Health Unit", "Chatham-Kent Health Unit",
-                                   "Durham Region Health Department", "Eastern Ontario Health Unit", "Grey Bruce Health Unit",
-                                   "Haldimand-Norfolk Health Unit", "Haliburton, Kawartha, Pine Ridge District Health Unit", "Halton Region Health Department",
-                                   "Hamilton Public Health Services", "Hastings and Prince Edward Counties Health Unit", "Huron Perth District Health Unit",
-                                   "Kingston, Frontenac and Lennox & Addington Public Health", "Lambton Public Health", "Leeds, Grenville and Lanark District Health Unit",
-                                   "Middlesex-London Health Unit", "Niagara Region Public Health Department", "North Bay Parry Sound District Health Unit",
-                                   "Northwestern Health Unit", "Ottawa Public Health", "Peel Public Health",
-                                   "Peterborough Public Health", "Porcupine Health Unit", "Renfrew County and District Health Unit",
-                                   "Simcoe Muskoka District Health Unit", "Southwestern Public Health", "Sudbury & District Health Unit",
-                                   "Thunder Bay District Health Unit", "Timiskaming Health Unit", "Toronto Public Health",
-                                   "Region of Waterloo, Public Health", "Wellington-Dufferin-Guelph Public Health", "Windsor-Essex County Health Unit",
-                                   "York Region Public Health Services", "Not Reported"
-            )
-          )
-        }
-      },
-      "QC" = {
-        hr <- get_hr_data(sknew = TRUE) %>%
-          dplyr::filter(.data$province_short == prov) %>%
-          dplyr::select(.data$health_region) %>%
-          dplyr::mutate(health_region_esri = .data$health_region) %>%
-          dplyr::mutate(
-            health_region_esri = dplyr::case_when(
-              .data$health_region_esri == "Gasp\u00E9sie-\u00CEles-de-la-Madeleine" ~ "Gasp\u00E9sie - \u00CEles-de-la-Madeleine",
-              .data$health_region_esri == "Saguenay" ~ "Saguenay - Lac-Saint-Jean",
-              .data$health_region_esri == "Mauricie" ~ "Mauricie et Centre-du-Qu\u00E9bec",
-              TRUE ~ .data$health_region_esri
-            )
-          )
-      },
-      "SK" = {
-        hr <- data.frame(
-          health_region = c("Far North", "Far North", "Far North",
-                            "North", "North", "North",
-                            "Saskatoon", "Central", "Central",
-                            "Regina", "South", "South",
-                            "South", "Not Reported"),
-          health_region_esri = c("Far North West", "Far North Central", "Far North East",
-                                 "North West", "North Central", "North East",
-                                 "Saskatoon", "Central West", "Central East",
-                                 "Regina", "South West", "South Central",
-                                 "South East", "Not Reported")
-        )
+convert_hr_names <- function(d) {
+  # read and process health region file
+  tryCatch(
+    {
+      hr <- get_hr() %>%
+        dplyr::mutate(name_hruid = .data$hruid) %>%
+        tidyr::pivot_longer(
+          dplyr::starts_with("name_"),
+          names_to = "hr_name"
+        ) %>%
+        dplyr::transmute(
+          .data$region,
+          sub_region_1 = .data$value,
+          .data$hruid) %>%
+        dplyr::filter(!is.na(.data$sub_region_1)) %>%
+        dplyr::distinct()
+      # convert health region names
+      d <- d %>%
+        dplyr::left_join(hr, by = c("region", "sub_region_1")) %>%
+        dplyr::mutate(
+          sub_region_1_original = .data$sub_region_1,
+          sub_region_1 = ifelse(
+            .data$sub_region_1 %in% c("Unknown", "9999"), "9999", .data$hruid)) %>%
+        dplyr::arrange(.data$region, .data$sub_region_1)
+      # check for conversion failures
+      failed <- d[is.na(d$sub_region_1), "sub_region_1_original", drop = TRUE] %>%
+        unique()
+      if (length(failed) > 0) {
+        stop(paste0("Some health region names failed to convert: ", paste(failed, collapse = ", ")))
       }
-    )
-  }
-
-  # convert unknown/out of province HRs to "Not Reported"
-  d <- d %>%
-    dplyr::mutate(
-      sub_region_1 = ifelse(.data$sub_region_1 %in% c(
-        "Unknown", "Out of Canada",
-        "Hors Qu\u00E9bec", "Inconnu",
-        "R\u00E9gion inconnue",
-        "R\u00E9gion \u00e0 d\u00E9terminer"),
-                            "Not Reported",
-                            .data$sub_region_1)
-    )
-
-  # ensure a not reported HR exists, otherwise create one
-  nr <- d %>%
-    dplyr::filter(.data$sub_region_1 == "Not Reported")
-  if (nrow(nr) == 0) {
-    d <- d %>%
-      {dplyr::add_row(
-        .,
-        data.frame(
-          name = .[["name"]][1],
-          region = prov,
-          sub_region_1 = "Not Reported",
-          date = date_today,
-          value = 0
-        )
-      )}
-    cat(prov, " ", d[["name"]][1], ": Adding a row for Not Reported...", sep = "", fill = TRUE)
-  }
-
-  # convert column names
-  d %>%
-    dplyr::left_join(
-      hr,
-      by = c("sub_region_1" = "health_region_esri")
-    ) %>%
-    dplyr::select(.data$name, .data$region, .data$health_region,
-                  .data$date, .data$value) %>%
-    dplyr::rename(sub_region_1 = .data$health_region)
+      # return converted data frame
+      dplyr::select(d, -.data$sub_region_1_original, -.data$hruid)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in convert_hr_names", fill = TRUE)
+    }
+  )
 }
 
-#' process_funs: Aggregate values to province level
+#' Shift dates forward by x days
 #'
 #' @rdname process_funs
 #'
 #' @export
-process_agg2prov <- function(d) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  d %>%
-    dplyr::select(!dplyr::matches("^sub_region_1$|^sub_region_2$")) %>%
-    dplyr::group_by(dplyr::across(c(-.data$value))) %>%
-    dplyr::summarize(value = sum(.data$value), .groups = "drop")
+date_shift <- function(d, n_days) {
+  tryCatch(
+    {
+      d %>%
+        dplyr::mutate(date = date + n_days)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in date_shift", fill = TRUE)
+    }
+  )
 }
 
-#' process_funs: Convert province with one health region to health region format
+#' Add name column in the first position
 #'
 #' @rdname process_funs
 #'
 #' @export
-process_prov2hr <- function(d, prov) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  # check args
-  match.arg(prov,
-            choices = c("NT", "NU", "PE", "YT"),
-            several.ok = FALSE)
-  d %>%
-    dplyr::mutate(
-      sub_region_1 = dplyr::case_when(
-        prov == "NT" ~ "NWT",
-        prov == "NU" ~ "Nunavut",
-        prov == "PE" ~ "Prince Edward Island",
-        prov == "YT" ~ "Yukon"
+add_name_col <- function(d, name) {
+  tryCatch(
+    {
+      # operation fails when .before is specified but the column already exists
+      # so drop the column if it already exists
+      d <- d[names(d) != "name"]
+      d %>%
+        dplyr::mutate(name = dplyr::all_of(name), .before = 1)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in add_name_col:", name, fill = TRUE)
+    }
+  )
+}
+
+#' Drop sub-regions
+#'
+#' @rdname process_funs
+#'
+#' @export
+drop_sub_regions <- function(d, sr) {
+  tryCatch(
+    {
+      d %>%
+        dplyr::filter(!.data$sub_region_1 %in% dplyr::all_of(sr))
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in drop_regions:", paste(sr, collapse = ", "), fill = TRUE)
+    }
+  )
+}
+
+#' Pluck relevant data from weekly reports
+#'
+#' @rdname process_funs
+#'
+#' @export
+report_pluck <- function(d, name, val, out_col, geo) {
+  tryCatch(
+    {
+      match.arg(geo, c("pt", "hr"), several.ok = FALSE)
+      # filter data
+      if (geo == "pt") {
+        d <- d %>%
+          dplyr::filter(is.na(.data$sub_region_1)) %>%
+          dplyr::transmute(
+            name = name,
+            .data$region,
+            date = .data$date_end,
+            "{out_col}" := !!rlang::sym(val)
+          )
+      } else {
+        d <- d %>%
+          dplyr::filter(!is.na(.data$sub_region_1)) %>%
+          dplyr::transmute(
+            name = name,
+            .data$region,
+            .data$sub_region_1,
+            date = .data$date_end,
+            "{out_col}" := !!rlang::sym(val)
+          )
+      }
+      # return data
+      d %>% dplyr::filter(!is.na(!!rlang::sym(out_col)))
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in report_pluck:", paste(name, val, out_col, geo, sep = " / "), fill = TRUE)
+    }
+  )
+}
+
+#' Append a daily value dataset to a cumulative value dataset
+#'
+#' @rdname process_funs
+#'
+#' @export
+append_daily_d <- function(d1, d2) {
+  tryCatch(
+    {
+      d2 <- d2 %>%
+        dplyr::group_by(.data$name, .data$region, .data$sub_region_1) %>%
+        dplyr::transmute(
+          .data$name,
+          .data$region,
+          .data$sub_region_1,
+          .data$date,
+          value = cumsum(.data$value_daily)) %>%
+        dplyr::ungroup()
+      d1_h <- unique(d1$sub_region_1)
+      for (h in unique(d2$sub_region_1)) {
+        # check for incompatible sub_region_1 names
+        if (!h %in% d1_h) {
+          # special case for "Unknown" sub_region_1 in d2, which may be missing from d1
+          if (h == "Unknown") {
+            break
+          } else {
+            stop("Sub-region names are incompatible")
+          }
+        } else {
+          # convert daily values in d2 to cumulative values based on final cumulative value in d1
+          d2[d2$sub_region_1 == h, "value"] <- d2[d2$sub_region_1 == h, "value"] +
+            d1[d1$sub_region_1 == h & d1$date == max(d1$date), "value", drop = TRUE]
+        }
+      }
+      # returned combined dataset
+      dplyr::bind_rows(d1, d2)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in append_daily_d", fill = TRUE)
+    }
+  )
+}
+
+#' Collate datasets together
+#'
+#' @rdname process_funs
+#'
+#' @export
+collate_datasets <- function(val) {
+  tryCatch(
+    {
+      dplyr::bind_rows(
+        mget(ls(parent.frame(),
+                pattern = paste0(val, "_(", paste(tolower(get_pt()[["region"]]), collapse = "|"), ")")), envir = parent.frame())
       )
-    ) %>%
-    dplyr::select(.data$name, .data$region, .data$sub_region_1,
-                         .data$date, .data$value)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in collate datasets:", val, fill = TRUE)
+    }
+  )
 }
 
-#' process_funs: Get current cumulative value(s)
+#' Fortify a PT-level dataset with a health region column
 #'
 #' @rdname process_funs
 #'
 #' @export
-process_cum_current <- function(d) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  # process
-  max_date <- max(d$date)
-  current_date <- lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto"))
-  d %>%
-    dplyr::filter(.data$date == max_date) %>%
-    dplyr::mutate(date = current_date)
+add_hr_col <- function(d, name) {
+  tryCatch(
+    {
+      d %>% tibble::add_column(sub_region_1 = name, .after = "region")
+    },
+    error = function(e) {
+      print(e)
+      cat("add_hr_col", fill = TRUE)
+    }
+  )
 }
 
-#' process_funs: Collate data by value
+#' Aggregate HR-level data up to PT-level
 #'
 #' @rdname process_funs
 #'
 #' @export
-process_collate <- function(d, pattern) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  # collate
-  d[grep(pattern, names(d))] %>%
-    dplyr::bind_rows() %>%
-    process_prov_names()
+agg2pt <- function(d) {
+  tryCatch(
+    {
+      d %>%
+        dplyr::select(-.data$sub_region_1) %>%
+        dplyr::group_by(.data$name, .data$region, .data$date) %>%
+        dplyr::summarise(value = sum(.data$value), value_daily = sum(.data$value_daily), .groups = "drop")
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in agg2pt", fill = TRUE)
+    }
+  )
 }
 
-#' process_funs: Download quickly from Google Sheets
+#' Aggregate PT-level data up to Canada-level
 #'
 #' @rdname process_funs
 #'
 #' @export
-sheets_load <- function(id, sheet = NULL) {
-  if (!is.null(sheet)) {
-    googlesheets4::read_sheet(
-      ss = id,
-      sheet = sheet,
-      col_types = "c" # don't mangle dates
-    )
-  } else {
-    googlesheets4::read_sheet(
-      ss = id,
-      col_types = "c" # don't mangle dates
-    )
-  }
+agg2can <- function(d) {
+  tryCatch(
+    {
+      # fill missing dates for each pt
+      out <- tidyr::expand(
+        d,
+        tidyr::nesting(d$name, d$region),
+        date = seq.Date(min(d$date), max(d$date), by = "day"),
+        .name_repair = function(y) sub("^d\\$", "", y))
+      out <- dplyr::right_join(d, out, by = c("name", "region", "date")) %>%
+        dplyr::select(-.data$value_daily) %>%
+        # fill missing values
+        dplyr::arrange(.data$name, .data$region, .data$date) %>%
+        dplyr::group_by(dplyr::across(c(-.data$date, -.data$value))) %>%
+        tidyr::fill(.data$value, .direction = "down") %>%
+        tidyr::replace_na(list(value = 0)) %>%
+        # calculate daily differences
+        dplyr::mutate(value_daily = c(dplyr::first(.data$value), diff(.data$value))) %>%
+        dplyr::ungroup()
+      # aggregate up to Canada
+      out <- out %>%
+        dplyr::mutate(region = "CAN") %>%
+        dplyr::group_by(.data$name, .data$region, .data$date) %>%
+        dplyr::summarise(value = sum(.data$value), value_daily = sum(.data$value_daily), .groups = "drop")
+      # return data
+      out
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in agg2can", fill = TRUE)
+    }
+  )
 }
 
-#' process_funs: Google Sheets download and merge
+#' Format the collated dataset for writing
 #'
 #' @rdname process_funs
 #'
 #' @export
-sheets_merge <- function(d, id, loc = c("prov", "hr"), date_today, sheet = NULL) {
-  # convert date to character
-  date_today <- as.character(date_today)
-  # rename new column
-  d <- d %>% dplyr::rename(c("new_data" = date_today))
-  # check arg
-  match.arg(loc, c("prov", "hr", several.ok = FALSE))
-  # load sheet
-  d_merge <- if (!is.null(sheet)) {
-    sheets_load(id, sheet = sheet)
-  } else {
-    sheets_load(id)
-  }
-  # variables to merge by
-  loc_merge <- if (loc == "hr") {
-    c("province" = "region", "health_region" = "sub_region_1")
-  } else {
-    c("province" = "region")
-  }
-  # merge data
-  dplyr::left_join(
-    d_merge,
-    d,
-    by = loc_merge
-  ) %>%
-    dplyr::mutate(
-      !!rlang::sym(date_today) := dplyr::case_when(
-        !is.na(.data$new_data) ~ as.character(.data$new_data),
-        TRUE ~ !!rlang::sym(date_today)
+dataset_format <- function(d, geo = c("pt", "hr", "sub-hr")) {
+  tryCatch(
+    {
+      match.arg(geo, c("pt", "hr", "sub-hr"), several.ok = FALSE)
+      # expand dates and regions
+      out <- split(d, d$region) # ensure separate date ranges for each region
+      switch(
+        geo,
+        "pt" = {
+          col_names <- c("name", "region", "date")
+          out <- lapply(out, function(x) {
+            tidyr::expand(
+              x,
+              tidyr::nesting(x$name, x$region),
+              date = seq.Date(min(x$date), max(x$date), by = "day"),
+              .name_repair = function(y) sub("^x\\$", "", y))
+          }) %>% dplyr::bind_rows()
+        },
+        "hr" = {
+          col_names <- c("name", "region", "date", "sub_region_1")
+          out <- lapply(out, function(x) {
+            tidyr::expand(
+              x,
+              tidyr::nesting(x$name, x$region, x$sub_region_1),
+              date = seq.Date(min(x$date), max(x$date), by = "day"),
+              .name_repair = function(y) sub("^x\\$", "", y))
+          }) %>% dplyr::bind_rows()
+        },
+        "sub-hr" = {
+          col_names <- c("name", "region", "date", "sub_region_1", "sub_region_2")
+          out <- lapply(out, function(x) {
+            tidyr::expand(
+              x,
+              tidyr::nesting(x$name, x$region, x$sub_region_1, x$sub_region_2),
+              date = seq.Date(min(x$date), max(x$date), by = "day"),
+              .name_repair = function(y) sub("^x\\$", "", y))
+          }) %>% dplyr::bind_rows()
+        }
       )
-    ) %>%
-    # drop new data column
-    dplyr::select(-.data$new_data)
-}
-
-#' process_funs: Format datasets for upload to Google Sheets
-#'
-#' @rdname process_funs
-#'
-#' @export
-process_format_sheets <- function(d, loc = c("prov", "hr")) {
-  # check arg
-  match.arg(loc, c("prov", "hr", several.ok = FALSE))
-
-  # format dataset
-  if (loc == "prov") {
-    d %>%
-      tidyr::pivot_wider(
-        id_cols = c(.data$region),
-        names_from = .data$date,
-        values_from = .data$value) %>%
-      dplyr::arrange(.data$region)
-  } else if (loc == "hr") {
-    d %>%
-      tidyr::pivot_wider(
-        id_cols = c(.data$region, .data$sub_region_1),
-        names_from = .data$date,
-        values_from = .data$value) %>%
-      dplyr::arrange(.data$region, .data$sub_region_1)
-  } else {
-    stop('loc should be "prov" or "hr".')
-  }
-}
-
-#' process_funs: SK new HRs to old HRs
-#'
-#' @rdname process_funs
-#'
-#' @export
-process_sk_new2old <- function(d) {
-  # check for NA
-  if (identical(d, NA)) {cat("Passing NA...", fill = TRUE); return(NA)}
-  d %>%
-    # convert SK HR names (new to old)
-    dplyr::mutate(
-      sub_region_1 = dplyr::case_when(
-          .data$sub_region_1 %in% c("Far North West", "Far North Central", "Far North East") ~ "Far North",
-          .data$sub_region_1 %in% c("North West", "North Central", "North East") ~ "North",
-          .data$sub_region_1 %in% c("Central West", "Central East") ~ "Central",
-          .data$sub_region_1 %in% c("South West", "South Central", "South East") ~ "South",
-          TRUE ~ .data$sub_region_1)) %>%
-    # aggregate values
-    dplyr::group_by(.data$name, .data$region, .data$sub_region_1, .data$date) %>%
-    dplyr::summarize(value = sum(.data$value), .groups = "drop")
+      # join and format data
+      out <- dplyr::right_join(d, out, by = col_names) %>%
+        # dplyr::arrange(!!!rlang::syms(col_names)[col_names != "date"]) %>%
+        # fill missing values
+        dplyr::group_by(dplyr::across(c(-.data$date, -.data$value))) %>%
+        dplyr::arrange(.data$date) %>%
+        tidyr::fill(.data$value, .direction = "down") %>%
+        tidyr::replace_na(list(value = 0)) %>%
+        # calculate daily differences
+        dplyr::mutate(value_daily = c(dplyr::first(.data$value), diff(.data$value))) %>%
+        dplyr::ungroup() %>%
+        # final sort
+        dplyr::arrange(!!!rlang::syms(col_names))
+      # check for duplicate observations
+      dedup <- dplyr::distinct(out, dplyr::across(c(-.data$value, -.data$value_daily)))
+      if (nrow(out) != nrow(dedup)) {
+        print(
+          dplyr::count(out, dplyr::across(c(-.data$value, -.data$value_daily))) %>%
+            dplyr::filter(.data$n > 1))
+        stop("Observations are not unique: check for data overlaps")
+      }
+      # return data
+      out
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in dataset_format:", geo, fill = TRUE)
+    }
+  )
 }

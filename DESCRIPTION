@@ -1,6 +1,6 @@
 Package: Covid19CanadaETL
 Title: A Pipeline for Canadian COVID-19 Data
-Version: 0.3.0
+Version: 0.4.0
 Authors@R:
     person(given = "Jean-Paul R.",
            family = "Soucy",
@@ -15,16 +15,22 @@ LazyData: true
 Imports:
     Covid19CanadaData,
     Covid19CanadaDataProcess,
-    rlang,
-    xml2,
+    utils,
+    stats,
     magrittr,
+    rlang,
+    tibble,
     dplyr,
     tidyr,
     lubridate,
-    googlesheets4,
+    readr,
     jsonlite,
+    xml2,
     httr,
-    utils
+    googledrive,
+    googlesheets4,
+    ggplot2,
+    ggpubr
 Remotes:
     ccodwg/Covid19CanadaData,
     ccodwg/Covid19CanadaDataProcess

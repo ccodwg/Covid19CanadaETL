@@ -4,10 +4,7 @@
 \alias{dl_datasets}
 \title{Download datasets required for daily Canadian COVID-19 data collection}
 \usage{
-dl_datasets(mode = c("main", "phu"))
-}
-\arguments{
-\item{mode}{Download which dataset? One of "main" or "phu".}
+dl_datasets()
 }
 \value{
 A character vector containing the path of the temporary directory

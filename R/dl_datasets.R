@@ -6,123 +6,48 @@
 #' to by their UUID given in the datasets.json (\url{https://github.com/ccodwg/Covid19CanadaArchive/blob/master/datasets.json})
 #' file from "Covid19CanadaArchive" (\url{https://github.com/ccodwg/Covid19CanadaArchive}).
 #'
-#' @param mode Download which dataset? One of "main" or "phu".
 #' @return A character vector containing the path of the temporary directory
 #' containing the datasets required for \link{e_t_datasets}. Names correspond to
 #' the UUIDs assigned to the dataset in datasets.json.
 #'
 #' @export
-dl_datasets <- function(mode = c("main", "phu")) {
+dl_datasets <- function() {
 
-  # verify mode
-  match.arg(mode, choices = c("main", "phu"), several.ok = FALSE)
-
-  # create temporary directory for datasets
+  # define temporary directory for downloaded datasets
   ds_dir <- tempdir()
-  cat("Creating temporary directory for datasets:", ds_dir, fill = TRUE)
 
   # list datasets
-  covid_datasets <- if (mode == "main") {
-    matrix(
-      c(
-        # ab
-        "d3b170a7-bb86-4bb0-b362-2adc5e6438c2", NA, NA,
-        "24a572ea-0de3-4f83-b9b7-8764ea203eb6", NA, NA,
-        "ec1acea4-8b85-4c04-b905-f075de040493", NA, NA,
-        # bc
-        "91367e1d-8b79-422c-b314-9b3441ba4f42", NA, NA,
-        "f9a8dea5-1eed-447b-a9a0-be2a4b62d6a6", NA, NA,
-        "9d940861-0252-4d33-b6e8-23a2eeb105bf", NA, NA,
-        # can
-        "fa3f2917-6553-438c-9a6f-2af8d077f47f", NA, NA,
-        "f7db31d0-6504-4a55-86f7-608664517bdb", NA, NA,
-        # mb
-        # nb
-        # nl
-        "34f45670-34ed-415c-86a6-e14d77fcf6db", NA, NA,
-        # ns
-        # nt
-        # nu
-        # on
-        "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA,
-        "a8b1be1a-561a-47f5-9456-c553ea5b2279", NA, NA,
-        "170057c4-3231-4f15-9438-2165c5438dda", NA, NA,
-        # pe
-        "68e5cbb9-0dcc-4a4f-ade0-58a0b06b1455", NA, NA,
-        "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Total Doses", NA,
-        "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Fully Immunized", NA,
-        "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Fully Immunized 5-11", NA,
-        "3ff94c42-8b12-4653-a6c9-0ddd8ff343d5", "Third Doses", NA,
-        # qc
-        "0c577d5e-999e-42c5-b4c1-66b3787c3a04", NA, NA,
-        "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA,
-        "aee3bd38-b782-4880-9033-db76f84cef5b", NA, ";",
-        "4e04442d-f372-4357-ba15-3b64f4e03fbe", NA, NA,
-        # sk
-        # yt
-        "9c29c29f-fd38-45d5-a471-9bfb95abb683", NA, NA,
-        "4a33ab2c-32a4-4630-8f6b-2bac2b1ce7ca", NA, NA,
-        "387473c7-bcb9-4712-82fb-cd0355793cdc", NA, NA
-      ),
-      ncol = 3,
-      byrow = TRUE
-    )
-  } else {
-    matrix(
-      c(
-        # Algoma (ALG)
-        "685df305-f6c7-4ac2-992b-ec707eb1f1cb", NA, NA,
-        # Brant (BRN)
-        "2e7a5549-92ae-473d-a97a-7b8e0c1ddbbc", NA, NA,
-        # Hamilton (HAM)
-        "b8ef690e-d23f-4b7d-8cf8-bc4a0f3d0a84", NA, NA,
-        # Middlesex-London (MSL)
-        "b32a2f6b-7745-4bb1-9f9b-7ad0000d98a0", NA, NA,
-        # Niagara (NIA)
-        "e1887eb2-538f-4610-bc00-bcd7d929a375", NA, NA,
-        # North Bay Parry Sound (NPS)
-        "3178dd11-17af-4478-a72e-e1a35d7d1b2d", NA, NA,
-        # Northwestern (NWR)
-        "4c56a58b-0cb3-4d71-bafe-9fdb42e5c1d5", NA, NA,
-        # Ottawa (OTT)
-        "d8d4cbc6-d0a5-4544-ad3e-5a3c3060f973", NA, NA,
-        # Peel (PEL)
-        "34b7dda2-1843-47e1-9c24-0c2a7ab78431", NA, NA,
-        # Peterborough (PET)
-        "821645cf-acbb-49d1-ae28-0e65037c61bf", NA, NA,
-        # Porcupine (PQP)
-        "00cc3ae2-7bf8-4074-81b7-8e06e91c947a", NA, NA,
-        # Renfrew (REN)
-        "688bf944-9be6-49c3-ae5d-848ae32bad92", NA, NA,
-        # Simcoe Muskoka (SMD)
-        "7106106a-2f43-4ed2-b2a2-a75a7046ff81", NA, NA,
-        # Sudbury (SUD)
-        "4b9c88a2-9487-4632-adc5-cfd4a2fddb3f", NA, NA,
-        # Thunder Bay (THB)
-        "942e48c4-1148-46e1-a5d3-e25aa9bede05", NA, NA,
-        # Timiskaming (TSK)
-        "9c7bbba4-33ba-493a-8ea1-4eedd5149bc0", NA, NA,
-        # Toronto (TOR)
-        "ebad185e-9706-44f4-921e-fc89d5cfa334", "Status", NA,
-        # Wellington Dufferin Guelph
-        "e00e2148-b0ea-458b-9f00-3533e0c5ae8e", NA, NA,
-        # Windsor-Essex (WEK)
-        "fb6ccf1c-498f-40d0-b70c-8fce37603be1", NA, NA,
-        # York (YRK)
-        "3821cc66-f88d-4f12-99ca-d36d368872cd", NA, NA,
-        # Ontario Ministry of Health Time Series by PHU
-        # used for:
-        # Chatham-Kent (CKH)
-        # Eastern (EOH)
-        # Haldimand-Norfolk (HNH)
-        # Huron Perth (HPH)
-        # Leeds Grenville and Lanark (LGL)
-        "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA
-      ),
-      ncol = 3,
-      byrow = TRUE
-    )
-  }
+  covid_datasets <- matrix(
+    c(
+      # ab
+      "59da1de8-3b4e-429a-9e18-b67ba3834002", NA, NA, # c
+      "d3b170a7-bb86-4bb0-b362-2adc5e6438c2", NA, NA, # d
+      # bc
+      "ab6abe51-c9b1-4093-b625-93de1ddb6302", NA, NA, # c
+      "91367e1d-8b79-422c-b314-9b3441ba4f42", NA, NA, # d
+      # can
+      "f7db31d0-6504-4a55-86f7-608664517bdb", NA, NA, # c/d
+      # mb
+      # nb
+      # nl
+      "b19daaca-6b32-47f5-944f-c69eebd63c07", NA, NA, # c
+      "34f45670-34ed-415c-86a6-e14d77fcf6db", NA, NA, # d
+      # ns
+      # nt
+      # nu
+      # on
+      "73fffd44-fbad-4de8-8d32-00cc5ae180a6", NA, NA, # c/d
+      "4b214c24-8542-4d26-a850-b58fc4ef6a30", NA, NA, # h/i
+      # pe
+      # qc
+      "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA, # c/d
+      "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA, # h/i
+      # sk
+      # yt
+      "8eb9a22f-a2c0-4bdb-8f6c-ef8134901efe", NA, NA # c
+    ),
+    ncol = 3,
+    byrow = TRUE)
 
   # calculate dataset names
   covid_datasets <- cbind(covid_datasets, apply(covid_datasets, MARGIN = 1, FUN = function(x) {
@@ -135,6 +60,7 @@ dl_datasets <- function(mode = c("main", "phu")) {
     }}))
 
   # read in datasets
+  cat("Downloading datasets...", fill = TRUE)
   ds_failed <- apply(covid_datasets, MARGIN = 1, FUN = function(x) {
     uuid <- x[1]
     sheet <- x[2]
@@ -204,6 +130,6 @@ dl_datasets <- function(mode = c("main", "phu")) {
     }
   }
 
-  # return temporary directory for datasets
+  # return temporary directory for downloaded datasets
   return(ds_dir)
 }

@@ -2,13 +2,11 @@
 % Please edit documentation in R/ccodwg_update.R
 \name{ccodwg_update}
 \alias{ccodwg_update}
-\title{Perform daily update for CCODWG dataset}
+\title{Perform update of CovidTimelineCanada}
 \usage{
-ccodwg_update(mode = c("main", "phu"), email = NULL, path = NULL)
+ccodwg_update(email = NULL, path = NULL)
 }
 \arguments{
-\item{mode}{Update which dataset? One of "main" or "phu".}
-
 \item{email}{The email to authenticate with Google Sheets. If not provided,
 manual authentication will be requested.}
 
@@ -16,5 +14,5 @@ manual authentication will be requested.}
 account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.}
 }
 \description{
-Daily update is based on today's cumulative totals for each value.
+Perform update of CovidTimelineCanada
 }
