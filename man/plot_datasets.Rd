@@ -4,7 +4,10 @@
 \alias{plot_datasets}
 \title{Plot CovidTimelineCanada datasets}
 \usage{
-plot_datasets()
+plot_datasets(plot_dir = ".")
+}
+\arguments{
+\item{plot_dir}{Directory to save plots. Defaults to current directory.}
 }
 \description{
 Plot CovidTimelineCanada datasets

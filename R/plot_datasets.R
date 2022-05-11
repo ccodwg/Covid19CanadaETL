@@ -1,6 +1,9 @@
 #' Plot CovidTimelineCanada datasets
+#'
+#' @param plot_dir Directory to save plots. Defaults to current directory.
+#'
 #' @export
-plot_datasets <- function() {
+plot_datasets <- function(plot_dir = ".") {
 
   # load data
   load_datasets()
@@ -38,8 +41,8 @@ plot_datasets <- function() {
   }
 
   # function: save value plot
-  save_plot <- function(path, width = 731, height = 603, units = "px", dpi = 96) {
-    ggplot2::ggsave(path, width = width, height = height, units = units, dpi = dpi)
+  save_plot <- function(file_name, width = 731, height = 603, units = "px", dpi = 96) {
+    ggplot2::ggsave(file.path(plot_dir, file_name), width = width, height = height, units = units, dpi = dpi)
   }
 
   # generate plots
@@ -67,4 +70,16 @@ plot_datasets <- function() {
   ## icu
   plot_value(get("icu_pt"), type = "cumulative", title = "ICU data")
   save_plot("icu_pt.png")
+
+  ## vaccine_coverage_dose_1
+  plot_value(get("vaccine_coverage_dose_1_pt"), type = "cumulative", title = "Vaccine coverage (dose 1)")
+  save_plot("vaccine_coverage_dose_1.png")
+
+  ## vaccine_coverage_dose_2
+  plot_value(get("vaccine_coverage_dose_2_pt"), type = "cumulative", title = "Vaccine coverage (dose 2)")
+  save_plot("vaccine_coverage_dose_2.png")
+
+  ## vaccine_coverage_dose_3
+  plot_value(get("vaccine_coverage_dose_3_pt"), type = "cumulative", title = "Vaccine coverage (dose 3)")
+  save_plot("vaccine_coverage_dose_3.png")
 }

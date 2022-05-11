@@ -53,21 +53,34 @@ get_pt <- function() {
 #' Read raw dataset using readr::read_csv
 #'
 #' @param file The CSV file to read.
+#' @param val_numeric Is the value numeric (versus an integer)? Default: FALSE.
 #'
 #' @export
-read_d <- function(file) {
+read_d <- function(file, val_numeric = FALSE) {
   tryCatch(
     {
       # define column types
-      cols <- readr::cols(
-        name = readr::col_character(),
-        region = readr::col_character(),
-        sub_region_1 = readr::col_character(),
-        sub_region_2 = readr::col_character(),
-        date = readr::col_date("%Y-%m-%d"),
-        value = readr::col_integer(),
-        value_daily = readr::col_integer()
-      )
+      if (val_numeric) {
+        cols <- readr::cols(
+          name = readr::col_character(),
+          region = readr::col_character(),
+          sub_region_1 = readr::col_character(),
+          sub_region_2 = readr::col_character(),
+          date = readr::col_date("%Y-%m-%d"),
+          value = readr::col_double(),
+          value_daily = readr::col_double()
+        )
+      } else {
+        cols <- readr::cols(
+          name = readr::col_character(),
+          region = readr::col_character(),
+          sub_region_1 = readr::col_character(),
+          sub_region_2 = readr::col_character(),
+          date = readr::col_date("%Y-%m-%d"),
+          value = readr::col_integer(),
+          value_daily = readr::col_integer()
+        )
+      }
       # read dataset
       readr::read_csv(
         file = file,
@@ -91,13 +104,22 @@ read_d <- function(file) {
 get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
   tryCatch(
     {
-      match.arg(val, c("cases", "deaths", "tests_completed"))
+      match.arg(val, c(
+        "cases", "deaths", "tests_completed",
+        "vaccine_coverage_dose_1", "vaccine_coverage_dose_2",
+        "vaccine_coverage_dose_3"))
       # get relevant value
       d <- switch(
         val,
         "cases" = {read_d("raw_data/active_ts/can/can_cases_pt_ts.csv")},
         "deaths" = {read_d("raw_data/active_ts/can/can_deaths_pt_ts.csv")},
-        "tests_completed" = {read_d("raw_data/active_ts/can/can_tests_completed_pt_ts.csv")}
+        "tests_completed" = {read_d("raw_data/active_ts/can/can_tests_completed_pt_ts.csv")},
+        "vaccine_coverage_dose_1" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_coverage_dose_1_pt_ts.csv", val_numeric = TRUE)},
+        "vaccine_coverage_dose_2" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_coverage_dose_2_pt_ts.csv", val_numeric = TRUE)},
+        "vaccine_coverage_dose_3" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_coverage_dose_3_pt_ts.csv", val_numeric = TRUE)},
       )
       # exclude repatriated
       if (exclude_repatriated) {
@@ -206,7 +228,12 @@ get_covid19tracker_d <- function(val, region, from = NULL, to = NULL) {
 load_datasets <- function() {
   files <- list.files("data", pattern = "*.csv", recursive = TRUE, full.names = TRUE)
   list2env(lapply(stats::setNames(files, make.names(sub("*.csv$", "", basename(files)))),
-                  FUN = function(x) read_d(x)),
+                  FUN = function(x) {
+                    if (grepl("^vaccine_coverage_dose_", basename(x))) {
+                      read_d(x, val_numeric = TRUE)
+                    } else {
+                      read_d(x, val_numeric = FALSE)
+                    }}),
            envir = parent.frame()) %>% invisible()
 }
 

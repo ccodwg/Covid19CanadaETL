@@ -4,10 +4,12 @@
 \alias{read_d}
 \title{Read raw dataset using readr::read_csv}
 \usage{
-read_d(file)
+read_d(file, val_numeric = FALSE)
 }
 \arguments{
 \item{file}{The CSV file to read.}
+
+\item{val_numeric}{Is the value numeric (versus an integer)? Default: FALSE.}
 }
 \description{
 Read raw dataset using readr::read_csv

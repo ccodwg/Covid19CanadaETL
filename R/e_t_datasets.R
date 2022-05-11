@@ -207,6 +207,17 @@ e_t_datasets <- function() {
     add_name_col("tests_completed") %>%
     write_ts("active_ts", "can", "tests_completed")
 
+  # vaccine coverage data
+  cat("Updating active_ts: vaccine coverage data", fill = TRUE)
+  for (dose in 1:3) {
+    Covid19CanadaDataProcess::process_dataset(
+      uuid = "d0bfcd85-9552-47a5-a699-aa6fe4815e00",
+      val = paste0("vaccine_coverage_dose_", dose),
+      fmt = "prov_ts",
+      ds = load_ds(ds, "d0bfcd85-9552-47a5-a699-aa6fe4815e00")) %>%
+      write_ts("active_ts", "can", paste0("vaccine_coverage_dose_", dose))
+  }
+
   # update reports datasets
   cat("Updating reports datasets...", fill = TRUE)
 
