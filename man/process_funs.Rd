@@ -35,7 +35,7 @@ agg2pt(d)
 
 agg2can(d)
 
-dataset_format(d, geo = c("pt", "hr", "sub-hr"))
+dataset_format(d, geo = c("pt", "hr", "sub-hr"), digits)
 }
 \arguments{
 \item{d}{The dataset to process.}
@@ -55,6 +55,9 @@ dataset_format(d, geo = c("pt", "hr", "sub-hr"))
 \item{d1}{Dataset to append to. A cumulative value dataset.}
 
 \item{d2}{Dataset being appended. A daily value dataset.}
+
+\item{digits}{The number of digits to round to for numeric values. If not
+provided, no rounding will be done for numeric values.}
 }
 \description{
 Functions to further process data downloaded via the `process_dataset`

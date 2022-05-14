@@ -7,6 +7,8 @@
 #'
 #' @param d The dataset to process.
 #' @param n_days The number of days to shift dates forward by.
+#' @param digits The number of digits to round to for numeric values. If not
+#' provided, no rounding will be done for numeric values.
 #' @param name The value name to add.
 #' @param val The value to select.
 #' @param out_col The name of the value column in the output dataset.
@@ -304,7 +306,7 @@ agg2can <- function(d) {
 #' @rdname process_funs
 #'
 #' @export
-dataset_format <- function(d, geo = c("pt", "hr", "sub-hr")) {
+dataset_format <- function(d, geo = c("pt", "hr", "sub-hr"), digits) {
   tryCatch(
     {
       match.arg(geo, c("pt", "hr", "sub-hr"), several.ok = FALSE)
@@ -356,6 +358,15 @@ dataset_format <- function(d, geo = c("pt", "hr", "sub-hr")) {
         dplyr::ungroup() %>%
         # final sort
         dplyr::arrange(!!!rlang::syms(col_names))
+      # round numeric values if digits arg is provided
+      if (!missing(digits)) {
+        if (is.numeric(out$value)) {
+          out$value <- round(out$value, digits = digits)
+        }
+        if (is.numeric(out$value_daily)) {
+          out$value_daily <- round(out$value_daily, digits = digits)
+        }
+      }
       # check for duplicate observations
       dedup <- dplyr::distinct(out, dplyr::across(c(-.data$value, -.data$value_daily)))
       if (nrow(out) != nrow(dedup)) {
