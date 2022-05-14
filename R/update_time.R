@@ -5,7 +5,7 @@
 #'
 #' @return The update time as a string.
 #' @export
-update_time <- function() {
+write_update_time <- function() {
   tryCatch(
     {
       cat("Writing update time...", fill = TRUE)
