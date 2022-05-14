@@ -222,19 +222,54 @@ get_covid19tracker_d <- function(val, region, from = NULL, to = NULL) {
 
 #' Load datasets
 #'
-#' Bulk load CSV datasets from `CovidTimelineCanada`.
+#' Bulk load CSV datasets from `CovidTimelineCanada`. If `path` is not provided,
+#' the function will first check if the working directory is called
+#' `CovidTimelineCanada` and if so, load files from the `data` directory. If
+#' not, the function will attempt to download the data from GitHub into a
+#' temporary directory. If `path` is provided, the function will attempt to load
+#' files from the `data` directory at that path.
+#'
+#' @param path Path to `CovidTimelineCanada` directory. Optional, see
+#' Description for more details.
 #'
 #' @export
-load_datasets <- function() {
-  files <- list.files("data", pattern = "*.csv", recursive = TRUE, full.names = TRUE)
-  list2env(lapply(stats::setNames(files, make.names(sub("*.csv$", "", basename(files)))),
-                  FUN = function(x) {
-                    if (grepl("^vaccine_coverage_dose_", basename(x))) {
-                      read_d(x, val_numeric = TRUE)
-                    } else {
-                      read_d(x, val_numeric = FALSE)
-                    }}),
-           envir = parent.frame()) %>% invisible()
+load_datasets <- function(path = NULL) {
+  tryCatch(
+    {
+      if (is.null(path)) {
+        if (basename(getwd()) == "CovidTimelineCanada") {
+          # use working directory if it is called "CovidTimelineCanada"
+          cat("Loading CovidTimelineCanada datasets from working directory...", fill = TRUE)
+          path <- "."
+        } else {
+          # attempt to clone from GitHub into temporary directory
+          cat("Downloading CovidTimelineCanada datasets from GitHub...", fill = TRUE)
+          temp_dir <- tempdir()
+          temp_file <- tempfile(tmpdir = temp_dir)
+          download.file("https://github.com/ccodwg/CovidTimelineCanada/archive/refs/heads/main.zip",
+                        destfile = temp_file)
+          utils::unzip(temp_file, exdir = temp_dir)
+          path <- file.path(temp_dir, "CovidTimelineCanada-main")
+        }
+      }
+      # read data files
+      files <- list.files(file.path(path, "data"), pattern = "*.csv", recursive = TRUE, full.names = TRUE)
+      list2env(lapply(stats::setNames(files, make.names(sub("*.csv$", "", basename(files)))),
+                      FUN = function(x) {
+                        if (grepl("^vaccine_coverage_dose_", basename(x))) {
+                          read_d(x, val_numeric = TRUE)
+                        } else {
+                          read_d(x, val_numeric = FALSE)
+                        }}),
+               envir = parent.frame())
+      # read update time
+      assign("update_time", readLines(file.path(path, "update_time.txt")), envir = parent.frame())
+    },
+    error = function(e) {
+      print(e)
+      cat("Error loading datasets. Is the path specified correctly?", fill = TRUE)
+    }
+  )
 }
 
 #' Log error

@@ -4,8 +4,17 @@
 \alias{load_datasets}
 \title{Load datasets}
 \usage{
-load_datasets()
+load_datasets(path = NULL)
+}
+\arguments{
+\item{path}{Path to `CovidTimelineCanada` directory. Optional, see
+Description for more details.}
 }
 \description{
-Bulk load CSV datasets from `CovidTimelineCanada`.
+Bulk load CSV datasets from `CovidTimelineCanada`. If `path` is not provided,
+the function will first check if the working directory is called
+`CovidTimelineCanada` and if so, load files from the `data` directory. If
+not, the function will attempt to download the data from GitHub into a
+temporary directory. If `path` is provided, the function will attempt to load
+files from the `data` directory at that path.
 }
