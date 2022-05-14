@@ -73,13 +73,13 @@ plot_datasets <- function(plot_dir = ".") {
 
   ## vaccine_coverage_dose_1
   plot_value(get("vaccine_coverage_dose_1_pt"), type = "cumulative", title = "Vaccine coverage (dose 1)")
-  save_plot("vaccine_coverage_dose_1.png")
+  save_plot("vaccine_coverage_dose_1_pt.png")
 
   ## vaccine_coverage_dose_2
   plot_value(get("vaccine_coverage_dose_2_pt"), type = "cumulative", title = "Vaccine coverage (dose 2)")
-  save_plot("vaccine_coverage_dose_2.png")
+  save_plot("vaccine_coverage_dose_2_pt.png")
 
   ## vaccine_coverage_dose_3
   plot_value(get("vaccine_coverage_dose_3_pt"), type = "cumulative", title = "Vaccine coverage (dose 3)")
-  save_plot("vaccine_coverage_dose_3.png")
+  save_plot("vaccine_coverage_dose_3_pt.png")
 }
