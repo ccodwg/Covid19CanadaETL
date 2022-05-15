@@ -7,9 +7,11 @@
 #' account (e.g., file path to JSON). See \code{\link[googledrive]{drive_auth}}
 #' and \code{\link[googlesheets4]{gs4_auth}}.
 #' @param d Dataset to upload.
+#' @param d_merge Dataset to merge into.
 #' @param files List of Google Drive files from \code{\link[googledrive]{drive_ls}}.
 #' @param file Name of specific Google Sheets file.
 #' @param sheet Number/name of specific sheet in the Google Sheets file.
+#' @param col_range Column range to write to (e.g., "C:C").
 #'
 #' @name sheets_funs
 NULL
@@ -90,11 +92,9 @@ sheets_load <- function(files, file, sheet = NULL) {
 #' @rdname sheets_funs
 #'
 #' @export
-sheets_merge <- function(d, files, file, sheet = NULL) {
+sheets_merge <- function(d, d_merge) {
   tryCatch(
     {
-      # bind new data together
-      d <- dplyr::bind_rows(d)
       # extract the current date
       if (length(unique(d$date)) == 1) {
         date_today <- as.character(d$date[1])
@@ -111,8 +111,6 @@ sheets_merge <- function(d, files, file, sheet = NULL) {
       } else {
         cols <- "region"
       }
-      # load existing data
-      d_merge <- sheets_load(files, file, sheet)
       # check if there is already data for today's date
       if (date_today %in% names(d_merge)) {
         # extract existing data
@@ -162,32 +160,54 @@ sheets_merge <- function(d, files, file, sheet = NULL) {
 #' @rdname sheets_funs
 #'
 #' @export
-sheets_upload <- function(d, files, file, sheet = NULL) {
+sheets_upload <- function(d, files, file, sheet = NULL, col_range = NULL) {
   tryCatch(
     {
       id <- files %>%
         dplyr::filter(.data$name == file) %>%
         dplyr::pull(.data$id)
       if (!is.null(sheet)) {
-        googlesheets4::write_sheet(
-          data = d,
-          ss = id,
-          sheet = sheet
-        )
+        if (!is.null(col_range)) {
+          cat("Uploading:", paste(file, sheet, col_range, sep = " / "), fill = TRUE)
+          googlesheets4::range_write(
+            data = d,
+            ss = id,
+            sheet = sheet,
+            range = col_range,
+            reformat = FALSE
+          )
+        } else {
+          cat("Uploading:", paste(file, sheet, sep = " / "), fill = TRUE)
+          googlesheets4::write_sheet(
+            data = d,
+            ss = id,
+            sheet = sheet
+          )
+        }
       } else {
-        googlesheets4::write_sheet(
-          data = d,
-          ss = id,
-          sheet = sheet
-        )
+        if (!is.null(col_range)) {
+          cat("Uploading:", paste(file, col_range, sep = " / "), fill = TRUE)
+          googlesheets4::range_write(
+            data = d,
+            ss = id,
+            range = col_range,
+            reformat = FALSE
+          )
+        } else {
+          cat("Uploading:", file, fill = TRUE)
+          googlesheets4::write_sheet(
+            data = d,
+            ss = id
+          )
+        }
       }
     },
     error = function(e) {
       print(e)
       if (!is.null(sheet)) {
-        cat("Error in sheets_load:", file, fill = TRUE)
+        cat("Error in sheets_upload:", file, fill = TRUE)
       } else {
-        cat("Error in sheets_load:", paste(file, sheet, sep = " / "), fill = TRUE)
+        cat("Error in sheets_upload:", paste(file, sheet, sep = " / "), fill = TRUE)
       }
     }
   )
@@ -201,10 +221,29 @@ sheets_upload <- function(d, files, file, sheet = NULL) {
 upload_active_cumul <- function(d, files, file, sheet = NULL) {
   tryCatch(
     {
+      # bind new data together
+      d <- dplyr::bind_rows(d)
+      # extract the current date
+      if (length(unique(d$date)) == 1) {
+        date_today <- as.character(d$date[1])
+      } else {
+        stop("Dates do not all match")
+      }
+      # load existing data
+      d_merge <- sheets_load(files, file, sheet)
       # merge new data
-      d <- sheets_merge(d, files, file, sheet)
-      # upload data
-      sheets_upload(d, files, file, sheet)
+      d <- sheets_merge(d, d_merge)
+      # write entire data frame (if no column for today) or just overwrite today's column
+      if (date_today %in% names(d_merge)) {
+        col_range <- LETTERS[which(names(d_merge) == date_today)]
+        if (length(col_range) != 1) {stop("Something went wrong.")}
+        col_range <- paste0(col_range, ":", col_range)
+        d <- d[, date_today]
+        sheets_upload(d, files, file, sheet, col_range)
+      } else {
+        # upload entire data frame
+        sheets_upload(d, files, file, sheet)
+      }
     },
     error = function(e) {
       print(e)

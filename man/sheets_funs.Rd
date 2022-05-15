@@ -16,9 +16,9 @@ auth_gs(email = NULL, path = NULL)
 
 sheets_load(files, file, sheet = NULL)
 
-sheets_merge(d, files, file, sheet = NULL)
+sheets_merge(d, d_merge)
 
-sheets_upload(d, files, file, sheet = NULL)
+sheets_upload(d, files, file, sheet = NULL, col_range = NULL)
 
 upload_active_cumul(d, files, file, sheet = NULL)
 }
@@ -37,6 +37,10 @@ and \code{\link[googlesheets4]{gs4_auth}}.}
 \item{sheet}{Number/name of specific sheet in the Google Sheets file.}
 
 \item{d}{Dataset to upload.}
+
+\item{d_merge}{Dataset to merge into.}
+
+\item{col_range}{Column range to write to (e.g., "C:C").}
 }
 \description{
 Functions to download/upload data from Google Sheets
