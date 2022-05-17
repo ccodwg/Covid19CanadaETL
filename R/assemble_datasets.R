@@ -415,6 +415,8 @@ assemble_datasets <- function() {
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_3_pt <- get_phac_d("vaccine_coverage_dose_3", "all") %>%
     dataset_format("pt", digits = 2)
+  vaccine_coverage_dose_4_pt <- get_phac_d("vaccine_coverage_dose_4", "all") %>%
+    dataset_format("pt", digits = 2)
 
   ## Canadian datasets (NOT an aggregate of PT datasets)
   vaccine_coverage_dose_1_can <- get_phac_d("vaccine_coverage_dose_1", "CAN") %>%
@@ -422,6 +424,8 @@ assemble_datasets <- function() {
   vaccine_coverage_dose_2_can <- get_phac_d("vaccine_coverage_dose_2", "CAN") %>%
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_3_can <- get_phac_d("vaccine_coverage_dose_3", "CAN") %>%
+    dataset_format("pt", digits = 2)
+  vaccine_coverage_dose_4_can <- get_phac_d("vaccine_coverage_dose_4", "CAN") %>%
     dataset_format("pt", digits = 2)
 
   # create aggregated datasets (HR -> PT)
@@ -455,4 +459,6 @@ assemble_datasets <- function() {
   write_dataset(vaccine_coverage_dose_2_can, "can", "vaccine_coverage_dose_2_can")
   write_dataset(vaccine_coverage_dose_3_pt, "pt", "vaccine_coverage_dose_3_pt")
   write_dataset(vaccine_coverage_dose_3_can, "can", "vaccine_coverage_dose_3_can")
+  write_dataset(vaccine_coverage_dose_4_pt, "pt", "vaccine_coverage_dose_4_pt")
+  write_dataset(vaccine_coverage_dose_4_can, "can", "vaccine_coverage_dose_4_can")
 }

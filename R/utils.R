@@ -107,7 +107,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
       match.arg(val, c(
         "cases", "deaths", "tests_completed",
         "vaccine_coverage_dose_1", "vaccine_coverage_dose_2",
-        "vaccine_coverage_dose_3"))
+        "vaccine_coverage_dose_3", "vaccine_coverage_dose_4"))
       # get relevant value
       d <- switch(
         val,
@@ -120,6 +120,8 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
           "raw_data/active_ts/can/can_vaccine_coverage_dose_2_pt_ts.csv", val_numeric = TRUE)},
         "vaccine_coverage_dose_3" = {read_d(
           "raw_data/active_ts/can/can_vaccine_coverage_dose_3_pt_ts.csv", val_numeric = TRUE)},
+        "vaccine_coverage_dose_4" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_coverage_dose_4_pt_ts.csv", val_numeric = TRUE)}
       )
       # exclude repatriated
       if (exclude_repatriated) {
