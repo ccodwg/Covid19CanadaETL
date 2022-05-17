@@ -248,8 +248,8 @@ load_datasets <- function(path = NULL) {
           cat("Downloading CovidTimelineCanada datasets from GitHub...", fill = TRUE)
           temp_dir <- tempdir()
           temp_file <- tempfile(tmpdir = temp_dir)
-          download.file("https://github.com/ccodwg/CovidTimelineCanada/archive/refs/heads/main.zip",
-                        destfile = temp_file)
+          utils::download.file("https://github.com/ccodwg/CovidTimelineCanada/archive/refs/heads/main.zip",
+                               destfile = temp_file)
           utils::unzip(temp_file, exdir = temp_dir)
           path <- file.path(temp_dir, "CovidTimelineCanada-main")
         }

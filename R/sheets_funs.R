@@ -146,11 +146,7 @@ sheets_merge <- function(d, d_merge) {
     },
     error = function(e) {
       print(e)
-      if (!is.null(sheet)) {
-        cat("Error in sheets_merge:", file, fill = TRUE)
-      } else {
-        cat("Error in sheets_merge:", paste(file, sheet, sep = " / "), fill = TRUE)
-      }
+      cat("Error in sheets_merge", fill = TRUE)
     }
   )
 }
