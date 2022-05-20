@@ -107,7 +107,9 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
       match.arg(val, c(
         "cases", "deaths", "tests_completed",
         "vaccine_coverage_dose_1", "vaccine_coverage_dose_2",
-        "vaccine_coverage_dose_3", "vaccine_coverage_dose_4"))
+        "vaccine_coverage_dose_3", "vaccine_coverage_dose_4",
+        "vaccine_administration_dose_1", "vaccine_administration_dose_2",
+        "vaccine_administration_dose_3", "vaccine_administration_total_doses"))
       # get relevant value
       d <- switch(
         val,
@@ -121,7 +123,15 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
         "vaccine_coverage_dose_3" = {read_d(
           "raw_data/active_ts/can/can_vaccine_coverage_dose_3_pt_ts.csv", val_numeric = TRUE)},
         "vaccine_coverage_dose_4" = {read_d(
-          "raw_data/active_ts/can/can_vaccine_coverage_dose_4_pt_ts.csv", val_numeric = TRUE)}
+          "raw_data/active_ts/can/can_vaccine_coverage_dose_4_pt_ts.csv", val_numeric = TRUE)},
+        "vaccine_administration_dose_1" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_administration_dose_1_pt_ts.csv")},
+        "vaccine_administration_dose_2" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_administration_dose_2_pt_ts.csv")},
+        "vaccine_administration_dose_3" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_administration_dose_3_pt_ts.csv")},
+        "vaccine_administration_total_doses" = {read_d(
+          "raw_data/active_ts/can/can_vaccine_administration_total_doses_pt_ts.csv")}
       )
       # exclude repatriated
       if (exclude_repatriated) {

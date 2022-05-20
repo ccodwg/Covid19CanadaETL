@@ -86,4 +86,20 @@ plot_datasets <- function(plot_dir = ".") {
   ## vaccine_coverage_dose_4
   plot_value(get("vaccine_coverage_dose_4_pt"), type = "cumulative", title = "Vaccine coverage (dose 4)")
   save_plot("vaccine_coverage_dose_4_pt.png")
+
+  ## vaccine_administration_dose_1
+  plot_value(get("vaccine_administration_dose_1_pt"), type = "daily", title = "Vaccine administration (dose 1)", hide_negative_values = TRUE)
+  save_plot("vaccine_administration_dose_1_pt.png")
+
+  ## vaccine_administration_dose_2
+  plot_value(get("vaccine_administration_dose_2_pt"), type = "daily", title = "Vaccine administration (dose 2)", hide_negative_values = TRUE)
+  save_plot("vaccine_administration_dose_2_pt.png")
+
+  ## vaccine_administration_dose_3
+  plot_value(get("vaccine_administration_dose_3_pt"), type = "daily", title = "Vaccine administration (dose 3)", hide_negative_values = TRUE)
+  save_plot("vaccine_administration_dose_3_pt.png")
+
+  ## vaccine_administration_total_doses
+  plot_value(get("vaccine_administration_total_doses_pt"), type = "daily", title = "Vaccine administration (total_doses)", hide_negative_values = TRUE)
+  save_plot("vaccine_administration_total_doses_pt.png")
 }

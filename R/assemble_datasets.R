@@ -428,6 +428,28 @@ assemble_datasets <- function() {
   vaccine_coverage_dose_4_can <- get_phac_d("vaccine_coverage_dose_4", "CAN") %>%
     dataset_format("pt", digits = 2)
 
+  # vaccine administration dataset
+
+  ## collate and process final datasets
+  vaccine_administration_dose_1_pt <- get_phac_d("vaccine_administration_dose_1", "all") %>%
+    dataset_format("pt")
+  vaccine_administration_dose_2_pt <- get_phac_d("vaccine_administration_dose_2", "all") %>%
+    dataset_format("pt")
+  vaccine_administration_dose_3_pt <- get_phac_d("vaccine_administration_dose_3", "all") %>%
+    dataset_format("pt")
+  vaccine_administration_total_doses_pt <- get_phac_d("vaccine_administration_total_doses", "all") %>%
+    dataset_format("pt")
+
+  ## Canadian datasets (NOT an aggregate of PT datasets)
+  vaccine_administration_dose_1_can <- get_phac_d("vaccine_administration_dose_1", "CAN") %>%
+    dataset_format("pt")
+  vaccine_administration_dose_2_can <- get_phac_d("vaccine_administration_dose_2", "CAN") %>%
+    dataset_format("pt")
+  vaccine_administration_dose_3_can <- get_phac_d("vaccine_administration_dose_3", "CAN") %>%
+    dataset_format("pt")
+  vaccine_administration_total_doses_can <- get_phac_d("vaccine_administration_total_doses", "CAN") %>%
+    dataset_format("pt")
+
   # create aggregated datasets (HR -> PT)
   cases_pt <- agg2pt(cases_hr)
   deaths_pt <- agg2pt(deaths_hr)
@@ -461,4 +483,12 @@ assemble_datasets <- function() {
   write_dataset(vaccine_coverage_dose_3_can, "can", "vaccine_coverage_dose_3_can")
   write_dataset(vaccine_coverage_dose_4_pt, "pt", "vaccine_coverage_dose_4_pt")
   write_dataset(vaccine_coverage_dose_4_can, "can", "vaccine_coverage_dose_4_can")
+  write_dataset(vaccine_administration_dose_1_pt, "pt", "vaccine_administration_dose_1_pt")
+  write_dataset(vaccine_administration_dose_1_can, "can", "vaccine_administration_dose_1_can")
+  write_dataset(vaccine_administration_dose_2_pt, "pt", "vaccine_administration_dose_2_pt")
+  write_dataset(vaccine_administration_dose_2_can, "can", "vaccine_administration_dose_2_can")
+  write_dataset(vaccine_administration_dose_3_pt, "pt", "vaccine_administration_dose_3_pt")
+  write_dataset(vaccine_administration_dose_3_can, "can", "vaccine_administration_dose_3_can")
+  write_dataset(vaccine_administration_total_doses_pt, "pt", "vaccine_administration_total_doses_pt")
+  write_dataset(vaccine_administration_total_doses_can, "can", "vaccine_administration_total_doses_can")
 }
