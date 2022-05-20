@@ -23,10 +23,10 @@ ccodwg_update <- function(email = NULL, path = NULL) {
   auth_gs(email, path)
 
   # download, process, upload, write raw datasets
-  e_t_datasets()
+  update_raw_datasets()
 
   # assemble and write final datasets
-  assemble_datasets()
+  assemble_final_datasets()
 
   # email error log
   error_log <- readLines(log_path)

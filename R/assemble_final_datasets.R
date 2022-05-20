@@ -1,9 +1,9 @@
-#' Assemble and write final datasets from raw datasets
+#' Assemble and write final datasets from raw datasets for CovidTimelineCanada
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-assemble_datasets <- function() {
+assemble_final_datasets <- function() {
 
   # announce start
   cat("Assembling final datasets...", fill = TRUE)

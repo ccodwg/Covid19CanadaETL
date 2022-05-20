@@ -1,10 +1,9 @@
-#' Extract and transform data for the daily Canadian COVID-19 data collection,
-#' then upload to Google Sheets and/or write it locally
+#' Update raw datasets for CovidTimelineCanada
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-e_t_datasets <- function() {
+update_raw_datasets <- function() {
 
   # announce start
   cat("Updating raw datasets...", fill = TRUE)
