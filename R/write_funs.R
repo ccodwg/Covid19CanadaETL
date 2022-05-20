@@ -61,7 +61,7 @@ write_ts <- function(d,
 #' @rdname write_funs
 #'
 #' @export
-update_covid19tracker <- function(val) {
+update_covid19tracker_dataset <- function(val) {
   tryCatch(
     {
       match.arg(val, c("hospitalizations", "icu"))

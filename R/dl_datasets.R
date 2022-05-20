@@ -1,4 +1,4 @@
-#' Download datasets required for daily Canadian COVID-19 data collection
+#' Download datasets required to update raw datasets for CovidTimelineCanada
 #'
 #' The live version of each required dataset is downloaded from a URL using the
 #' function \code{\link[Covid19CanadaData]{dl_dataset}}. Datasets are saved as
@@ -7,7 +7,7 @@
 #' file from "Covid19CanadaArchive" (\url{https://github.com/ccodwg/Covid19CanadaArchive}).
 #'
 #' @return A character vector containing the path of the temporary directory
-#' containing the datasets required for \link{e_t_datasets}. Names correspond to
+#' containing the datasets required for \code{\link{update_raw_datasets}}. Names correspond to
 #' the UUIDs assigned to the dataset in datasets.json.
 #'
 #' @export

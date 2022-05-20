@@ -1,57 +1,7 @@
-#' Update raw datasets for CovidTimelineCanada
-#'
-#' @importFrom rlang .data
-#'
+#' Update active_ts datasets
+#' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
 #' @export
-update_raw_datasets <- function() {
-
-  # announce start
-  cat("Updating raw datasets...", fill = TRUE)
-
-  # define constants
-
-  ## define provinces/territories
-  pt <- c(
-    "AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT")
-
-  # load Google Drive folder for COVID-19 data
-  files <- googledrive::drive_ls(googledrive::as_id("10uX8h0GHcf3tleH-9i0E9mX0e8hXEOl5"))
-
-  # download datasets
-  ds <- dl_datasets()
-
-  # function: load data from temporary directory
-  load_ds <- function(ds, ds_name) {
-    tryCatch(
-      {
-        # check file
-        f_name <- list.files(path = ds, pattern = ds_name)
-        if (length(f_name) == 0) {
-          stop("Dataset not found")
-        } else if (length(f_name) > 1) {
-          stop("Dataset name matches multiple files")
-        }
-        if (grepl(".*\\.html$", f_name)) {
-          # if .html, use read_xml()
-          xml2::read_html(file.path(ds, paste0(ds_name, ".html")))
-        } else {
-          # else, try readRDS
-          suppressWarnings(readRDS(file.path(ds, paste0(ds_name, ".RData"))))
-        }
-      },
-      error = function(e) {
-        print(e)
-        cat("Error in load_ds:", ds_name, fill = TRUE)
-      }
-    )
-  }
-
-  # open sink for error messages
-  e <- tempfile()
-  ef <- file(e, open = "wt")
-  sink(file = ef, type = "message")
-
-  # update active_ts datasets
+update_active_ts <- function(ds) {
   cat("Updating active_ts datasets...", fill = TRUE)
 
   # active_ts - case data
@@ -233,27 +183,40 @@ update_raw_datasets <- function() {
     fmt = "prov_ts",
     ds = load_ds(ds, "d0bfcd85-9552-47a5-a699-aa6fe4815e00")) %>%
     write_ts("active_ts", "can", "vaccine_administration_total_doses")
+}
 
-  # update reports datasets
+#' Update reports datasets
+#' @export
+update_reports <- function() {
   cat("Updating reports datasets...", fill = TRUE)
 
-  ## actively updated reports
+  # actively updated reports
   sync_report("mb_weekly_report", "mb", "hr")
   sync_report("nb_weekly_report", "nb", "hr")
   sync_report("ns_weekly_report", "ns", "hr")
   sync_report("sk_weekly_report", "sk", "hr")
 
-  ## no longer updated reports
+  # no longer updated reports
   # sync_report("ns_daily_news_release", "ns", "hr")
   # sync_report("pe_daily_news_release", "pe", "hr")
+}
 
-  # update covid19tracker.ca datasets
+#' Update covid19tracker.ca datasets
+#' @export
+update_covid19tracker <- function() {
   cat("Updating covid19tracker.ca datasets...", fill = TRUE)
-  update_covid19tracker("hospitalizations")
-  update_covid19tracker("icu")
+  update_covid19tracker_dataset("hospitalizations")
+  update_covid19tracker_dataset("icu")
+}
 
-  # update active_cumul datasets
+#' Update active_cumul datasets
+#' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
+#' @export
+update_active_cumul <- function(ds) {
   cat("Updating active_cumul datasets...", fill = TRUE)
+
+  # load Google Drive folder for COVID-19 data
+  files <- googledrive::drive_ls(googledrive::as_id("10uX8h0GHcf3tleH-9i0E9mX0e8hXEOl5"))
 
   # active_cumul - death data
   cat("Updating active_cumul: death data", fill = TRUE)
@@ -289,6 +252,72 @@ update_raw_datasets <- function() {
 
   ## sync and write
   sync_active_cumul("deaths_hr", "deaths", c("AB", "BC", "NL"))
+}
+
+#' Load data from temporary directory
+#' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
+#' @param ds_name The UUID of the dataset to load.
+#' @export
+load_ds <- function(ds, ds_name) {
+  tryCatch(
+    {
+      # check file
+      f_name <- list.files(path = ds, pattern = ds_name)
+      if (length(f_name) == 0) {
+        stop("Dataset not found")
+      } else if (length(f_name) > 1) {
+        stop("Dataset name matches multiple files")
+      }
+      if (grepl(".*\\.html$", f_name)) {
+        # if .html, use read_xml()
+        xml2::read_html(file.path(ds, paste0(ds_name, ".html")))
+      } else {
+        # else, try readRDS
+        suppressWarnings(readRDS(file.path(ds, paste0(ds_name, ".RData"))))
+      }
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in load_ds:", ds_name, fill = TRUE)
+    }
+  )
+}
+
+#' Update raw datasets for CovidTimelineCanada
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+update_raw_datasets <- function() {
+
+  # announce start
+  cat("Updating raw datasets...", fill = TRUE)
+
+  # define constants
+
+  ## define provinces/territories
+  pt <- c(
+    "AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT")
+
+  # download datasets
+  ds <- dl_datasets()
+
+  # open sink for error messages
+  e <- tempfile()
+  ef <- file(e, open = "wt")
+  sink(file = ef, type = "message")
+
+  # update active_ts datasets
+  update_active_ts(ds)
+
+  # update reports datasets
+  update_reports()
+
+  # update covid19tracker.ca datasets
+  update_covid19tracker()
+
+  # update active_cumul datasets
+  update_active_cumul(ds)
 
   # close sink
   sink(NULL, type = "message")

@@ -3,7 +3,7 @@
 \name{write_funs}
 \alias{write_funs}
 \alias{write_ts}
-\alias{update_covid19tracker}
+\alias{update_covid19tracker_dataset}
 \alias{sync_report}
 \alias{sync_active_cumul}
 \alias{write_dataset}
@@ -11,7 +11,7 @@
 \usage{
 write_ts(d, dir = c("active_ts", "active_cumul"), region, val)
 
-update_covid19tracker(val)
+update_covid19tracker_dataset(val)
 
 sync_report(sheet, region, geo)
 

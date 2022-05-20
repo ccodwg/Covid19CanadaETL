@@ -2,13 +2,13 @@
 % Please edit documentation in R/dl_datasets.R
 \name{dl_datasets}
 \alias{dl_datasets}
-\title{Download datasets required for daily Canadian COVID-19 data collection}
+\title{Download datasets required to update raw datasets for CovidTimelineCanada}
 \usage{
 dl_datasets()
 }
 \value{
 A character vector containing the path of the temporary directory
-containing the datasets required for \link{e_t_datasets}. Names correspond to
+containing the datasets required for \code{\link{update_raw_datasets}}. Names correspond to
 the UUIDs assigned to the dataset in datasets.json.
 }
 \description{
