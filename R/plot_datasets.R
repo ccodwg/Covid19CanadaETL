@@ -1,12 +1,11 @@
 #' Plot CovidTimelineCanada datasets
 #'
+#' This function expects that data have already been loaded using \code{\link[Covid19CanadaETL]{load_datasets}}.
+#'
 #' @param plot_dir Directory to save plots. Defaults to current directory.
 #'
 #' @export
 plot_datasets <- function(plot_dir = ".") {
-
-  # load data
-  load_datasets()
 
   # function: plot value
   plot_value <- function(data, type = c("daily", "cumulative"), title,
