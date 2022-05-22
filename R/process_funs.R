@@ -31,6 +31,7 @@ convert_hr_names <- function(d) {
     {
       hr <- get_hr() %>%
         dplyr::mutate(name_hruid = .data$hruid) %>%
+        dplyr::select(!dplyr::starts_with("pop")) %>% # drop pop columns
         tidyr::pivot_longer(
           dplyr::starts_with("name_"),
           names_to = "hr_name"
