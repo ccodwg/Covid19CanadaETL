@@ -1,3 +1,32 @@
+#' Load data from temporary directory
+#' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
+#' @param ds_name The UUID of the dataset to load.
+#' @export
+load_ds <- function(ds, ds_name) {
+  tryCatch(
+    {
+      # check file
+      f_name <- list.files(path = ds, pattern = ds_name)
+      if (length(f_name) == 0) {
+        stop("Dataset not found")
+      } else if (length(f_name) > 1) {
+        stop("Dataset name matches multiple files")
+      }
+      if (grepl(".*\\.html$", f_name)) {
+        # if .html, use read_xml()
+        xml2::read_html(file.path(ds, paste0(ds_name, ".html")))
+      } else {
+        # else, try readRDS
+        suppressWarnings(readRDS(file.path(ds, paste0(ds_name, ".RData"))))
+      }
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in load_ds:", ds_name, fill = TRUE)
+    }
+  )
+}
+
 #' Update active_ts datasets
 #' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
 #' @export
@@ -230,15 +259,6 @@ update_active_cumul <- function(ds) {
     ds = load_ds(ds, "d3b170a7-bb86-4bb0-b362-2adc5e6438c2")) %>%
     convert_hr_names()
 
-  ## bc
-  ac_deaths_hr[["bc"]] <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
-    val = "mortality",
-    fmt = "hr_cum_current",
-    ds = load_ds(ds, "91367e1d-8b79-422c-b314-9b3441ba4f42")) %>%
-    drop_sub_regions("Out of Canada") %>%
-    convert_hr_names()
-
   ## nl
   ac_deaths_hr[["nl"]] <- Covid19CanadaDataProcess::process_dataset(
     uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
@@ -251,36 +271,20 @@ update_active_cumul <- function(ds) {
   upload_active_cumul(ac_deaths_hr, files, "covid19_cumul", "deaths_hr")
 
   ## sync and write
-  sync_active_cumul("deaths_hr", "deaths", c("AB", "BC", "NL"))
-}
+  sync_active_cumul("deaths_hr", "deaths", c("AB", "NL"))
 
-#' Load data from temporary directory
-#' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
-#' @param ds_name The UUID of the dataset to load.
-#' @export
-load_ds <- function(ds, ds_name) {
-  tryCatch(
-    {
-      # check file
-      f_name <- list.files(path = ds, pattern = ds_name)
-      if (length(f_name) == 0) {
-        stop("Dataset not found")
-      } else if (length(f_name) > 1) {
-        stop("Dataset name matches multiple files")
-      }
-      if (grepl(".*\\.html$", f_name)) {
-        # if .html, use read_xml()
-        xml2::read_html(file.path(ds, paste0(ds_name, ".html")))
-      } else {
-        # else, try readRDS
-        suppressWarnings(readRDS(file.path(ds, paste0(ds_name, ".RData"))))
-      }
-    },
-    error = function(e) {
-      print(e)
-      cat("Error in load_ds:", ds_name, fill = TRUE)
-    }
-  )
+  # active_cumul - death data - bc
+  ac_deaths_hr_bc <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
+    val = "mortality",
+    fmt = "hr_cum_current",
+    ds = load_ds(ds, "91367e1d-8b79-422c-b314-9b3441ba4f42")) %>%
+    drop_sub_regions("Out of Canada") %>%
+    convert_hr_names() %>%
+    add_as_of_date(
+      as_of_date = max(as.Date(load_ds(ds, "ab6abe51-c9b1-4093-b625-93de1ddb6302")[["Reported_Date"]]), na.rm = TRUE))
+  upload_active_cumul(ac_deaths_hr_bc, files, "covid19_cumul", "deaths_hr_bc")
+  sync_active_cumul("deaths_hr_bc", "deaths", "BC", as_of_date = TRUE)
 }
 
 #' Update raw datasets for CovidTimelineCanada

@@ -13,6 +13,7 @@
 #' @param val The value to select.
 #' @param out_col The name of the value column in the output dataset.
 #' @param sr A vector of sub-regions to drop.
+#' @param as_of_date The date to add as the "as-of date".
 #' @param geo The geographic level of the data. One of "pt", "hr", "sub-hr".
 #' @param d1 Dataset to append to. A cumulative value dataset.
 #' @param d2 Dataset being appended. A daily value dataset.
@@ -121,6 +122,24 @@ drop_sub_regions <- function(d, sr) {
       cat("Error in drop_regions:", paste(sr, collapse = ", "), fill = TRUE)
     }
   )
+}
+
+#' Add row for as of date
+#'
+#' @rdname process_funs
+#'
+#' @export
+add_as_of_date <- function(d, as_of_date) {
+  d <- d %>%
+    dplyr::mutate(value = as.character(.data$value), date = as.character(.data$date)) %>%
+    {dplyr::add_row(.,
+                    dplyr::tibble(
+                      name = .[1, "name"],
+                      region = "as_of_date",
+                      date = .[1, "date"],
+                      value = as.character(as_of_date)))}
+  d[is.na(d)] <- ""
+  d
 }
 
 #' Pluck relevant data from weekly reports

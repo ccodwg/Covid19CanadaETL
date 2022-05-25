@@ -15,7 +15,7 @@ update_covid19tracker_dataset(val)
 
 sync_report(sheet, region, geo)
 
-sync_active_cumul(sheet, val, regions)
+sync_active_cumul(sheet, val, regions, as_of_date = FALSE)
 
 write_dataset(d, geo, name)
 }
@@ -33,6 +33,9 @@ write_dataset(d, geo, name)
 \item{geo}{The geographic level of data being written. One of "can", "pt", "hr", "sub-hr".}
 
 \item{regions}{Regions to sync from active_cumul Google Sheet.}
+
+\item{as_of_date}{Does the data have an "as_of_date" row that needs pre-processing?
+Default: FALSE.}
 
 \item{name}{The name to give to the output file.}
 }

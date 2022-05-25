@@ -137,7 +137,11 @@ assemble_final_datasets <- function() {
   deaths_ab <- read_d("raw_data/active_cumul/ab/ab_deaths_hr_ts.csv")
 
   ## bc
-  deaths_bc <- read_d("raw_data/active_cumul/bc/bc_deaths_hr_ts.csv")
+  deaths_bc <- dplyr::bind_rows(
+    get_ccodwg_d("deaths", "BC", to = "2022-04-01", drop_not_reported = TRUE) %>%
+      convert_hr_names(),
+    read_d("raw_data/active_cumul/bc/bc_deaths_hr_ts.csv")
+  )
 
   ## mb
   tryCatch(

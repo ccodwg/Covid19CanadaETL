@@ -6,6 +6,7 @@
 \alias{date_shift}
 \alias{add_name_col}
 \alias{drop_sub_regions}
+\alias{add_as_of_date}
 \alias{report_pluck}
 \alias{append_daily_d}
 \alias{collate_datasets}
@@ -22,6 +23,8 @@ date_shift(d, n_days)
 add_name_col(d, name)
 
 drop_sub_regions(d, sr)
+
+add_as_of_date(d, as_of_date)
 
 report_pluck(d, name, val, out_col, geo)
 
@@ -45,6 +48,8 @@ dataset_format(d, geo = c("pt", "hr", "sub-hr"), digits)
 \item{name}{The value name to add.}
 
 \item{sr}{A vector of sub-regions to drop.}
+
+\item{as_of_date}{The date to add as the "as-of date".}
 
 \item{val}{The value to select.}
 

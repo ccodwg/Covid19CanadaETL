@@ -8,6 +8,8 @@
 #' @param name The name to give to the output file.
 #' @param sheet Name of sheet to read from the reports or active_cumul Google Sheet.
 #' @param regions Regions to sync from active_cumul Google Sheet.
+#' @param as_of_date Does the data have an "as_of_date" row that needs pre-processing?
+#' Default: FALSE.
 #'
 #' @name write_funs
 NULL
@@ -143,13 +145,20 @@ sync_report <- function(sheet, region, geo) {
 #' @rdname write_funs
 #'
 #' @export
-sync_active_cumul <- function(sheet, val, regions) {
+sync_active_cumul <- function(sheet, val, regions, as_of_date = FALSE) {
   tryCatch(
     {
       # load sheet
-      d <- googlesheets4::read_sheet(
-        ss = "14b_aksEvD3s_yonmG43rChCuL4u45qVsS2GmhUdiRd0",
-        sheet = sheet)
+      if (as_of_date) {
+        d <- googlesheets4::read_sheet(
+          ss = "14b_aksEvD3s_yonmG43rChCuL4u45qVsS2GmhUdiRd0",
+          sheet = sheet,
+          col_types = "c") # prevent as_of_date from getting messed up
+      } else {
+        d <- googlesheets4::read_sheet(
+          ss = "14b_aksEvD3s_yonmG43rChCuL4u45qVsS2GmhUdiRd0",
+          sheet = sheet)
+      }
       # format data frame
       d <- d %>%
         # ensure all relevant columns are character for writing
@@ -158,18 +167,50 @@ sync_active_cumul <- function(sheet, val, regions) {
         tidyr::pivot_longer(
           cols = !dplyr::matches("region|sub_region_1|sub_region_2"),
           names_to = "date",
-          values_to = "value") %>%
+          values_to = "value")
+      # process as_of_date
+      if (as_of_date) {
+        as_of_dates <- d[d$region == "as_of_date", ] %>%
+          dplyr::transmute(
+            .data$date,
+            as_of_date = .data$value
+          )
+        d <- d[d$region != "as_of_date", ]
+        d <- dplyr::left_join(d, as_of_dates, by = "date") %>%
+          dplyr::mutate(
+            date = .data$as_of_date,
+            value = as.numeric(.data$value)) %>%
+          dplyr::arrange(dplyr::across(dplyr::matches("region|sub_region_1|sub_region_2|date"))) %>%
+          dplyr::select(-.data$date)
+        # take the latest values for each date (likely they will all be identical anyway)
+        d <- d %>%
+          dplyr::group_by(dplyr::across(dplyr::matches("region|sub_region_1|sub_region_2|date"))) %>%
+          dplyr::slice_tail() %>%
+          dplyr::ungroup()
+        # rename and rearrange columns
+        d <- dplyr::rename(d, c("date" = "as_of_date"))
+        d <- d[, c(names(d)[!names(d) %in% c("date", "value")], "date", "value")]
+      }
+      # convert data frame formatting
+      d <- d %>%
         # drop empty values
         dplyr::filter(!is.na(.data$value)) %>%
         # arrange data
         dplyr::arrange(dplyr::across(dplyr::matches("region|sub_region_1|sub_region_2|date"))) %>%
         # add column with value name
         dplyr::mutate(name = val, .before = 1)
+      # trim sheet name, if necessary
+      if (length(regions) == 1 && grepl(paste0("_", tolower(regions), "$"), sheet)) {
+        nchar(sheet)
+        sheet_write <- substr(sheet, 1, (nchar(sheet) - (nchar(regions) + 1)))
+      } else {
+        sheet_write <- sheet
+      }
       # subset and write file for each region
       for (r in regions) {
         dir_path <- file.path("raw_data", "active_cumul", tolower(r))
         dir.create(dir_path, showWarnings = FALSE)
-        f_name <- paste0(tolower(r), "_", sheet, "_ts.csv")
+        f_name <- paste0(tolower(r), "_", sheet_write, "_ts.csv")
         d %>%
           dplyr::filter(.data$region == r) %>%
           utils::write.csv(

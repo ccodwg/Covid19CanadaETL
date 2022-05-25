@@ -135,6 +135,8 @@ sheets_merge <- function(d, d_merge) {
       }
       # rename value column with current date
       d <- dplyr::rename(d, !!date_today := .data$value)
+      # blank values should be NA (to join properly)
+      d[d == ""] <- NA
       # merge data
       d <- dplyr::right_join(
         d,
@@ -234,7 +236,7 @@ upload_active_cumul <- function(d, files, file, sheet = NULL) {
         col_range <- LETTERS[which(names(d_merge) == date_today)]
         if (length(col_range) != 1) {stop("Something went wrong.")}
         col_range <- paste0(col_range, ":", col_range)
-        d <- d[, date_today]
+        d <- d[, date_today, drop = FALSE]
         sheets_upload(d, files, file, sheet, col_range)
       } else {
         # upload entire data frame
