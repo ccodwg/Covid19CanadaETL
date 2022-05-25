@@ -134,7 +134,11 @@ assemble_final_datasets <- function() {
   # death dataset
 
   ## ab
-  deaths_ab <- read_d("raw_data/active_cumul/ab/ab_deaths_hr_ts.csv")
+  deaths_ab <- dplyr::bind_rows(
+    get_ccodwg_d("deaths", "AB", to = "2020-06-22", drop_not_reported = FALSE) %>%
+      convert_hr_names(),
+    read_d("raw_data/active_cumul/ab/ab_deaths_hr_ts.csv")
+  )
 
   ## bc
   deaths_bc <- dplyr::bind_rows(
@@ -175,7 +179,9 @@ assemble_final_datasets <- function() {
   deaths_nl <- dplyr::bind_rows(
     get_ccodwg_d("deaths", "NL", to = "2021-03-15", drop_not_reported = TRUE) %>%
       convert_hr_names(),
-    read_d("raw_data/static/nl/nl_deaths_hr_ts.csv") %>%
+    read_d("raw_data/static/nl/nl_deaths_hr_ts_1.csv") %>%
+      convert_hr_names(),
+    read_d("raw_data/static/nl/nl_deaths_hr_ts_2.csv") %>%
       convert_hr_names(),
     read_d("raw_data/active_cumul/nl/nl_deaths_hr_ts.csv")
   )

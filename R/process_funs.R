@@ -130,16 +130,24 @@ drop_sub_regions <- function(d, sr) {
 #'
 #' @export
 add_as_of_date <- function(d, as_of_date) {
-  d <- d %>%
-    dplyr::mutate(value = as.character(.data$value), date = as.character(.data$date)) %>%
-    {dplyr::add_row(.,
-                    dplyr::tibble(
-                      name = .[1, "name"],
-                      region = "as_of_date",
-                      date = .[1, "date"],
-                      value = as.character(as_of_date)))}
-  d[is.na(d)] <- ""
-  d
+  tryCatch(
+    {
+      d <- d %>%
+        dplyr::mutate(value = as.character(.data$value), date = as.character(.data$date)) %>%
+        {dplyr::add_row(.,
+                        dplyr::tibble(
+                          name = .[1, "name", drop = TRUE],
+                          region = "as_of_date",
+                          date = .[1, "date", drop = TRUE],
+                          value = as.character(as_of_date)))}
+      d[is.na(d)] <- ""
+      d
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in add_as_of_date", fill = TRUE)
+    }
+  )
 }
 
 #' Pluck relevant data from weekly reports
