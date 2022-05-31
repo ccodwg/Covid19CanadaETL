@@ -69,11 +69,11 @@ assemble_final_datasets <- function() {
   rm(ns1, ns2, ns3, ns4) # cleanup
 
   ## nt
-  cases_nt <- get_phac_d("cases", "NT") %>%
+  cases_nt <- get_phac_d("cases", "NT", keep_up_to_date = TRUE) %>%
     add_hr_col("Northwest Territories")
 
   ## nu
-  cases_nu <- get_phac_d("cases", "NU") %>%
+  cases_nu <- get_phac_d("cases", "NU", keep_up_to_date = TRUE) %>%
     add_hr_col("Nunavut")
 
   ## on
@@ -85,7 +85,7 @@ assemble_final_datasets <- function() {
   )
 
   ## pe
-  cases_pe <- get_phac_d("cases", "PE") %>%
+  cases_pe <- get_phac_d("cases", "PE", keep_up_to_date = TRUE) %>%
     add_hr_col("Prince Edward Island")
 
   ## qc
@@ -211,11 +211,11 @@ assemble_final_datasets <- function() {
   )
 
   ## nt
-  deaths_nt <- get_phac_d("deaths", "NT") %>%
+  deaths_nt <- get_phac_d("deaths", "NT", keep_up_to_date = TRUE) %>%
     add_hr_col("Northwest Territories")
 
   ## nu
-  deaths_nu <- get_phac_d("deaths", "NU") %>%
+  deaths_nu <- get_phac_d("deaths", "NU", keep_up_to_date = TRUE) %>%
     add_hr_col("Nunavut")
 
   ## on
@@ -227,7 +227,7 @@ assemble_final_datasets <- function() {
   )
 
   ## pe
-  deaths_pe <- get_phac_d("deaths", "PE") %>%
+  deaths_pe <- get_phac_d("deaths", "PE", keep_up_to_date = TRUE) %>%
     add_hr_col("Prince Edward Island")
 
   ## qc

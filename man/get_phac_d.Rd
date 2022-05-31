@@ -4,7 +4,7 @@
 \alias{get_phac_d}
 \title{Get PHAC data for a particular value and region}
 \usage{
-get_phac_d(val, region, exclude_repatriated = TRUE)
+get_phac_d(val, region, exclude_repatriated = TRUE, keep_up_to_date = FALSE)
 }
 \arguments{
 \item{val}{The value to read data for.}
@@ -12,6 +12,10 @@ get_phac_d(val, region, exclude_repatriated = TRUE)
 \item{region}{Either "all" or the region to read data for.}
 
 \item{exclude_repatriated}{Exclude "Repatriated" region when reading data for "all" regions? Default: TRUE.}
+
+\item{keep_up_to_date}{Keep data for each province/territory only up to the date it was most recently updated
+(i.e., the most recent date with `update` = 1)? Default: FALSE (i.e., keep all data).
+Ignored if there is no `update` column.}
 }
 \description{
 Get PHAC data for a particular value and region

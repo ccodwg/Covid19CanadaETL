@@ -99,9 +99,12 @@ read_d <- function(file, val_numeric = FALSE) {
 #' @param val The value to read data for.
 #' @param region Either "all" or the region to read data for.
 #' @param exclude_repatriated Exclude "Repatriated" region when reading data for "all" regions? Default: TRUE.
+#' @param keep_up_to_date Keep data for each province/territory only up to the date it was most recently updated
+#' (i.e., the most recent date with `update` = 1)? Default: FALSE (i.e., keep all data).
+#' Ignored if there is no `update` column.
 #'
 #' @export
-get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
+get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date = FALSE) {
   tryCatch(
     {
       match.arg(val, c(
@@ -143,6 +146,36 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE) {
       } else {
         d <- d[d$region == region, ]
       }
+      # filter up to most recent date updated for each P/T
+      if (keep_up_to_date) {
+        if (!"update" %in% names(d)) {
+          warning("There is no column 'update', ignoring 'keep_up_to_date = TRUE'...")
+        } else {
+          # get unique PTs
+          pts <- unique(d$region)
+          pts <- pts[!pts %in% c("CAN", "RT")]
+          if (length(pts) == 0) {
+            warning("Ignoring 'keep_up_to_date = TRUE' due to no valid PTs...")
+          } else {
+            # calculate cumsum of update
+            # first instance of maximum value is most recent update date
+            d <- d %>%
+              dplyr::mutate(update = ifelse(is.na(.data$update), 0, .data$update)) %>%
+              dplyr::group_by(.data$region) %>%
+              dplyr::mutate(update = cumsum(.data$update)) %>%
+              dplyr::ungroup()
+            # filter is ignored for Canada and Repatriated groups
+            for (pt in pts) {
+              update_max <- max(d[d$region == pt, "update"])
+              update_max_date <- d[d$region == pt & d$update == update_max, "date", drop = TRUE][1]
+              d <- d %>%
+                dplyr::filter(.data$region != pt | .data$date <= update_max_date)
+            }
+          }
+        }
+      }
+      # drop 'update' column, if it exists
+      d <- d[, names(d) != "update"]
       # return data
       d
     },
