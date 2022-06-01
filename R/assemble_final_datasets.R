@@ -266,7 +266,7 @@ assemble_final_datasets <- function() {
   )
 
   ## yt
-  deaths_yt <- get_phac_d("deaths", "YT") %>%
+  deaths_yt <- get_phac_d("deaths", "YT", keep_up_to_date = TRUE) %>%
     add_hr_col("Yukon")
 
   ## collate and process final dataset
