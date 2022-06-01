@@ -174,8 +174,10 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "f0c25e20-2a6c-4f9a-adc3-61b28ab97245")) %>%
     write_ts("active_ts", "qc", "icu")
 
-  # testing data
+  # active_ts - testing data
   cat("Updating active_ts: testing data", fill = TRUE)
+
+  ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "f7db31d0-6504-4a55-86f7-608664517bdb",
     val = "testing",
@@ -184,6 +186,16 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "f7db31d0-6504-4a55-86f7-608664517bdb")) %>%
     add_name_col("tests_completed") %>%
     write_ts("active_ts", "can", "tests_completed")
+
+  ## yt
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "4a33ab2c-32a4-4630-8f6b-2bac2b1ce7ca",
+    val = "testing",
+    fmt = "prov_ts",
+    testing_type = "n_tests_completed",
+    ds = load_ds(ds, "4a33ab2c-32a4-4630-8f6b-2bac2b1ce7ca")) %>%
+    add_name_col("tests_completed") %>%
+    write_ts("active_ts", "yt", "tests_completed")
 
   # vaccine coverage data
   cat("Updating active_ts: vaccine coverage data", fill = TRUE)

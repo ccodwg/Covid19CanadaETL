@@ -45,7 +45,8 @@ dl_datasets <- function() {
       "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA, # h/i
       # sk
       # yt
-      "8eb9a22f-a2c0-4bdb-8f6c-ef8134901efe", NA, NA # c
+      "8eb9a22f-a2c0-4bdb-8f6c-ef8134901efe", NA, NA, # c
+      "4a33ab2c-32a4-4630-8f6b-2bac2b1ce7ca", NA, NA # tests_completed
     ),
     ncol = 3,
     byrow = TRUE)

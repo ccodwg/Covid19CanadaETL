@@ -412,8 +412,19 @@ assemble_final_datasets <- function() {
 
   # tests_completed dataset
 
-  ## collate and process final dataset
+  ## all regions
   tests_completed_pt <- get_phac_d("tests_completed", "all") %>%
+    dplyr::filter(!.data$region %in% c("YT"))
+
+  ## replace YT
+  tests_completed_pt <- dplyr::bind_rows(
+    tests_completed_pt,
+    read_d("raw_data/active_ts/yt/yt_tests_completed_pt_ts.csv") %>%
+      add_hr_col("Yukon")
+  )
+
+  ## collate and process final dataset
+   tests_completed_pt <- tests_completed_pt %>%
     dataset_format("pt")
 
   # vaccine coverage dataset
