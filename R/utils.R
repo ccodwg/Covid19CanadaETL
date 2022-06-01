@@ -99,8 +99,8 @@ read_d <- function(file, val_numeric = FALSE) {
 #' @param val The value to read data for.
 #' @param region Either "all" or the region to read data for.
 #' @param exclude_repatriated Exclude "Repatriated" region when reading data for "all" regions? Default: TRUE.
-#' @param keep_up_to_date Keep data for each province/territory only up to the date it was most recently updated
-#' (i.e., the most recent date with `update` = 1)? Default: FALSE (i.e., keep all data).
+#' @param keep_up_to_date Keep data for each province/territory only up to the date it was most recently updated?
+#' Method of filtering differs by value. Default: FALSE (i.e., keep all data).
 #' Ignored if there is no `update` column.
 #'
 #' @export
@@ -148,9 +148,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
       }
       # filter up to most recent date updated for each P/T
       if (keep_up_to_date) {
-        if (!"update" %in% names(d)) {
-          warning("There is no column 'update', ignoring 'keep_up_to_date = TRUE'...")
-        } else {
+        if (val %in% c("cases", "deaths")) {
           # get unique PTs
           pts <- unique(d$region)
           pts <- pts[!pts %in% c("CAN", "RT")]
@@ -171,11 +169,24 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
               d <- d %>%
                 dplyr::filter(.data$region != pt | .data$date <= update_max_date)
             }
+            # drop 'update' column
+            d <- d[, names(d) != "update"]
           }
+        } else if (val == "tests_completed") {
+          # get unique PTs
+          pts <- unique(d$region)
+          # most recent distinct value is the latest update date
+          for (pt in pts) {
+            max_date <- dplyr::distinct(d[d$region == pt, ], .data$value, .keep_all = TRUE) %>%
+              dplyr::slice_tail(n = 1) %>%
+              dplyr::pull(.data$date)
+            d <- d %>%
+              dplyr::filter(.data$region != pt | .data$date <= max_date)
+          }
+        } else {
+          warning("keep_up_to_date = TRUE is not supported with this value, ignoring...")
         }
       }
-      # drop 'update' column, if it exists
-      d <- d[, names(d) != "update"]
       # return data
       d
     },
