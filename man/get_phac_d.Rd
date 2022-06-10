@@ -13,8 +13,8 @@ get_phac_d(val, region, exclude_repatriated = TRUE, keep_up_to_date = FALSE)
 
 \item{exclude_repatriated}{Exclude "Repatriated" region when reading data for "all" regions? Default: TRUE.}
 
-\item{keep_up_to_date}{Keep data for each province/territory only up to the date it was most recently updated
-(i.e., the most recent date with `update` = 1)? Default: FALSE (i.e., keep all data).
+\item{keep_up_to_date}{Keep data for each province/territory only up to the date it was most recently updated?
+Method of filtering differs by value. Default: FALSE (i.e., keep all data).
 Ignored if there is no `update` column.}
 }
 \description{
