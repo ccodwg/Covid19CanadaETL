@@ -21,6 +21,7 @@ dl_datasets <- function() {
     c(
       # ab
       "59da1de8-3b4e-429a-9e18-b67ba3834002", NA, NA, # c/d
+      "24a572ea-0de3-4f83-b9b7-8764ea203eb6", NA, NA, # tests_completed
       # bc
       "ab6abe51-c9b1-4093-b625-93de1ddb6302", NA, NA, # c
       "91367e1d-8b79-422c-b314-9b3441ba4f42", NA, NA, # d

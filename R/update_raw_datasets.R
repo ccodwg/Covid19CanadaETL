@@ -177,6 +177,15 @@ update_active_ts <- function(ds) {
   # active_ts - testing data
   cat("Updating active_ts: testing data", fill = TRUE)
 
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
+    val = "testing",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "24a572ea-0de3-4f83-b9b7-8764ea203eb6")) %>%
+    add_name_col("tests_completed") %>%
+    write_ts("active_ts", "ab", "tests_completed")
+
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "366ce221-c1c9-4f41-a917-8ff4648f6a40",
