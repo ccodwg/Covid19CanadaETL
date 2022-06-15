@@ -69,12 +69,22 @@ assemble_final_datasets <- function() {
   rm(ns1, ns2, ns3, ns4) # cleanup
 
   ## nt
-  cases_nt <- get_phac_d("cases", "NT", keep_up_to_date = TRUE) %>%
-    add_hr_col("Northwest Territories")
+  cases_nt <- dplyr::bind_rows(
+    get_phac_d("cases_daily", "NT", keep_up_to_date = TRUE) %>%
+      add_hr_col("Northwest Territories"),
+    get_phac_d("cases", "NT") %>%
+      add_hr_col("Northwest Territories") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## nu
-  cases_nu <- get_phac_d("cases", "NU", keep_up_to_date = TRUE) %>%
-    add_hr_col("Nunavut")
+  cases_nu <- dplyr::bind_rows(
+    get_phac_d("cases_daily", "NU", keep_up_to_date = TRUE) %>%
+      add_hr_col("Nunavut"),
+    get_phac_d("cases", "NU") %>%
+      add_hr_col("Nunavut") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## on
   cases_on <- dplyr::bind_rows(
@@ -85,8 +95,13 @@ assemble_final_datasets <- function() {
   )
 
   ## pe
-  cases_pe <- get_phac_d("cases", "PE", keep_up_to_date = TRUE) %>%
-    add_hr_col("Prince Edward Island")
+  cases_pe <- dplyr::bind_rows(
+    get_phac_d("cases_daily", "PE", keep_up_to_date = TRUE) %>%
+      add_hr_col("Prince Edward Island"),
+    get_phac_d("cases", "PE") %>%
+      add_hr_col("Prince Edward Island") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## qc
   tryCatch(
@@ -211,12 +226,22 @@ assemble_final_datasets <- function() {
   )
 
   ## nt
-  deaths_nt <- get_phac_d("deaths", "NT", keep_up_to_date = TRUE) %>%
-    add_hr_col("Northwest Territories")
+  deaths_nt <- dplyr::bind_rows(
+    get_phac_d("deaths_daily", "NT", keep_up_to_date = TRUE) %>%
+      add_hr_col("Northwest Territories"),
+    get_phac_d("deaths", "NT") %>%
+      add_hr_col("Northwest Territories") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## nu
-  deaths_nu <- get_phac_d("deaths", "NU", keep_up_to_date = TRUE) %>%
-    add_hr_col("Nunavut")
+  deaths_nu <- dplyr::bind_rows(
+    get_phac_d("deaths_daily", "NU", keep_up_to_date = TRUE) %>%
+      add_hr_col("Nunavut"),
+  get_phac_d("deaths", "NU") %>%
+    add_hr_col("Nunavut") %>%
+    dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## on
   deaths_on <- dplyr::bind_rows(
@@ -227,8 +252,13 @@ assemble_final_datasets <- function() {
   )
 
   ## pe
-  deaths_pe <- get_phac_d("deaths", "PE", keep_up_to_date = TRUE) %>%
-    add_hr_col("Prince Edward Island")
+  deaths_pe <- dplyr::bind_rows(
+    get_phac_d("deaths_daily", "PE", keep_up_to_date = TRUE) %>%
+      add_hr_col("Prince Edward Island"),
+    get_phac_d("deaths", "PE") %>%
+      add_hr_col("Prince Edward Island") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## qc
   tryCatch(
@@ -266,8 +296,13 @@ assemble_final_datasets <- function() {
   )
 
   ## yt
-  deaths_yt <- get_phac_d("deaths", "YT", keep_up_to_date = TRUE) %>%
-    add_hr_col("Yukon")
+  deaths_yt <- dplyr::bind_rows(
+    get_phac_d("deaths_daily", "YT", keep_up_to_date = TRUE) %>%
+      add_hr_col("Yukon"),
+    get_phac_d("deaths", "YT") %>%
+      add_hr_col("Yukon") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+  )
 
   ## collate and process final dataset
   suppressWarnings(rm(deaths_hr)) # if re-running manually
