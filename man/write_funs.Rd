@@ -17,7 +17,7 @@ sync_report(sheet, region, geo)
 
 sync_active_cumul(sheet, val, regions, as_of_date = FALSE)
 
-write_dataset(d, geo, name)
+write_dataset(d, geo, name, ext = "csv")
 }
 \arguments{
 \item{d}{The dataset to write.}
@@ -34,10 +34,12 @@ write_dataset(d, geo, name)
 
 \item{regions}{Regions to sync from active_cumul Google Sheet.}
 
-\item{as_of_date}{Does the data have an "as_of_date" row that needs pre-processing?
-Default: FALSE.}
+\item{as_of_date}{Does the data have an "as_of_date" row that needs pre-processing?}
 
 \item{name}{The name to give to the output file.}
+
+\item{ext}{The file extension to write. One of "csv" (the default) or "json".
+Default: FALSE.}
 }
 \description{
 Functions to write data

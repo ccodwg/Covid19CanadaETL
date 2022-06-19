@@ -9,6 +9,7 @@
 #' @param sheet Name of sheet to read from the reports or active_cumul Google Sheet.
 #' @param regions Regions to sync from active_cumul Google Sheet.
 #' @param as_of_date Does the data have an "as_of_date" row that needs pre-processing?
+#' @param ext The file extension to write. One of "csv" (the default) or "json".
 #' Default: FALSE.
 #'
 #' @name write_funs
@@ -232,14 +233,24 @@ sync_active_cumul <- function(sheet, val, regions, as_of_date = FALSE) {
 #' @rdname write_funs
 #'
 #' @export
-write_dataset <- function(d, geo, name) {
+write_dataset <- function(d, geo, name, ext = "csv") {
   tryCatch(
     {
-      utils::write.csv(
-        d,
-        file.path("data", geo, paste0(name, ".csv")),
-        row.names = FALSE,
-        quote = 1:(ncol(d) - 2))
+      match.arg(ext, c("csv", "json"), several.ok = FALSE)
+      out_path <- file.path("data", geo, paste(name, ext, sep = "."))
+      if (ext == "csv") {
+        utils::write.csv(
+          d,
+          out_path,
+          row.names = FALSE,
+          quote = 1:(ncol(d) - 2))
+      } else {
+        jsonlite::write_json(
+          d,
+          out_path,
+          auto_unbox = TRUE
+        )
+      }
     },
     error = function(e) {
       print(e)

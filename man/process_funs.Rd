@@ -13,6 +13,7 @@
 \alias{add_hr_col}
 \alias{agg2pt}
 \alias{agg2can}
+\alias{agg2can_completeness}
 \alias{dataset_format}
 \title{Functions to further process COVID-19 data}
 \usage{
@@ -37,6 +38,8 @@ add_hr_col(d, name)
 agg2pt(d)
 
 agg2can(d)
+
+agg2can_completeness(d)
 
 dataset_format(d, geo = c("pt", "hr", "sub-hr"), digits)
 }

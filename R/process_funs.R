@@ -329,6 +329,36 @@ agg2can <- function(d) {
   )
 }
 
+#' Generated completeness metadata for PT-level data aggregated up to Canada-level
+#'
+#' @rdname process_funs
+#'
+#' @export
+agg2can_completeness <- function(d) {
+  tryCatch(
+    {
+      # get region values for each date
+      out_pt <- split(d$region, d$date)
+      # count number of regions for each date
+      out_n <- lapply(out_pt, function(x) length(x))
+      # combine
+      out <- lapply(seq_along(out_pt), function(i) {
+        list(
+          "pt_n" = out_n[[i]],
+          "pt" = out_pt[[i]]
+        )
+      })
+      names(out) <- names(out_pt)
+      # return list
+      out
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in agg2can_completeness", fill = TRUE)
+    }
+  )
+}
+
 #' Format the collated dataset for writing
 #'
 #' @rdname process_funs

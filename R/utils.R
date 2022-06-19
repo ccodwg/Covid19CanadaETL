@@ -152,7 +152,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
       }
       # filter up to most recent date updated for each P/T
       if (keep_up_to_date) {
-        if (val %in% c("cases_daily", "deaths_daily", "tests_completed")) {
+        if (val %in% c("cases", "cases_daily", "deaths", "deaths_daily", "tests_completed")) {
           # get unique PTs
           pts <- unique(d$region)
           pts <- pts[!pts %in% c("CAN", "RT")]

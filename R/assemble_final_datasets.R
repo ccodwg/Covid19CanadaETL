@@ -72,7 +72,7 @@ assemble_final_datasets <- function() {
   cases_nt <- dplyr::bind_rows(
     get_phac_d("cases_daily", "NT", keep_up_to_date = TRUE) %>%
       add_hr_col("Northwest Territories"),
-    get_phac_d("cases", "NT") %>%
+    get_phac_d("cases", "NT", keep_up_to_date = TRUE) %>%
       add_hr_col("Northwest Territories") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -81,7 +81,7 @@ assemble_final_datasets <- function() {
   cases_nu <- dplyr::bind_rows(
     get_phac_d("cases_daily", "NU", keep_up_to_date = TRUE) %>%
       add_hr_col("Nunavut"),
-    get_phac_d("cases", "NU") %>%
+    get_phac_d("cases", "NU", keep_up_to_date = TRUE) %>%
       add_hr_col("Nunavut") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -98,7 +98,7 @@ assemble_final_datasets <- function() {
   cases_pe <- dplyr::bind_rows(
     get_phac_d("cases_daily", "PE", keep_up_to_date = TRUE) %>%
       add_hr_col("Prince Edward Island"),
-    get_phac_d("cases", "PE") %>%
+    get_phac_d("cases", "PE", keep_up_to_date = TRUE) %>%
       add_hr_col("Prince Edward Island") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -229,7 +229,7 @@ assemble_final_datasets <- function() {
   deaths_nt <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "NT", keep_up_to_date = TRUE) %>%
       add_hr_col("Northwest Territories"),
-    get_phac_d("deaths", "NT") %>%
+    get_phac_d("deaths", "NT", keep_up_to_date = TRUE) %>%
       add_hr_col("Northwest Territories") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -238,7 +238,7 @@ assemble_final_datasets <- function() {
   deaths_nu <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "NU", keep_up_to_date = TRUE) %>%
       add_hr_col("Nunavut"),
-  get_phac_d("deaths", "NU") %>%
+  get_phac_d("deaths", "NU", keep_up_to_date = TRUE) %>%
     add_hr_col("Nunavut") %>%
     dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -255,7 +255,7 @@ assemble_final_datasets <- function() {
   deaths_pe <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "PE", keep_up_to_date = TRUE) %>%
       add_hr_col("Prince Edward Island"),
-    get_phac_d("deaths", "PE") %>%
+    get_phac_d("deaths", "PE", keep_up_to_date = TRUE) %>%
       add_hr_col("Prince Edward Island") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -299,7 +299,7 @@ assemble_final_datasets <- function() {
   deaths_yt <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "YT", keep_up_to_date = TRUE) %>%
       add_hr_col("Yukon"),
-    get_phac_d("deaths", "YT") %>%
+    get_phac_d("deaths", "YT", keep_up_to_date = TRUE) %>%
       add_hr_col("Yukon") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
@@ -512,7 +512,9 @@ assemble_final_datasets <- function() {
 
   # create aggregated datasets (PT -> CAN)
   cases_can <- agg2can(cases_pt)
+  cases_can_completeness <- agg2can_completeness(cases_pt)
   deaths_can <- agg2can(deaths_pt)
+  deaths_can_completeness <- agg2can_completeness(deaths_pt)
   hospitalizations_can <- agg2can(hospitalizations_pt)
   icu_can <- agg2can(icu_pt)
   tests_completed_can <- agg2can(tests_completed_pt)
@@ -522,9 +524,11 @@ assemble_final_datasets <- function() {
   write_dataset(cases_hr, "hr", "cases_hr")
   write_dataset(cases_pt, "pt", "cases_pt")
   write_dataset(cases_can, "can", "cases_can")
+  write_dataset(cases_can_completeness, "can", "cases_can_completeness", ext = "json")
   write_dataset(deaths_hr, "hr", "deaths_hr")
   write_dataset(deaths_pt, "pt", "deaths_pt")
   write_dataset(deaths_can, "can", "deaths_can")
+  write_dataset(deaths_can_completeness, "can", "deaths_can_completeness", ext = "json")
   write_dataset(hospitalizations_pt, "pt", "hospitalizations_pt")
   write_dataset(hospitalizations_can, "can", "hospitalizations_can")
   write_dataset(icu_pt, "pt", "icu_pt")
