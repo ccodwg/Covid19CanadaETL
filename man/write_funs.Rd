@@ -30,7 +30,7 @@ write_dataset(d, geo, name, ext = "csv")
 
 \item{sheet}{Name of sheet to read from the reports or active_cumul Google Sheet.}
 
-\item{geo}{The geographic level of data being written. One of "can", "pt", "hr", "sub-hr".}
+\item{geo}{The geographic level of data being written. One of "can", "pt", "hr", "subhr".}
 
 \item{regions}{Regions to sync from active_cumul Google Sheet.}
 

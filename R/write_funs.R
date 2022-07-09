@@ -4,7 +4,7 @@
 #' @param dir The directory to write to. One of "active_ts", "active_cumul".
 #' @param region The region to write data for.
 #' @param val The name identifying the value being written.
-#' @param geo The geographic level of data being written. One of "can", "pt", "hr", "sub-hr".
+#' @param geo The geographic level of data being written. One of "can", "pt", "hr", "subhr".
 #' @param name The name to give to the output file.
 #' @param sheet Name of sheet to read from the reports or active_cumul Google Sheet.
 #' @param regions Regions to sync from active_cumul Google Sheet.
@@ -31,7 +31,7 @@ write_ts <- function(d,
       region <- tolower(region)
       # determine geo
       if ("sub_region_2" %in% names(d)) {
-        geo <- "sub-hr"
+        geo <- "subhr"
         quote_range <- 5 # sub-hr
       } else if ("sub_region_1" %in% names(d)) {
         geo <- "hr"
