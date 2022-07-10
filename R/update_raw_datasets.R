@@ -232,6 +232,16 @@ update_active_ts <- function(ds) {
     fmt = "prov_ts",
     ds = load_ds(ds, "d0bfcd85-9552-47a5-a699-aa6fe4815e00")) %>%
     write_ts("active_ts", "can", "vaccine_administration_total_doses")
+
+  # wastewater data
+
+  ## can
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "ea3718c1-83f1-46a1-8b21-e25aebd1ebee",
+    val = "wastewater_copies_per_ml",
+    fmt = "subhr_ts",
+    ds = load_ds(ds, "ea3718c1-83f1-46a1-8b21-e25aebd1ebee")) %>%
+    write_ts("active_ts", "can", "wastewater_copies_per_ml")
 }
 
 #' Update reports datasets
