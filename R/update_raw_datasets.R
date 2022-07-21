@@ -253,11 +253,12 @@ update_reports <- function() {
   sync_report("mb_weekly_report", "mb", "hr")
   sync_report("nb_weekly_report", "nb", "hr")
   sync_report("ns_weekly_report", "ns", "hr")
-  sync_report("sk_weekly_report", "sk", "hr")
+  sync_report("sk_monthly_report", "sk", "hr")
 
   # no longer updated reports
   # sync_report("ns_daily_news_release", "ns", "hr")
   # sync_report("pe_daily_news_release", "pe", "hr")
+  # sync_report("sk_weekly_report", "sk", "hr")
 }
 
 #' Update covid19tracker.ca datasets
