@@ -26,7 +26,7 @@ dl_datasets <- function() {
       "ab6abe51-c9b1-4093-b625-93de1ddb6302", NA, NA, # c
       "91367e1d-8b79-422c-b314-9b3441ba4f42", NA, NA, # d
       # can
-      "f7db31d0-6504-4a55-86f7-608664517bdb", NA, NA, # c/d
+      "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c/d
       "366ce221-c1c9-4f41-a917-8ff4648f6a40", NA, NA, # tests_completed
       "d0bfcd85-9552-47a5-a699-aa6fe4815e00", NA, NA, # vaccine_coverage
       "c4631a95-cb44-4d21-ae39-f1ad54daf814", NA, NA, # vaccine_administration

@@ -54,10 +54,10 @@ update_active_ts <- function(ds) {
 
   ## can
   Covid19CanadaDataProcess::process_dataset(
-    uuid = "f7db31d0-6504-4a55-86f7-608664517bdb",
+    uuid = "314c507d-7e48-476e-937b-965499f51e8e",
     val = "cases",
     fmt = "prov_ts",
-    ds = load_ds(ds, "f7db31d0-6504-4a55-86f7-608664517bdb")) %>%
+    ds = load_ds(ds, "314c507d-7e48-476e-937b-965499f51e8e")) %>%
     write_ts("active_ts", "can", "cases")
 
   ## nl
@@ -97,10 +97,10 @@ update_active_ts <- function(ds) {
 
   ## can
   Covid19CanadaDataProcess::process_dataset(
-    uuid = "f7db31d0-6504-4a55-86f7-608664517bdb",
+    uuid = "314c507d-7e48-476e-937b-965499f51e8e",
     val = "mortality",
     fmt = "prov_ts",
-    ds = load_ds(ds, "f7db31d0-6504-4a55-86f7-608664517bdb")) %>%
+    ds = load_ds(ds, "314c507d-7e48-476e-937b-965499f51e8e")) %>%
     add_name_col("deaths")  %>%
     write_ts("active_ts", "can", "deaths")
 
