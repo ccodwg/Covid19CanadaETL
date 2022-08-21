@@ -302,7 +302,7 @@ update_active_cumul <- function(ds) {
     drop_sub_regions("Out of Canada") %>%
     convert_hr_names() %>%
     add_as_of_date(
-      as_of_date = as.Date(as.POSIXct(load_ds(ds, "4f9dc8b7-7b42-450e-a741-a0f6a621d2af")$features$attributes[1, 1] / 1000, origin = "1970-01-01", tz = "UTC")))
+      as_of_date = as.Date(as.POSIXct(load_ds(ds, "4f9dc8b7-7b42-450e-a741-a0f6a621d2af")$features$attributes[1, 1] / 1000, origin = "1970-01-01", tz = "America/Vancouver")))
   upload_active_cumul(ac_deaths_hr_bc, files, "covid19_cumul", "deaths_hr_bc")
   sync_active_cumul("deaths_hr_bc", "deaths", "BC", as_of_date = TRUE)
 
