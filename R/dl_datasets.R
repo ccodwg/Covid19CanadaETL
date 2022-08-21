@@ -23,7 +23,12 @@ dl_datasets <- function() {
       "59da1de8-3b4e-429a-9e18-b67ba3834002", NA, NA, # c/d
       "24a572ea-0de3-4f83-b9b7-8764ea203eb6", NA, NA, # tests_completed
       # bc
-      "ab6abe51-c9b1-4093-b625-93de1ddb6302", NA, NA, # c
+      "a8637b6c-babf-48cd-aeab-2f38c713f596", NA, NA, # c (Interior)
+      "f7cd5492-f23b-45a5-9d9b-118ac2b47529", NA, NA, # c (Fraser)
+      "1ad7ef1b-1b02-4d5c-aec2-4923ea100e97", NA, NA, # c (Vancouver Coastal)
+      "89b48da6-bed9-4cd4-824c-8b6d82ffba24", NA, NA, # c (Vancouver Island)
+      "def3aca2-3595-4d70-a5d2-d51f78912dda", NA, NA, # c (Northern)
+      "c0ab9514-92ea-4dda-b714-bab9985e58be", NA, NA, # c (Out of Canada)
       "91367e1d-8b79-422c-b314-9b3441ba4f42", NA, NA, # d
       "4f9dc8b7-7b42-450e-a741-a0f6a621d2af", NA, NA, # d (as of date)
       # can

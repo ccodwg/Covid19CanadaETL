@@ -45,11 +45,21 @@ update_active_ts <- function(ds) {
     write_ts("active_ts", "ab", "cases")
 
   ## bc
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "ab6abe51-c9b1-4093-b625-93de1ddb6302",
-    val = "cases",
-    fmt = "hr_ts",
-    ds = load_ds(ds, "ab6abe51-c9b1-4093-b625-93de1ddb6302")) %>%
+  lapply(c("a8637b6c-babf-48cd-aeab-2f38c713f596",
+           "f7cd5492-f23b-45a5-9d9b-118ac2b47529",
+           "1ad7ef1b-1b02-4d5c-aec2-4923ea100e97",
+           "89b48da6-bed9-4cd4-824c-8b6d82ffba24",
+           "def3aca2-3595-4d70-a5d2-d51f78912dda",
+           "c0ab9514-92ea-4dda-b714-bab9985e58be"),
+         function(uuid) {
+           Covid19CanadaDataProcess::process_dataset(
+             uuid = uuid,
+             val = "cases",
+             fmt = "hr_ts",
+             ds = load_ds(ds, uuid))
+           }) %>%
+    dplyr::bind_rows() %>%
+    dplyr::arrange(.data$name, .data$date, .data$sub_region_1) %>%
     write_ts("active_ts", "bc", "cases")
 
   ## can
