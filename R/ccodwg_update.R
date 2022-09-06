@@ -28,6 +28,9 @@ ccodwg_update <- function(email = NULL, path = NULL) {
   # assemble and write final datasets
   assemble_final_datasets()
 
+  # update diffs datasets
+  diff_datasets()
+
   # email error log
   error_log <- readLines(log_path)
   error_log <- error_log[error_log != ""] # remove blank entries ("")
