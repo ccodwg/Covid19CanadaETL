@@ -12,13 +12,13 @@ diff_datasets <- function() {
     files <- list.files(d, pattern = "*.csv$", full.names = TRUE)
     for (f in files) {
       # read dataset
-      dat <- utils::read.csv(f, stringsAsFactors = FALSE)
+      dat_raw <- utils::read.csv(f, stringsAsFactors = FALSE)
       # get most recent data for each dataset
-      dat <- dat %>%
+      dat <- dat_raw %>%
         dplyr::group_by(dplyr::across(
           dplyr::any_of(
             c("name", "region", "sub_region_1", "sub_region_2")))) %>%
-        dplyr::slice_tail(n = 1) %>%
+        dplyr::filter(.data$date == max(.data$date)) %>%
         dplyr::ungroup() %>%
         dplyr::select(dplyr::any_of(
             c("name", "region", "sub_region_1", "sub_region_2", "date", "value")))
@@ -46,6 +46,9 @@ diff_datasets <- function() {
           dplyr::select(dplyr::any_of(
             c("name", "region", "sub_region_1", "sub_region_2", "date_current", "value_current"))) %>%
           dplyr::rename("date" = "date_current", "value" = "value_current")
+        diff_previous <- diff %>%
+          dplyr::select(dplyr::any_of(
+            c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
         # update if data have changed
         if (!identical(dat, diff_current)) {
           # if geographic units differ, bail with warning
@@ -62,16 +65,36 @@ diff_datasets <- function() {
           diff <- lapply(seq_along(1:nrow(diff)), function(x) {
             # check if new data is the same as current data in diff
             if (!identical(dat[x, ], diff_current[x, ])) {
-              # use new data
+              # use new data for current data
               new_diff <- dat %>%
                 dplyr::slice(x) %>%
                 dplyr::rename("date_current" = "date", "value_current" = "value")
-              new_diff <- dplyr::bind_cols(
-                new_diff,
-                diff_current %>%
+              # if dates of new data and current data from diff are the same
+              # (indicating that historical data have been updated but no new data added),
+              # then update previous data as well, so that the diff is accurate
+              if (identical(dat[x, "date", drop = TRUE], diff_current[x, "date", drop = TRUE])) {
+                # if previous date and value are blank, then keep them blank
+                if (is.na(diff_previous[x, "date_previous", drop = TRUE])) {
+                  new_diff_2 <- diff_previous %>%
+                    dplyr::slice(x) %>%
+                    dplyr::select(.data$date_previous, .data$value_previous)
+                } else {
+                  new_diff_2 <- dat_raw %>%
+                    # same geographic unit
+                    dplyr::filter(.data$date == diff_previous[x, "date_previous", drop = TRUE]) %>%
+                    dplyr::slice(x) %>%
+                    dplyr::transmute(date_previous = .data$date, value_previous = .data$value)
+                }
+              } else {
+                new_diff_2 <- diff_current %>%
                   dplyr::slice(x) %>%
                   dplyr::transmute(date_previous = .data$date, value_previous = .data$value)
-                )
+              }
+              # create new diff row
+              new_diff <- dplyr::bind_cols(
+                new_diff,
+                new_diff_2
+              )
             } else {
               # use current data in diff
               diff[x, ]
@@ -81,11 +104,10 @@ diff_datasets <- function() {
             # calculate date and value diffs
             dplyr::mutate(
               date_diff = as.Date(.data$date_current) - as.Date(.data$date_previous),
-              value_diff = ifelse(
+              value_diff = dplyr::case_when(
                 # round vaccine coverage diff to account for floating point error
-                grepl("^vaccine_coverage_", basename(f)),
-                round(.data$value_current - .data$value_previous, 2),
-                .data$value_current - .data$value_previous
+                grepl("^vaccine_coverage_", basename(f)) ~ as.character(round(.data$value_current - .data$value_previous, 2)),
+                TRUE ~ as.character(.data$value_current - .data$value_previous)
               ))
         } else {
           # skip to next step of loop without re-writing diff dataset
