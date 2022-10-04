@@ -499,6 +499,8 @@ assemble_final_datasets <- function() {
     dataset_format("pt")
   vaccine_administration_dose_3_pt <- get_phac_d("vaccine_administration_dose_3", "all") %>%
     dataset_format("pt")
+  vaccine_administration_dose_4_pt <- get_phac_d("vaccine_administration_dose_4", "all") %>%
+    dataset_format("pt")
   vaccine_administration_total_doses_pt <- get_phac_d("vaccine_administration_total_doses", "all") %>%
     dataset_format("pt")
 
@@ -508,6 +510,8 @@ assemble_final_datasets <- function() {
   vaccine_administration_dose_2_can <- get_phac_d("vaccine_administration_dose_2", "CAN") %>%
     dataset_format("pt")
   vaccine_administration_dose_3_can <- get_phac_d("vaccine_administration_dose_3", "CAN") %>%
+    dataset_format("pt")
+  vaccine_administration_dose_4_can <- get_phac_d("vaccine_administration_dose_4", "CAN") %>%
     dataset_format("pt")
   vaccine_administration_total_doses_can <- get_phac_d("vaccine_administration_total_doses", "CAN") %>%
     dataset_format("pt")
@@ -555,6 +559,8 @@ assemble_final_datasets <- function() {
   write_dataset(vaccine_administration_dose_2_can, "can", "vaccine_administration_dose_2_can")
   write_dataset(vaccine_administration_dose_3_pt, "pt", "vaccine_administration_dose_3_pt")
   write_dataset(vaccine_administration_dose_3_can, "can", "vaccine_administration_dose_3_can")
+  write_dataset(vaccine_administration_dose_4_pt, "pt", "vaccine_administration_dose_4_pt")
+  write_dataset(vaccine_administration_dose_4_can, "can", "vaccine_administration_dose_4_can")
   write_dataset(vaccine_administration_total_doses_pt, "pt", "vaccine_administration_total_doses_pt")
   write_dataset(vaccine_administration_total_doses_can, "can", "vaccine_administration_total_doses_can")
 }

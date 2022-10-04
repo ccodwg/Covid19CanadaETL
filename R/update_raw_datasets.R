@@ -228,7 +228,7 @@ update_active_ts <- function(ds) {
 
   # vaccine administration data
   cat("Updating active_ts: vaccine administration data", fill = TRUE)
-  for (dose in 1:3) {
+  for (dose in 1:4) {
     Covid19CanadaDataProcess::process_dataset(
       uuid = "d0bfcd85-9552-47a5-a699-aa6fe4815e00",
       val = paste0("vaccine_administration_dose_", dose),
