@@ -248,7 +248,8 @@ write_dataset <- function(d, geo, name, ext = "csv") {
         jsonlite::write_json(
           d,
           out_path,
-          auto_unbox = TRUE
+          auto_unbox = TRUE,
+          pretty = TRUE
         )
       }
     },
