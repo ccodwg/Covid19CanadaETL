@@ -55,15 +55,26 @@ diff_datasets <- function() {
                 c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
             # update if data have changed
             if (!identical(dat, diff_current)) {
-              # if geographic units differ, bail with warning
+              # if geographic units differ, update diff with new regions
               if (!identical(
                 dat %>% dplyr::select(dplyr::any_of(
                   c("name", "region", "sub_region_1", "sub_region_2"))),
                 diff_current %>% dplyr::select(dplyr::any_of(
                   c("name", "region", "sub_region_1", "sub_region_2")))
               )) {
-                warning(paste0(f, ": Geographic units have changed, aborting diff..."))
-                break
+                # force geographic units from dat to match diff
+                diff <- dplyr::left_join(
+                  dat %>% dplyr::select(dplyr::any_of(c("name", "region", "sub_region_1", "sub_region_2"))),
+                  diff,
+                  by = dat %>% dplyr::select(dplyr::any_of(c("name", "region", "sub_region_1", "sub_region_2"))) %>% names())
+                # regenerate diff data
+                diff_current <- diff %>%
+                  dplyr::select(dplyr::any_of(
+                    c("name", "region", "sub_region_1", "sub_region_2", "date_current", "value_current"))) %>%
+                  dplyr::rename("date" = "date_current", "value" = "value_current")
+                diff_previous <- diff %>%
+                  dplyr::select(dplyr::any_of(
+                    c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
               }
               # construct new diff dataset with line-by-line comparisons
               diff <- lapply(seq_along(1:nrow(diff)), function(x) {
