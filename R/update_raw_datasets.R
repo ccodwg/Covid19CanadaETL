@@ -45,12 +45,19 @@ update_active_ts <- function(ds) {
     write_ts("active_ts", "ab", "cases")
 
   ## bc
-  lapply(c("a8637b6c-babf-48cd-aeab-2f38c713f596",
-           "f7cd5492-f23b-45a5-9d9b-118ac2b47529",
-           "1ad7ef1b-1b02-4d5c-aec2-4923ea100e97",
-           "89b48da6-bed9-4cd4-824c-8b6d82ffba24",
-           "def3aca2-3595-4d70-a5d2-d51f78912dda",
-           "c0ab9514-92ea-4dda-b714-bab9985e58be"),
+  lapply(c("a8637b6c-babf-48cd-aeab-2f38c713f596", # up to 2022-10-08
+           "878c0e41-ec21-4bd5-87e8-3b4a5969de84", # 2022-10-09 and later
+           "f7cd5492-f23b-45a5-9d9b-118ac2b47529", # up to 2022-10-08
+           "29c5a1e0-2f4d-409d-b10a-d6a62caad835", # 2022-10-09 and later
+           "1ad7ef1b-1b02-4d5c-aec2-4923ea100e97", # up to 2022-10-08
+           "635e4440-a4a3-457b-ac0f-7511f567afda", # 2022-10-09 and later
+           "89b48da6-bed9-4cd4-824c-8b6d82ffba24", # up to 2022-10-08
+           "2111db2e-f894-40ad-b7ad-aeea0c851a51", # 2022-10-09 and later
+           "def3aca2-3595-4d70-a5d2-d51f78912dda", # up to 2022-10-08
+           "b8aa2bec-cad8-45cf-901b-79f9f9aad545", # 2022-10-09 and later
+           "c0ab9514-92ea-4dda-b714-bab9985e58be", # up to 2022-10-08
+           "f056e795-1502-43f2-b87d-603aac0edf05" # 2022-10-09 and later
+           ),
          function(uuid) {
            Covid19CanadaDataProcess::process_dataset(
              uuid = uuid,
