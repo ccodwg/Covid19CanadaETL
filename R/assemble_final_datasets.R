@@ -478,12 +478,16 @@ assemble_final_datasets <- function() {
 
   ## collate and process final datasets
   vaccine_coverage_dose_1_pt <- get_phac_d("vaccine_coverage_dose_1", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_2_pt <- get_phac_d("vaccine_coverage_dose_2", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_3_pt <- get_phac_d("vaccine_coverage_dose_3", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_4_pt <- get_phac_d("vaccine_coverage_dose_4", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt", digits = 2)
 
   ## Canadian datasets (NOT an aggregate of PT datasets)
@@ -500,14 +504,19 @@ assemble_final_datasets <- function() {
 
   ## collate and process final datasets
   vaccine_administration_dose_1_pt <- get_phac_d("vaccine_administration_dose_1", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt")
   vaccine_administration_dose_2_pt <- get_phac_d("vaccine_administration_dose_2", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt")
   vaccine_administration_dose_3_pt <- get_phac_d("vaccine_administration_dose_3", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt")
   vaccine_administration_dose_4_pt <- get_phac_d("vaccine_administration_dose_4", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt")
   vaccine_administration_total_doses_pt <- get_phac_d("vaccine_administration_total_doses", "all") %>%
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
     dataset_format("pt")
 
   ## Canadian datasets (NOT an aggregate of PT datasets)
