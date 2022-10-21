@@ -67,6 +67,9 @@ update_active_ts <- function(ds) {
            }) %>%
     dplyr::bind_rows() %>%
     dplyr::arrange(.data$name, .data$date, .data$sub_region_1) %>%
+    dplyr::group_by(.data$name, .data$region, .data$sub_region_1) %>%
+    dplyr::mutate(value = cumsum(.data$value)) %>%
+    dplyr::ungroup() %>%
     write_ts("active_ts", "bc", "cases")
 
   ## can
