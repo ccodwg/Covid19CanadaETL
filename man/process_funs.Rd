@@ -8,6 +8,7 @@
 \alias{drop_sub_regions}
 \alias{add_as_of_date}
 \alias{report_pluck}
+\alias{report_recent}
 \alias{append_daily_d}
 \alias{collate_datasets}
 \alias{add_hr_col}
@@ -28,6 +29,8 @@ drop_sub_regions(d, sr)
 add_as_of_date(d, as_of_date)
 
 report_pluck(d, name, val, out_col, geo)
+
+report_recent(d)
 
 append_daily_d(d1, d2)
 

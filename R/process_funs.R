@@ -190,6 +190,28 @@ report_pluck <- function(d, name, val, out_col, geo) {
   )
 }
 
+#' Filter to most recent data in report with multiple entries for the same date
+#'
+#' @rdname process_funs
+#'
+#' @export
+report_recent <- function(d) {
+  tryCatch(
+    {
+      col_vars <- c("name", "region", "sub_region_1", "sub_region_2", "date")
+      col_vars <- col_vars[col_vars %in% names(d)]
+      d %>%
+        dplyr::group_by(!!!rlang::syms(col_vars)) %>%
+        dplyr::slice_tail(n = 1) %>%
+        dplyr::ungroup()
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in report_recent")
+    }
+  )
+}
+
 #' Append a daily value dataset to a cumulative value dataset
 #'
 #' @rdname process_funs
@@ -261,7 +283,7 @@ collate_datasets <- function(val) {
 add_hr_col <- function(d, name) {
   tryCatch(
     {
-      d %>% tibble::add_column(sub_region_1 = name, .after = "region")
+      d %>% tibble::add_column(data.frame(sub_region_1 = name), .after = "region")
     },
     error = function(e) {
       print(e)

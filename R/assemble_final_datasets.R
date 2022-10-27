@@ -128,7 +128,8 @@ assemble_final_datasets <- function() {
       sk3 <- read_d("raw_data/reports/sk/sk_monthly_report.csv") %>%
         report_pluck("cases", "cases", "value_daily", "hr")
       sk4 <- read_d("raw_data/reports/sk/sk_crisp_report.csv") %>%
-        report_pluck("cases", "cases", "value_daily", "hr")
+        report_pluck("cases", "cases", "value_daily", "hr") %>%
+        report_recent()
       cases_sk <- append_daily_d(sk1, sk2) %>%
         dplyr::mutate(
           sub_region_1 = ifelse(.data$sub_region_1 == "Not Assigned", "Unknown", .data$sub_region_1))
@@ -293,7 +294,8 @@ assemble_final_datasets <- function() {
       sk3 <- read_d("raw_data/reports/sk/sk_monthly_report.csv") %>%
         report_pluck("deaths", "deaths", "value_daily", "hr")
       sk4 <- read_d("raw_data/reports/sk/sk_crisp_report.csv") %>%
-        report_pluck("deaths", "deaths", "value_daily", "hr")
+        report_pluck("deaths", "deaths", "value_daily", "hr") %>%
+        report_recent()
       deaths_sk <- append_daily_d(sk1, sk2) %>%
         dplyr::mutate(
           sub_region_1 = ifelse(.data$sub_region_1 == "Not Assigned", "Unknown", .data$sub_region_1))
