@@ -9,7 +9,7 @@ write_update_time <- function() {
   tryCatch(
     {
       cat("Writing update time...", fill = TRUE)
-      update_time <- lubridate::with_tz(Sys.time(), tzone = "America/Toronto") %>%
+      update_time <- lubridate::with_tz(lubridate::now("UTC"), tzone = "America/Toronto") %>%
         format.Date("%Y-%m-%d %H:%M %Z")
       cat(paste0(update_time, "\n"), file = "update_time.txt")
       return(update_time)
