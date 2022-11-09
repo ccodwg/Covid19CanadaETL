@@ -211,7 +211,8 @@ assemble_final_datasets <- function() {
   ## ns
   tryCatch(
     {
-      ns1 <- get_ccodwg_d("deaths", "NS", to = "2021-01-18", drop_not_reported = TRUE)
+      ns1 <- get_ccodwg_d("deaths", "NS", to = "2021-01-18", drop_not_reported = TRUE) %>%
+        dplyr::mutate(sub_region_1 = sub("Zone \\d - ", "", .data$sub_region_1))
       ns2 <- read_d("raw_data/static/ns/ns_deaths_hr_ts.csv") %>%
         dplyr::filter(.data$date <= as.Date("2021-12-09")) %>%
         dplyr::mutate(sub_region_1 = sub("Zone \\d - ", "", .data$sub_region_1))
@@ -222,9 +223,22 @@ assemble_final_datasets <- function() {
       deaths_ns <- append_daily_d(deaths_ns, ns3)
       ns4 <- read_d("raw_data/reports/ns/ns_weekly_report.csv") %>%
         report_pluck("deaths", "deaths", "value_daily", "pt") %>%
+        dplyr::filter(date == as.Date("2022-03-08")) %>% # use daily value from first weekly report
         add_hr_col("Unknown")
       deaths_ns <- append_daily_d(deaths_ns, ns4)
-      rm(ns1, ns2, ns3, ns4) # cleanup
+      ns5 <- read_d("raw_data/reports/ns/ns_weekly_report.csv") %>%
+        report_pluck("deaths", "cumulative_deaths", "value", "pt") %>%
+        # dplyr::filter(date >= as.Date("2022-03-15")) %>% # use cumulative value from second weekly report forward
+        add_hr_col("Unknown")
+      # subtract out deaths assigned to a health region from the cumulative value for unknown health region
+      ns5$value <- ns5$value - deaths_ns %>%
+        dplyr::filter(.data$sub_region_1 != "Unknown") %>%
+        dplyr::group_by(.data$sub_region_1) %>%
+        dplyr::summarize(value = max(.data$value)) %>%
+        dplyr::pull(.data$value) %>%
+        sum()
+      deaths_ns <- dplyr::bind_rows(deaths_ns, ns5)
+      rm(ns1, ns2, ns3, ns4, ns5) # cleanup
     },
     error = function(e) {
       print(e)
