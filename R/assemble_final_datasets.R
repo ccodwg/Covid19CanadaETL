@@ -144,7 +144,7 @@ assemble_final_datasets <- function() {
   )
 
   ## yt
-  cases_yt <- read_d("raw_data/active_ts/yt/yt_cases_pt_ts.csv") %>%
+  cases_yt <- read_d("raw_data/static/yt/yt_cases_pt_ts.csv") %>%
     add_hr_col("Yukon")
 
   ## collate and process final dataset
@@ -483,7 +483,7 @@ assemble_final_datasets <- function() {
   tests_completed_pt <- dplyr::bind_rows(
     tests_completed_pt,
     read_d("raw_data/active_ts/ab/ab_tests_completed_pt_ts.csv"),
-    read_d("raw_data/active_ts/yt/yt_tests_completed_pt_ts.csv")
+    read_d("raw_data/static/yt/yt_tests_completed_pt_ts.csv")
   )
 
   ## collate and process final dataset
