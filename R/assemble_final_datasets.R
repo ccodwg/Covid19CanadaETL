@@ -18,12 +18,16 @@ assemble_final_datasets <- function() {
     drop_sub_regions("Out of Canada")
 
   ## mb
-  cases_mb <- dplyr::bind_rows(
+  mb1 <- dplyr::bind_rows(
     read_d("raw_data/static/mb/mb_cases_hr_ts.csv") %>%
       date_shift(1),
     read_d("raw_data/reports/mb/mb_weekly_report.csv") %>%
       report_pluck("cases", "cumulative_cases", "value", "hr")
   )
+  mb2 <- read_d("raw_data/reports/mb/mb_weekly_report_2.csv") %>%
+    report_pluck("cases", "cases", "value_daily", "hr")
+  cases_mb <- append_daily_d(mb1, mb2)
+  rm(mb1, mb2) # cleanup
 
   ## nb
   cases_nb <- dplyr::bind_rows(
@@ -175,10 +179,21 @@ assemble_final_datasets <- function() {
       mb1 <- read_d("raw_data/static/mb/mb_deaths_hr_ts.csv") %>%
         date_shift(1) %>%
         dplyr::filter(.data$date <= as.Date("2022-03-19"))
+      deaths_hr <- mb1 %>%
+        dplyr::group_by(.data$sub_region_1) %>%
+        dplyr::slice_tail(n = 1) %>%
+        dplyr::pull(.data$value) %>%
+        sum() # deaths assigned to a health region
       mb2 <- read_d("raw_data/reports/mb/mb_weekly_report.csv") %>%
-        report_pluck("deaths", "deaths", "value_daily", "pt") %>%
-        add_hr_col("Unknown")
-      deaths_mb <- append_daily_d(mb1, mb2)
+        report_pluck("deaths", "cumulative_deaths", "value", "pt") %>%
+        add_hr_col("Unknown") %>%
+        dplyr::mutate(value = .data$value - deaths_hr) # subtract deaths assigned to a health region
+      mb3 <- get_phac_d("deaths", "MB", keep_up_to_date = TRUE) %>%
+        dplyr::filter(.data$date >= as.Date("2022-11-12")) %>%
+          add_hr_col("Unknown") %>%
+        dplyr::mutate(value = .data$value - deaths_hr) # subtract deaths assigned to a health region
+      deaths_mb <- dplyr::bind_rows(mb1, mb2, mb3)
+      rm(mb1, mb2, mb3, deaths_hr) # cleanup
     },
     error = function(e) {
       print(e)
