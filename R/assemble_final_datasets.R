@@ -420,6 +420,10 @@ assemble_final_datasets <- function() {
   hospitalizations_pt <- collate_datasets("hospitalizations") %>%
     dataset_format("pt")
 
+  ## Canadian dataset (NOT an aggregate of PT datasets)
+  hospitalizations_can <- get_phac_d("hospitalizations", "CAN") %>%
+    dataset_format("pt")
+
   # icu dataset
 
   ## ab
@@ -486,6 +490,10 @@ assemble_final_datasets <- function() {
   ## collate and process final dataset
   suppressWarnings(rm(icu_pt)) # if re-running manually
   icu_pt <- collate_datasets("icu") %>%
+    dataset_format("pt")
+
+  ## Canadian dataset (NOT an aggregate of PT datasets)
+  icu_can <- get_phac_d("icu", "CAN") %>%
     dataset_format("pt")
 
   # tests_completed dataset
@@ -589,8 +597,6 @@ assemble_final_datasets <- function() {
   cases_can_completeness <- agg2can_completeness(cases_pt)
   deaths_can <- agg2can(deaths_pt)
   deaths_can_completeness <- agg2can_completeness(deaths_pt)
-  hospitalizations_can <- agg2can(hospitalizations_pt)
-  icu_can <- agg2can(icu_pt)
   tests_completed_can <- agg2can(tests_completed_pt)
 
   # write datasets

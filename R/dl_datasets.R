@@ -40,6 +40,7 @@ dl_datasets <- function() {
       # can
       "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c/d
       "366ce221-c1c9-4f41-a917-8ff4648f6a40", NA, NA, # tests_completed
+      "f1e1a857-fab8-4c25-a132-f474fab93622", NA, NA, # hospitalizations, icu
       "d0bfcd85-9552-47a5-a699-aa6fe4815e00", NA, NA, # vaccine_coverage, vaccine_administration
       "ea3718c1-83f1-46a1-8b21-e25aebd1ebee", NA, NA, # wastewater_copies_per_ml
       # mb

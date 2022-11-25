@@ -110,6 +110,8 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
       match.arg(val, c(
         "cases", "cases_daily",
         "deaths", "deaths_daily",
+        "hospitalizations",
+        "icu",
         "tests_completed",
         "vaccine_coverage_dose_1", "vaccine_coverage_dose_2",
         "vaccine_coverage_dose_3", "vaccine_coverage_dose_4",
@@ -119,10 +121,12 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
       # get relevant value
       d <- switch(
         val,
-        "cases" = {read_d("raw_data/active_ts/can/can_cases_pt_ts.csv")},
-        "cases_daily" = {read_d("raw_data/static/can/can_cases_pt_ts.csv")},
-        "deaths" = {read_d("raw_data/active_ts/can/can_deaths_pt_ts.csv")},
-        "deaths_daily" = {read_d("raw_data/static/can/can_deaths_pt_ts.csv")},
+        "cases" = {read_d("raw_data/active_ts/can/can_cases_pt_ts.csv")}, # cases from (current) weekly epidemiology update
+        "cases_daily" = {read_d("raw_data/static/can/can_cases_pt_ts.csv")}, # cases from (retired) daily epidemiology update
+        "deaths" = {read_d("raw_data/active_ts/can/can_deaths_pt_ts.csv")}, # deaths from (current) weekly epidemiology update
+        "deaths_daily" = {read_d("raw_data/static/can/can_deaths_pt_ts.csv")}, # deaths from (retired) daily epidemiology update
+        "hospitalizations" = {read_d("raw_data/active_ts/can/can_hospitalizations_pt_ts.csv")},
+        "icu" = {read_d("raw_data/active_ts/can/can_icu_pt_ts.csv")},
         "tests_completed" = {read_d("raw_data/active_ts/can/can_tests_completed_pt_ts.csv")},
         "vaccine_coverage_dose_1" = {read_d(
           "raw_data/active_ts/can/can_vaccine_coverage_dose_1_pt_ts.csv", val_numeric = TRUE)},

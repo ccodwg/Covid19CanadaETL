@@ -151,6 +151,14 @@ update_active_ts <- function(ds) {
   # active_ts - hospitalization data
   cat("Updating active_ts: hospitalization data", fill = TRUE)
 
+  ## can
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "f1e1a857-fab8-4c25-a132-f474fab93622",
+    val = "hospitalizations",
+    fmt = "can_ts",
+    ds = load_ds(ds, "f1e1a857-fab8-4c25-a132-f474fab93622")) %>%
+    write_ts("active_ts", "can", "hospitalizations")
+
   ## on
   Covid19CanadaDataProcess::process_dataset(
     uuid = "4b214c24-8542-4d26-a850-b58fc4ef6a30",
@@ -169,6 +177,14 @@ update_active_ts <- function(ds) {
 
   # active_ts - icu data
   cat("Updating active_ts: icu data", fill = TRUE)
+
+  ## can
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "f1e1a857-fab8-4c25-a132-f474fab93622",
+    val = "icu",
+    fmt = "can_ts",
+    ds = load_ds(ds, "f1e1a857-fab8-4c25-a132-f474fab93622")) %>%
+    write_ts("active_ts", "can", "icu")
 
   ## on
   Covid19CanadaDataProcess::process_dataset(
