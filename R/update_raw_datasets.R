@@ -8,9 +8,9 @@ load_ds <- function(ds, ds_name) {
       # check file
       f_name <- list.files(path = ds, pattern = ds_name)
       if (length(f_name) == 0) {
-        stop("Dataset not found")
+        stop("Dataset not found, returning NULL.")
       } else if (length(f_name) > 1) {
-        stop("Dataset name matches multiple files")
+        stop("Dataset name matches multiple files, returning NULL.")
       }
       if (grepl(".*\\.html$", f_name)) {
         # if .html, use read_xml()
@@ -23,6 +23,7 @@ load_ds <- function(ds, ds_name) {
     error = function(e) {
       print(e)
       cat("Error in load_ds:", ds_name, fill = TRUE)
+      return(NULL)
     }
   )
 }
