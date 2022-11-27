@@ -127,6 +127,16 @@ sync_report <- function(sheet, region, geo) {
         ss = "1ZTUb3fVzi6CLZAbU3lj6T6FTzl5Aq-arBNL49ru3VLo",
         sheet = sheet
       )
+      # some columns with mixed values (e.g., 11, <5) get read as lists
+      # these should be converted to character
+      for (i in 1:ncol(d)) {
+        d2 <- d[, i, drop = TRUE]
+        if (is.list(d2)) {
+          d2[sapply(d2, function(x) length(x) == 0L)] <- NA
+          d2 <- unlist(d2)
+          d[, i] <- d2
+        }
+      }
       utils::write.csv(
         d,
         file.path(dir_path, f_name),
