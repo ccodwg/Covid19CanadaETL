@@ -500,7 +500,8 @@ assemble_final_datasets <- function() {
 
   ## all regions
   tests_completed_pt <- get_phac_d("tests_completed", "all", keep_up_to_date = TRUE) %>%
-    dplyr::filter(!.data$region %in% c("AB", "YT"))
+    dplyr::filter(!.data$region %in% c("AB", "YT")) %>%
+    dplyr::filter(.data$date <= as.Date("2022-11-22"))
 
   ## replace AB and YT
   tests_completed_pt <- dplyr::bind_rows(
