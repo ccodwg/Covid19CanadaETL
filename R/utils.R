@@ -1,6 +1,6 @@
 #' Get health region data
 #'
-#' @return A data frame containing the information from geo/health_regions.csv
+#' @return A data frame containing the information from geo/hr.csv
 #' @export
 get_hr <- function() {
   tryCatch(
@@ -9,7 +9,7 @@ get_hr <- function() {
         # download and cache hr data
         assign(
           "hr",
-          readr::read_csv("https://raw.githubusercontent.com/ccodwg/CovidTimelineCanada/main/geo/health_regions.csv",
+          readr::read_csv("https://raw.githubusercontent.com/ccodwg/CovidTimelineCanada/main/geo/hr.csv",
                           col_types = "ccccccccc"),
           envir = covid_etl_env
         )

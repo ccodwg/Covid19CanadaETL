@@ -7,7 +7,7 @@
 get_hr()
 }
 \value{
-A data frame containing the information from geo/health_regions.csv
+A data frame containing the information from geo/hr.csv
 }
 \description{
 Get health region data
