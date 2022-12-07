@@ -89,6 +89,14 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "b19daaca-6b32-47f5-944f-c69eebd63c07")) %>%
     write_ts("active_ts", "nl", "cases")
 
+  ## ns
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "369d8d34-c8f7-4594-8e5c-7c4ccc00a7a4",
+    val = "cases",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "369d8d34-c8f7-4594-8e5c-7c4ccc00a7a4")) %>%
+    write_ts("active_ts", "ns", "cases")
+
   ## on
   Covid19CanadaDataProcess::process_dataset(
     uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
