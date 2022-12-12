@@ -1,23 +1,29 @@
 #' Load data from temporary directory
 #' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
 #' @param ds_name The UUID of the dataset to load.
+#' @param d The object already loaded into memory. If provided, all other arguments will be ignored.
 #' @export
-load_ds <- function(ds, ds_name) {
+load_ds <- function(ds, ds_name, d) {
   tryCatch(
     {
-      # check file
-      f_name <- list.files(path = ds, pattern = ds_name)
-      if (length(f_name) == 0) {
-        stop("Dataset not found, returning NULL.")
-      } else if (length(f_name) > 1) {
-        stop("Dataset name matches multiple files, returning NULL.")
-      }
-      if (grepl(".*\\.html$", f_name)) {
-        # if .html, use read_xml()
-        xml2::read_html(file.path(ds, paste0(ds_name, ".html")))
+      # check if name of object in memory has been provided
+      if (!missing(d)) {
+        return(d)
       } else {
-        # else, try readRDS
-        suppressWarnings(readRDS(file.path(ds, paste0(ds_name, ".RData"))))
+        # check file
+        f_name <- list.files(path = ds, pattern = ds_name)
+        if (length(f_name) == 0) {
+          stop("Dataset not found, returning NULL.")
+        } else if (length(f_name) > 1) {
+          stop("Dataset name matches multiple files, returning NULL.")
+        }
+        if (grepl(".*\\.html$", f_name)) {
+          # if .html, use read_xml()
+          xml2::read_html(file.path(ds, paste0(ds_name, ".html")))
+        } else {
+          # else, try readRDS
+          suppressWarnings(readRDS(file.path(ds, paste0(ds_name, ".RData"))))
+        }
       }
     },
     error = function(e) {
@@ -36,6 +42,19 @@ update_active_ts <- function(ds) {
 
   # active_ts - case data
   cat("Updating active_ts: case data", fill = TRUE)
+
+  ## download and process data from PHO's Ontario COVID-19 Data Tool
+  tryCatch(
+    {
+      pho_data <- Covid19CanadaDataProcess::process_pho_data_tool()
+    },
+    error = function(e) {
+      print(e)
+      cat(
+        "Error in downloading and processing data from Ontario COVID-19 Data Tool",
+        fill = TRUE)
+    }
+  )
 
   ## ab
   Covid19CanadaDataProcess::process_dataset(
@@ -98,11 +117,7 @@ update_active_ts <- function(ds) {
     write_ts("active_ts", "ns", "cases")
 
   ## on
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
-    val = "cases",
-    fmt = "hr_ts",
-    ds = load_ds(ds, "73fffd44-fbad-4de8-8d32-00cc5ae180a6")) %>%
+  load_ds(d = pho_data[["cases_on"]]) %>%
     write_ts("active_ts", "on", "cases")
 
   ## qc
@@ -126,27 +141,8 @@ update_active_ts <- function(ds) {
     write_ts("active_ts", "can", "deaths")
 
   ## on
-  on1 <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "73fffd44-fbad-4de8-8d32-00cc5ae180a6",
-    val = "mortality",
-    fmt = "hr_ts",
-    ds = load_ds(ds, "73fffd44-fbad-4de8-8d32-00cc5ae180a6")) %>%
-    add_name_col("deaths")
-  # fix obvious error
-  tryCatch(
-    {
-      on1[on1$sub_region_1 == "TORONTO" &
-            on1$date == as.Date("2021-02-02"), "value"] <- on1[
-              on1$sub_region_1 == "TORONTO" &
-                on1$date == as.Date("2021-02-01"), "value"]
-    },
-    error = function(e) {
-      print(e)
-      cat("Error in processing pipeline", fill = TRUE)
-    }
-  )
-  write_ts(on1, "active_ts", "on", "deaths")
-  rm(on1)
+  load_ds(d = pho_data[["deaths_on"]]) %>%
+    write_ts("active_ts", "on", "deaths")
 
   ## qc
   Covid19CanadaDataProcess::process_dataset(

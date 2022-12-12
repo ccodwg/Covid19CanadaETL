@@ -93,11 +93,9 @@ assemble_final_datasets <- function() {
 
   ## on
   cases_on <- dplyr::bind_rows(
-    get_ccodwg_d("cases", "ON", to = "2020-03-31", drop_not_reported = TRUE) %>%
-      convert_hr_names(),
-    read_d("raw_data/active_ts/on/on_cases_hr_ts.csv") %>%
-      convert_hr_names()
-  )
+    read_d("raw_data/active_ts/on/on_cases_hr_ts.csv")
+  ) |>
+    convert_hr_names()
 
   ## pe
   cases_pe <- dplyr::bind_rows(
@@ -282,11 +280,9 @@ assemble_final_datasets <- function() {
 
   ## on
   deaths_on <- dplyr::bind_rows(
-    get_ccodwg_d("deaths", "ON", to = "2020-03-31", drop_not_reported = TRUE) %>%
-      convert_hr_names(),
-    read_d("raw_data/active_ts/on/on_deaths_hr_ts.csv") %>%
-      convert_hr_names()
-  )
+    read_d("raw_data/active_ts/on/on_deaths_hr_ts.csv")
+  ) |>
+    convert_hr_names()
 
   ## pe
   deaths_pe <- dplyr::bind_rows(

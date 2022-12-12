@@ -4,12 +4,14 @@
 \alias{load_ds}
 \title{Load data from temporary directory}
 \usage{
-load_ds(ds, ds_name)
+load_ds(ds, ds_name, d)
 }
 \arguments{
 \item{ds}{The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.}
 
 \item{ds_name}{The UUID of the dataset to load.}
+
+\item{d}{The object already loaded into memory. If provided, all other arguments will be ignored.}
 }
 \description{
 Load data from temporary directory
