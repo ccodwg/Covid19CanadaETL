@@ -31,9 +31,14 @@ ccodwg_update <- function(email = NULL, path = NULL) {
   # update diffs datasets
   diff_datasets()
 
-  # email error log
+  # load error log
   error_log <- readLines(log_path)
+
+  # filter error log
   error_log <- error_log[error_log != ""] # remove blank entries ("")
+  error_log <- error_log[!grepl("^\u2716 Request failed \\[\\d{3}\\]. Retry", error_log)] # remove Google Sheets retries
+
+  # email error log if not blank
   if (!identical(error_log, character(0))) {
     error_log <- paste(error_log, collapse = "\n")
     # print
