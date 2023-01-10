@@ -136,7 +136,8 @@ assemble_final_datasets <- function() {
       sk3 <- read_d("raw_data/reports/sk/sk_monthly_report.csv") %>%
         report_pluck("cases", "cases", "value_daily", "hr")
       sk4 <- read_d("raw_data/reports/sk/sk_crisp_report.csv") %>%
-        report_pluck("cases", "cases", "value_daily", "hr") %>%
+        report_pluck("cases", "cases", "value_daily", "pt") %>%
+        add_hr_col("Unknown") %>%
         report_recent()
       cases_sk <- append_daily_d(sk1, sk2) %>%
         dplyr::mutate(
