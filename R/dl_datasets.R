@@ -23,20 +23,6 @@ dl_datasets <- function() {
       "59da1de8-3b4e-429a-9e18-b67ba3834002", NA, NA, # c/d
       "24a572ea-0de3-4f83-b9b7-8764ea203eb6", NA, NA, # tests_completed
       # bc
-      "a8637b6c-babf-48cd-aeab-2f38c713f596", NA, NA, # c (Interior, up to 2022-10-08)
-      "878c0e41-ec21-4bd5-87e8-3b4a5969de84", NA, NA, # c (Interior, 2022-10-09 and later)
-      "f7cd5492-f23b-45a5-9d9b-118ac2b47529", NA, NA, # c (Fraser, up to 2022-10-08)
-      "29c5a1e0-2f4d-409d-b10a-d6a62caad835", NA, NA, # c (Fraser, 2022-10-09 and later)
-      "1ad7ef1b-1b02-4d5c-aec2-4923ea100e97", NA, NA, # c (Vancouver Coastal, up to 2022-10-08)
-      "635e4440-a4a3-457b-ac0f-7511f567afda", NA, NA, # c (Vancouver Coastal, 2022-10-09 and later)
-      "89b48da6-bed9-4cd4-824c-8b6d82ffba24", NA, NA, # c (Vancouver Island, up to 2022-10-08)
-      "2111db2e-f894-40ad-b7ad-aeea0c851a51", NA, NA, # c (Vancouver Island, 2022-10-09 and later)
-      "def3aca2-3595-4d70-a5d2-d51f78912dda", NA, NA, # c (Northern, up to 2022-10-08)
-      "b8aa2bec-cad8-45cf-901b-79f9f9aad545", NA, NA, # c (Northern, 2022-10-09 and later)
-      "c0ab9514-92ea-4dda-b714-bab9985e58be", NA, NA, # c (Out of Canada, up to 2022-10-08)
-      "f056e795-1502-43f2-b87d-603aac0edf05", NA, NA, # c (Out of Canada, 2022-10-09 and later)
-      "91367e1d-8b79-422c-b314-9b3441ba4f42", NA, NA, # d
-      "4f9dc8b7-7b42-450e-a741-a0f6a621d2af", NA, NA, # d (as of date)
       # can
       "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c/d
       "f1e1a857-fab8-4c25-a132-f474fab93622", NA, NA, # hospitalizations, icu

@@ -14,7 +14,7 @@ assemble_final_datasets <- function() {
   cases_ab <- read_d("raw_data/active_ts/ab/ab_cases_hr_ts.csv")
 
   ## bc
-  cases_bc <- read_d("raw_data/active_ts/bc/bc_cases_hr_ts.csv") %>%
+  cases_bc <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
     drop_sub_regions("Out of Canada")
 
   ## mb
@@ -175,7 +175,7 @@ assemble_final_datasets <- function() {
   deaths_bc <- dplyr::bind_rows(
     get_ccodwg_d("deaths", "BC", to = "2022-04-01", drop_not_reported = TRUE) %>%
       convert_hr_names(),
-    read_d("raw_data/active_cumul/bc/bc_deaths_hr_ts.csv")
+    read_d("raw_data/static/bc/bc_deaths_hr_ts.csv")
   )
 
   ## mb

@@ -64,34 +64,6 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "59da1de8-3b4e-429a-9e18-b67ba3834002")) %>%
     write_ts("active_ts", "ab", "cases")
 
-  ## bc
-  lapply(c("a8637b6c-babf-48cd-aeab-2f38c713f596", # up to 2022-10-08
-           "878c0e41-ec21-4bd5-87e8-3b4a5969de84", # 2022-10-09 and later
-           "f7cd5492-f23b-45a5-9d9b-118ac2b47529", # up to 2022-10-08
-           "29c5a1e0-2f4d-409d-b10a-d6a62caad835", # 2022-10-09 and later
-           "1ad7ef1b-1b02-4d5c-aec2-4923ea100e97", # up to 2022-10-08
-           "635e4440-a4a3-457b-ac0f-7511f567afda", # 2022-10-09 and later
-           "89b48da6-bed9-4cd4-824c-8b6d82ffba24", # up to 2022-10-08
-           "2111db2e-f894-40ad-b7ad-aeea0c851a51", # 2022-10-09 and later
-           "def3aca2-3595-4d70-a5d2-d51f78912dda", # up to 2022-10-08
-           "b8aa2bec-cad8-45cf-901b-79f9f9aad545", # 2022-10-09 and later
-           "c0ab9514-92ea-4dda-b714-bab9985e58be", # up to 2022-10-08
-           "f056e795-1502-43f2-b87d-603aac0edf05" # 2022-10-09 and later
-           ),
-         function(uuid) {
-           Covid19CanadaDataProcess::process_dataset(
-             uuid = uuid,
-             val = "cases",
-             fmt = "hr_ts",
-             ds = load_ds(ds, uuid))
-           }) %>%
-    dplyr::bind_rows() %>%
-    dplyr::arrange(.data$name, .data$date, .data$sub_region_1) %>%
-    dplyr::group_by(.data$name, .data$region, .data$sub_region_1) %>%
-    dplyr::mutate(value = cumsum(.data$value)) %>%
-    dplyr::ungroup() %>%
-    write_ts("active_ts", "bc", "cases")
-
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "314c507d-7e48-476e-937b-965499f51e8e",
@@ -309,19 +281,6 @@ update_active_cumul <- function(ds) {
       as_of_date = max(as.Date(load_ds(ds, "59da1de8-3b4e-429a-9e18-b67ba3834002")[["Date.reported"]]), na.rm = TRUE))
   upload_active_cumul(ac_deaths_hr_ab, files, "covid19_cumul", "deaths_hr_ab")
   sync_active_cumul("deaths_hr_ab", "deaths", "AB", as_of_date = TRUE)
-
-  # active_cumul - death data - bc
-  ac_deaths_hr_bc <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "91367e1d-8b79-422c-b314-9b3441ba4f42",
-    val = "mortality",
-    fmt = "hr_cum_current",
-    ds = load_ds(ds, "91367e1d-8b79-422c-b314-9b3441ba4f42")) %>%
-    drop_sub_regions("Out of Canada") %>%
-    convert_hr_names() %>%
-    add_as_of_date(
-      as_of_date = as.Date(as.POSIXct(load_ds(ds, "4f9dc8b7-7b42-450e-a741-a0f6a621d2af")$features$attributes[1, 1] / 1000, origin = "1970-01-01", tz = "America/Vancouver")))
-  upload_active_cumul(ac_deaths_hr_bc, files, "covid19_cumul", "deaths_hr_bc")
-  sync_active_cumul("deaths_hr_bc", "deaths", "BC", as_of_date = TRUE)
 
   # active_cumul - death data - nl
   ac_deaths_hr_nl <- Covid19CanadaDataProcess::process_dataset(
