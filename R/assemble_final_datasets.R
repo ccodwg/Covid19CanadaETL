@@ -14,8 +14,15 @@ assemble_final_datasets <- function() {
   cases_ab <- read_d("raw_data/active_ts/ab/ab_cases_hr_ts.csv")
 
   ## bc
-  cases_bc <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
-    drop_sub_regions("Out of Canada")
+  bc1 <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
+    drop_sub_regions("Out of Canada") %>%
+    convert_hr_names()
+  bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
+    report_pluck("cases", "cases", "value_daily", "hr") %>%
+    dplyr::filter(.data$date > as.Date("2023-04-15")) %>%
+    convert_hr_names()
+  cases_bc <- append_daily_d(bc1, bc2)
+  rm(bc1, bc2) # cleanup
 
   ## mb
   mb1 <- dplyr::bind_rows(
@@ -172,11 +179,17 @@ assemble_final_datasets <- function() {
   )
 
   ## bc
-  deaths_bc <- dplyr::bind_rows(
+  bc1 <- dplyr::bind_rows(
     get_ccodwg_d("deaths", "BC", to = "2022-04-01", drop_not_reported = TRUE) %>%
       convert_hr_names(),
     read_d("raw_data/static/bc/bc_deaths_hr_ts.csv")
   )
+  bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
+    report_pluck("deaths", "deaths", "value_daily", "hr") %>%
+    dplyr::filter(.data$date > as.Date("2023-04-15")) %>%
+    convert_hr_names()
+  deaths_bc <- append_daily_d(bc1, bc2)
+  rm(bc1, bc2) # cleanup
 
   ## mb
   tryCatch(
