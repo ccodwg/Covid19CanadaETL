@@ -80,14 +80,6 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "b19daaca-6b32-47f5-944f-c69eebd63c07")) %>%
     write_ts("active_ts", "nl", "cases")
 
-  ## ns
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "369d8d34-c8f7-4594-8e5c-7c4ccc00a7a4",
-    val = "cases",
-    fmt = "prov_ts",
-    ds = load_ds(ds, "369d8d34-c8f7-4594-8e5c-7c4ccc00a7a4")) %>%
-    write_ts("active_ts", "ns", "cases")
-
   ## on
   load_ds(d = pho_data[["cases_on"]]) %>%
     write_ts("active_ts", "on", "cases")
@@ -239,13 +231,13 @@ update_reports <- function() {
   sync_report("bc_monthly_report", "bc", "hr")
   sync_report("mb_weekly_report_2", "mb", "hr")
   sync_report("nb_weekly_report_2", "nb", "hr")
-  sync_report("ns_weekly_report", "ns", "hr")
   sync_report("sk_crisp_report", "sk", "hr")
 
   # no longer updated reports
   # sync_report("mb_weekly_report", "mb", "hr")
   # sync_report("nb_weekly_report", "nb", "hr")
   # sync_report("ns_daily_news_release", "ns", "hr")
+  # sync_report("ns_weekly_report", "ns", "hr")
   # sync_report("pe_daily_news_release", "pe", "hr")
   # sync_report("sk_monthly_report", "sk", "hr")
   # sync_report("sk_weekly_report", "sk", "hr")

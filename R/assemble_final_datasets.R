@@ -78,7 +78,7 @@ assemble_final_datasets <- function() {
     report_pluck("cases", "cases", "value_daily", "hr") %>%
     dplyr::mutate(sub_region_1 = sub("Zone \\d - ", "", .data$sub_region_1))
   cases_ns <- append_daily_d(cases_ns, ns3)
-  ns4 <- read_d("raw_data/active_ts/ns/ns_cases_pt_ts.csv") %>%
+  ns4 <- read_d("raw_data/static/ns/ns_cases_pt_ts.csv") %>%
     dplyr::mutate(value_daily = c(dplyr::slice_head(., n = 1) %>% dplyr::pull(.data$value), diff(.data$value))) %>% # convert to daily
     dplyr::filter(.data$date >= as.Date("2022-03-05")) %>%
     add_hr_col("Unknown")
