@@ -58,10 +58,10 @@ update_active_ts <- function(ds) {
 
   ## ab
   Covid19CanadaDataProcess::process_dataset(
-    uuid = "59da1de8-3b4e-429a-9e18-b67ba3834002",
+    uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
     val = "cases",
     fmt = "hr_ts",
-    ds = load_ds(ds, "59da1de8-3b4e-429a-9e18-b67ba3834002")) %>%
+    ds = load_ds(ds, "24a572ea-0de3-4f83-b9b7-8764ea203eb6")) %>%
     write_ts("active_ts", "ab", "cases")
 
   ## can
@@ -94,6 +94,14 @@ update_active_ts <- function(ds) {
 
   # active_ts - death data
   cat("Updating active_ts: death data", fill = TRUE)
+
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "3ced816d-8524-4875-bd69-61fb5603b596",
+    val = "mortality",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "3ced816d-8524-4875-bd69-61fb5603b596")) %>%
+    write_ts("active_ts", "ab", "deaths")
 
   ## can
   Covid19CanadaDataProcess::process_dataset(
@@ -262,18 +270,6 @@ update_active_cumul <- function(ds) {
 
   # active_cumul - death data
   cat("Updating active_cumul: death data", fill = TRUE)
-
-  # active_cumul - death data - ab
-  ac_deaths_hr_ab <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "59da1de8-3b4e-429a-9e18-b67ba3834002",
-    val = "mortality",
-    fmt = "hr_cum_current",
-    ds = load_ds(ds, "59da1de8-3b4e-429a-9e18-b67ba3834002")) %>%
-    convert_hr_names() %>%
-    add_as_of_date(
-      as_of_date = max(as.Date(load_ds(ds, "59da1de8-3b4e-429a-9e18-b67ba3834002")[["Date.reported"]]), na.rm = TRUE))
-  upload_active_cumul(ac_deaths_hr_ab, files, "covid19_cumul", "deaths_hr_ab")
-  sync_active_cumul("deaths_hr_ab", "deaths", "AB", as_of_date = TRUE)
 
   # active_cumul - death data - nl
   ac_deaths_hr_nl <- Covid19CanadaDataProcess::process_dataset(

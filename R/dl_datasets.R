@@ -20,12 +20,12 @@ dl_datasets <- function() {
   covid_datasets <- matrix(
     c(
       # ab
-      "59da1de8-3b4e-429a-9e18-b67ba3834002", NA, NA, # c/d
-      "24a572ea-0de3-4f83-b9b7-8764ea203eb6", NA, NA, # tests_completed
+      "24a572ea-0de3-4f83-b9b7-8764ea203eb6", NA, NA, # c, tests_completed
+      "3ced816d-8524-4875-bd69-61fb5603b596", NA, NA, # d
       # bc
       # can
-      "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c/d
-      "f1e1a857-fab8-4c25-a132-f474fab93622", NA, NA, # hospitalizations, icu
+      "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c, d
+      "f1e1a857-fab8-4c25-a132-f474fab93622", NA, NA, # h, i
       "d0bfcd85-9552-47a5-a699-aa6fe4815e00", NA, NA, # vaccine_coverage, vaccine_administration
       "ea3718c1-83f1-46a1-8b21-e25aebd1ebee", NA, NA, # wastewater_copies_per_ml
       # mb
@@ -37,11 +37,11 @@ dl_datasets <- function() {
       # nt
       # nu
       # on
-      "4b214c24-8542-4d26-a850-b58fc4ef6a30", NA, NA, # h/i
+      "4b214c24-8542-4d26-a850-b58fc4ef6a30", NA, NA, # h, i
       # pe
       # qc
-      "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA, # c/d
-      "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA # h/i
+      "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA, # c, d
+      "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA # h, i
       # sk
       # yt
     ),
