@@ -176,7 +176,7 @@ assemble_final_datasets <- function() {
   deaths_ab <- dplyr::bind_rows(
     get_ccodwg_d("deaths", "AB", to = "2020-06-22", drop_not_reported = FALSE) %>%
       convert_hr_names(),
-    read_d("raw_data/static/ab/ab_deaths_hr_ts.csv")
+    read_d("raw_data/active_cumul/ab/ab_deaths_hr_ts.csv")
   )
 
   ## bc
