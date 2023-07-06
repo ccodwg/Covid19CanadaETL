@@ -89,7 +89,11 @@ assemble_final_datasets <- function() {
     dplyr::filter(.data$date >= as.Date("2022-07-01")) %>%
     add_hr_col("Unknown")
   cases_ns <- append_daily_d(cases_ns, ns5)
-  rm(ns1, ns2, ns3, ns4, ns5) # cleanup
+  ns6 <- read_d("raw_data/reports/ns/ns_monthly_report.csv") %>%
+    report_pluck("cases", "cases", "value_daily", "pt") %>%
+    add_hr_col("Unknown")
+  cases_ns <- append_daily_d(cases_ns, ns6)
+  rm(ns1, ns2, ns3, ns4, ns5, ns6) # cleanup
 
   ## nt
   cases_nt <- dplyr::bind_rows(
@@ -282,7 +286,11 @@ assemble_final_datasets <- function() {
         dplyr::pull(.data$value) %>%
         sum()
       deaths_ns <- dplyr::bind_rows(deaths_ns, ns5)
-      rm(ns1, ns2, ns3, ns4, ns5) # cleanup
+      ns6 <- read_d("raw_data/reports/ns/ns_monthly_report.csv") %>%
+        report_pluck("deaths", "deaths", "value_daily", "pt") %>%
+        add_hr_col("Unknown")
+      deaths_ns <- append_daily_d(deaths_ns, ns6)
+      rm(ns1, ns2, ns3, ns4, ns5, ns6) # cleanup
     },
     error = function(e) {
       print(e)
