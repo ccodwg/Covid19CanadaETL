@@ -345,3 +345,10 @@ log_error <- function(e) {
   # write error to log file
   write(paste0(e, "\n"), file = log_path, append = TRUE)
 }
+
+#' Get current date
+#'
+#' Get current date in the time zone of the dataset (America/Toronto).
+get_current_date <- function() {
+  lubridate::date(lubridate::with_tz(Sys.time(), "America/Toronto"))
+}

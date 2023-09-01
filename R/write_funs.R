@@ -246,8 +246,14 @@ sync_active_cumul <- function(sheet, val, regions, as_of_date = FALSE) {
 write_dataset <- function(d, geo, name, ext = "csv") {
   tryCatch(
     {
+      # check args
       match.arg(ext, c("csv", "json"), several.ok = FALSE)
+      # construct path
       out_path <- file.path("data", geo, paste(name, ext, sep = "."))
+      # check maximum date: stop with error if max date is greater than current date
+      date_max <- max(d$date)
+      if (date_max > get_current_date()) stop(paste0("Failed to write dataset: ", out_path, " (current date is earlier than max date: ", date_max, ")"))
+      # save file
       if (ext == "csv") {
         utils::write.csv(
           d,
