@@ -399,8 +399,7 @@ assemble_final_datasets <- function() {
   ## mb
   hospitalizations_mb <- dplyr::bind_rows(
     get_covid19tracker_d("hospitalizations", "MB", to = "2021-02-03"),
-    read_d("raw_data/static/mb/mb_hospitalizations_pt_ts.csv"),
-    get_covid19tracker_d("hospitalizations", "MB", from = "2022-03-26")
+    read_d("raw_data/static/mb/mb_hospitalizations_pt_ts.csv")
   )
 
   ## nb
@@ -470,8 +469,7 @@ assemble_final_datasets <- function() {
   ## mb
   icu_mb <- dplyr::bind_rows(
     get_covid19tracker_d("icu", "MB", to = "2021-02-03"),
-    read_d("raw_data/static/mb/mb_icu_pt_ts.csv"),
-    get_covid19tracker_d("icu", "MB", from = "2022-03-26")
+    read_d("raw_data/static/mb/mb_icu_pt_ts.csv")
   )
 
   ## nb
