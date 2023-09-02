@@ -648,6 +648,7 @@ assemble_final_datasets <- function() {
   deaths_can <- agg2can(deaths_pt)
   deaths_can_completeness <- agg2can_completeness(deaths_pt)
   tests_completed_can <- agg2can(tests_completed_pt)
+  tests_completed_can_completeness <- agg2can_completeness(tests_completed_pt)
 
   # write datasets
   cat("Writing final datasets...", fill = TRUE)
@@ -665,6 +666,7 @@ assemble_final_datasets <- function() {
   write_dataset(icu_can, "can", "icu_can")
   write_dataset(tests_completed_pt, "pt", "tests_completed_pt")
   write_dataset(tests_completed_can, "can", "tests_completed_can")
+  write_dataset(tests_completed_can_completeness, "can", "tests_completed_can_completeness", ext = "json")
   write_dataset(vaccine_coverage_dose_1_pt, "pt", "vaccine_coverage_dose_1_pt")
   write_dataset(vaccine_coverage_dose_1_can, "can", "vaccine_coverage_dose_1_can")
   write_dataset(vaccine_coverage_dose_2_pt, "pt", "vaccine_coverage_dose_2_pt")
