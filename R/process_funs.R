@@ -220,29 +220,50 @@ report_recent <- function(d) {
 append_daily_d <- function(d1, d2) {
   tryCatch(
     {
-      d2 <- d2 %>%
-        dplyr::group_by(.data$name, .data$region, .data$sub_region_1) %>%
-        dplyr::transmute(
-          .data$name,
-          .data$region,
-          .data$sub_region_1,
-          .data$date,
-          value = cumsum(.data$value_daily)) %>%
-        dplyr::ungroup()
-      d1_h <- unique(d1$sub_region_1)
-      for (h in unique(d2$sub_region_1)) {
-        # check for incompatible sub_region_1 names
-        if (!h %in% d1_h) {
-          # special case for "Unknown" sub_region_1 in d2, which may be missing from d1
-          if (h == "Unknown") {
-            break
+      if ("sub_region_1" %in% names(d1)) {
+        d2 <- d2 %>%
+          dplyr::group_by(.data$name, .data$region, .data$sub_region_1) %>%
+          dplyr::transmute(
+            .data$name,
+            .data$region,
+            .data$sub_region_1,
+            .data$date,
+            value = cumsum(.data$value_daily)) %>%
+          dplyr::ungroup()
+        d1_h <- unique(d1$sub_region_1)
+        for (h in unique(d2$sub_region_1)) {
+          # check for incompatible sub_region_1 names
+          if (!h %in% d1_h) {
+            # special case for "Unknown" sub_region_1 in d2, which may be missing from d1
+            if (h == "Unknown") {
+              break
+            } else {
+              stop("Sub-region names are incompatible")
+            }
           } else {
-            stop("Sub-region names are incompatible")
+            # convert daily values in d2 to cumulative values based on final cumulative value in d1
+            d2[d2$sub_region_1 == h, "value"] <- d2[d2$sub_region_1 == h, "value"] +
+              d1[d1$sub_region_1 == h & d1$date == max(d1$date), "value", drop = TRUE]
           }
-        } else {
-          # convert daily values in d2 to cumulative values based on final cumulative value in d1
-          d2[d2$sub_region_1 == h, "value"] <- d2[d2$sub_region_1 == h, "value"] +
-            d1[d1$sub_region_1 == h & d1$date == max(d1$date), "value", drop = TRUE]
+        }
+      } else {
+        d2 <- d2 %>%
+          dplyr::group_by(.data$name, .data$region) %>%
+          dplyr::transmute(
+            .data$name,
+            .data$region,
+            .data$date,
+            value = cumsum(.data$value_daily)) %>%
+          dplyr::ungroup()
+        d1_h <- unique(d1$region)
+        for (h in unique(d2$region)) {
+          # check for incompatible region names
+          if (!h %in% d1_h) {stop("Sub-region names are incompatible")
+          } else {
+            # convert daily values in d2 to cumulative values based on final cumulative value in d1
+            d2[d2$region == h, "value"] <- d2[d2$region == h, "value"] +
+              d1[d1$region == h & d1$date == max(d1$date), "value", drop = TRUE]
+          }
         }
       }
       # returned combined dataset

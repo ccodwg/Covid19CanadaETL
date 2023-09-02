@@ -531,17 +531,33 @@ assemble_final_datasets <- function() {
 
   # tests_completed dataset
 
-  ## all regions
-  tests_completed_pt <- get_phac_d("tests_completed", "all", keep_up_to_date = TRUE) %>%
-    dplyr::filter(!.data$region %in% c("AB", "YT")) %>%
-    dplyr::filter(.data$date <= as.Date("2022-11-22"))
+  ## all regions (up to 2022-11-12 or earlier, depending on PT)
+  tests_completed_pt <- get_phac_d("tests_completed", "all", keep_up_to_date = TRUE)
 
-  ## replace AB and YT
+  ## remove regions: AB, MB, YT
+  tests_completed_pt <- tests_completed_pt %>%
+    dplyr::filter(!.data$region %in% c("AB", "MB", "YT"))
+
+  ## add AB and YT data
   tests_completed_pt <- dplyr::bind_rows(
     tests_completed_pt,
     read_d("raw_data/active_ts/ab/ab_tests_completed_pt_ts.csv"),
     read_d("raw_data/static/yt/yt_tests_completed_pt_ts.csv")
   )
+
+  ## add MB data
+  mb1 <- get_phac_d("tests_completed", "MB", keep_up_to_date = TRUE)
+  mb2 <- read_d("raw_data/reports/mb/mb_weekly_report_2.csv") %>%
+    report_pluck("tests_completed", "tests_completed", "value_daily", "pt") %>%
+    dplyr::filter(.data$date >= as.Date("2022-11-26"))
+  mb3 <- append_daily_d(mb1, mb2)
+  # there is technically a 1-day overlap between PHAC data ending 2022-11-20
+  # and weekly MB report data ending 2022-11-26
+  tests_completed_pt <- dplyr::bind_rows(
+    tests_completed_pt,
+    mb3
+  )
+  rm(mb1, mb2, mb3) # cleanup
 
   ## collate and process final dataset
    tests_completed_pt <- tests_completed_pt %>%
