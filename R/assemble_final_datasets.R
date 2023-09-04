@@ -704,7 +704,7 @@ assemble_final_datasets <- function() {
   write_dataset(icu_can, "can", "icu_can")
   write_dataset(hosp_admissions_pt, "pt", "hosp_admissions_pt")
   # write_dataset(hosp_admissions_can, "can", "hosp_admissions_can")
-  write_dataset(hosp_admissions_pt, "pt", "hosp_admissions_pt")
+  write_dataset(icu_admissions_pt, "pt", "icu_admissions_pt")
   # write_dataset(icu_admissions_can, "can", "icu_admissions_can")
   write_dataset(tests_completed_pt, "pt", "tests_completed_pt")
   write_dataset(tests_completed_can, "can", "tests_completed_can")
