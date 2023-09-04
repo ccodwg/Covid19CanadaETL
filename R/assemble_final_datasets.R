@@ -529,6 +529,44 @@ assemble_final_datasets <- function() {
   icu_can <- get_phac_d("icu", "CAN") %>%
     dataset_format("pt")
 
+  # hosp_admissions dataset
+
+  ## mb
+  mb1 <- read_d("raw_data/static/mb/mb_hosp_admissions_pt_ts.csv") # up to 2022-03-19
+  mb2 <- read_d("raw_data/reports/mb/mb_weekly_report.csv") %>%
+    report_pluck("hosp_admissions", "cumulative_hospitalizations", "value", "pt") # up to 2022-11-05
+  mb3 <- read_d("raw_data/reports/mb/mb_weekly_report_2.csv") %>%
+    report_pluck("hosp_admissions", "cumulative_hospitalizations_diff", "value_daily", "pt") # from 2022-11-06
+  hosp_admissions_mb <- dplyr::bind_rows(mb1, mb2)
+  hosp_admissions_mb <- append_daily_d(hosp_admissions_mb, mb3)
+  rm(mb1, mb2, mb3) # clean up
+
+  ## collate and process final dataset
+  suppressWarnings(rm(hosp_admissions_pt)) # if re-running manually
+  hosp_admissions_pt <- collate_datasets("hosp_admissions") %>%
+    dataset_format("pt")
+
+  ## no Canadian dataset
+
+  # icu_admissions dataset
+
+  ## mb
+  mb1 <- read_d("raw_data/static/mb/mb_icu_admissions_pt_ts.csv") # up to 2022-03-19
+  mb2 <- read_d("raw_data/reports/mb/mb_weekly_report.csv") %>%
+    report_pluck("icu_admissions", "cumulative_icu", "value", "pt") # up to 2022-11-05
+  mb3 <- read_d("raw_data/reports/mb/mb_weekly_report_2.csv") %>%
+    report_pluck("icu_admissions", "cumulative_icu_diff", "value_daily", "pt") # from 2022-11-06
+  icu_admissions_mb <- dplyr::bind_rows(mb1, mb2)
+  icu_admissions_mb <- append_daily_d(icu_admissions_mb, mb3)
+  rm(mb1, mb2, mb3) # clean up
+
+  ## collate and process final dataset
+  suppressWarnings(rm(icu_admissions_pt)) # if re-running manually
+  icu_admissions_pt <- collate_datasets("icu_admissions") %>%
+    dataset_format("pt")
+
+  ## no Canadian dataset
+
   # tests_completed dataset
 
   ## all regions (up to 2022-11-12 or earlier, depending on PT)
@@ -560,10 +598,10 @@ assemble_final_datasets <- function() {
   rm(mb1, mb2, mb3) # cleanup
 
   ## collate and process final dataset
-   tests_completed_pt <- tests_completed_pt %>%
+  tests_completed_pt <- tests_completed_pt %>%
     dataset_format("pt")
 
-  # vaccine coverage dataset
+  # vaccine_coverage dataset
 
   ## collate and process final datasets
   vaccine_coverage_dose_1_pt <- get_phac_d("vaccine_coverage_dose_1", "all") %>%
@@ -597,7 +635,7 @@ assemble_final_datasets <- function() {
   vaccine_coverage_dose_4_can <- get_phac_d("vaccine_coverage_dose_4", "CAN") %>%
     dataset_format("pt", digits = 2)
 
-  # vaccine administration dataset
+  # vaccine_administration dataset
 
   ## collate and process final datasets
   vaccine_administration_dose_1_pt <- get_phac_d("vaccine_administration_dose_1", "all") %>%
@@ -664,6 +702,10 @@ assemble_final_datasets <- function() {
   write_dataset(hospitalizations_can, "can", "hospitalizations_can")
   write_dataset(icu_pt, "pt", "icu_pt")
   write_dataset(icu_can, "can", "icu_can")
+  write_dataset(hosp_admissions_pt, "pt", "hosp_admissions_pt")
+  # write_dataset(hosp_admissions_can, "can", "hosp_admissions_can")
+  write_dataset(hosp_admissions_pt, "pt", "hosp_admissions_pt")
+  # write_dataset(icu_admissions_can, "can", "icu_admissions_can")
   write_dataset(tests_completed_pt, "pt", "tests_completed_pt")
   write_dataset(tests_completed_can, "can", "tests_completed_can")
   write_dataset(tests_completed_can_completeness, "can", "tests_completed_can_completeness", ext = "json")
