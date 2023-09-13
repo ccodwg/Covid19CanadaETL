@@ -50,8 +50,12 @@ assemble_final_datasets <- function() {
   nb1 <- read_d("raw_data/reports/nb/nb_weekly_report_2.csv") %>%
     report_pluck("cases", "cases", "value_daily", "hr") %>%
     convert_hr_names()
+  nb2 <- read_d("raw_data/reports/nb/nb_weekly_report_3.csv") %>%
+    report_pluck("cases", "cases", "value_daily", "hr") %>%
+    convert_hr_names()
   cases_nb <- append_daily_d(cases_nb, nb1)
-  rm(nb1) # cleanup
+  cases_nb <- append_daily_d(cases_nb, nb2)
+  rm(nb1, nb2) # cleanup
 
   ## nl
   cases_nl <- dplyr::bind_rows(
@@ -242,8 +246,12 @@ assemble_final_datasets <- function() {
   nb1 <- read_d("raw_data/reports/nb/nb_weekly_report_2.csv") %>%
     report_pluck("deaths", "deaths", "value_daily", "pt") %>%
     add_hr_col("Unknown")
+  nb2 <- read_d("raw_data/reports/nb/nb_weekly_report_3.csv") %>%
+    report_pluck("deaths", "deaths", "value_daily", "pt") %>%
+    add_hr_col("Unknown")
   deaths_nb <- append_daily_d(deaths_nb, nb1)
-  rm(nb1) # cleanup
+  deaths_nb <- append_daily_d(deaths_nb, nb2)
+  rm(nb1, nb2) # cleanup
 
   ## nl
   deaths_nl <- dplyr::bind_rows(
