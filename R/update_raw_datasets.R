@@ -43,19 +43,6 @@ update_active_ts <- function(ds) {
   # active_ts - case data
   cat("Updating active_ts: case data", fill = TRUE)
 
-  ## download and process data from PHO's Ontario COVID-19 Data Tool
-  tryCatch(
-    {
-      pho_data <- Covid19CanadaDataProcess::process_pho_data_tool()
-    },
-    error = function(e) {
-      print(e)
-      cat(
-        "Error in downloading and processing data from Ontario COVID-19 Data Tool",
-        fill = TRUE)
-    }
-  )
-
   ## ab
   Covid19CanadaDataProcess::process_dataset(
     uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
@@ -80,10 +67,6 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "b19daaca-6b32-47f5-944f-c69eebd63c07")) %>%
     write_ts("active_ts", "nl", "cases")
 
-  ## on
-  load_ds(d = pho_data[["cases_on"]]) %>%
-    write_ts("active_ts", "on", "cases")
-
   ## qc
   Covid19CanadaDataProcess::process_dataset(
     uuid = "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5",
@@ -103,10 +86,6 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "314c507d-7e48-476e-937b-965499f51e8e")) %>%
     add_name_col("deaths")  %>%
     write_ts("active_ts", "can", "deaths")
-
-  ## on
-  load_ds(d = pho_data[["deaths_on"]]) %>%
-    write_ts("active_ts", "on", "deaths")
 
   ## qc
   Covid19CanadaDataProcess::process_dataset(
