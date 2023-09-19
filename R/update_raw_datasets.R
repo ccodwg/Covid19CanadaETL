@@ -212,6 +212,11 @@ update_reports <- function() {
   sync_report("nb_weekly_report_3", "nb", "hr")
   sync_report("ns_monthly_report", "ns", "hr")
   sync_report("sk_crisp_report", "sk", "hr")
+  sync_report("on_pho_cases", "on", "hr")
+  sync_report("on_pho_outcomes", "on", "hr")
+  sync_report("on_pho_testing", "on", "hr")
+  sync_report("on_pho_vaccine_doses", "on", "hr")
+  sync_report("on_pho_vaccine_coverage", "on", "hr")
 
   # no longer updated reports
   # sync_report("mb_weekly_report", "mb", "hr")
