@@ -614,6 +614,19 @@ assemble_final_datasets <- function() {
   )
   rm(mb1, mb2, mb3) # cleanup
 
+  ## add ON data (2022-11-26 and later)
+  on1 <- tests_completed_pt |>
+    dplyr::filter(.data$region == "ON" & .data$date <= as.Date("2022-11-19")) # avoid overlap with weekly data from 2022-11-20 to 2022-11-26
+  tests_completed_pt <- tests_completed_pt |>
+    dplyr::filter(.data$region != "ON") # remove ON from main dataset
+  on2 <- read_d("raw_data/reports/on/on_pho_testing.csv") |>
+    report_pluck("tests_completed", "tests_completed_weekly", "value_daily", "pt") |>
+    dplyr::filter(.data$date >= as.Date("2022-11-26"))
+  on3 <- append_daily_d(on1, on2)
+  # add ON back to main dataset
+  tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, on3)
+  rm(on1, on2, on3) # clean up
+
   ## collate and process final dataset
   tests_completed_pt <- tests_completed_pt %>%
     dataset_format("pt")
