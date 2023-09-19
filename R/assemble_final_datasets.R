@@ -118,10 +118,14 @@ assemble_final_datasets <- function() {
   )
 
   ## on
-  cases_on <- dplyr::bind_rows(
-    read_d("raw_data/static/on/on_cases_hr_ts.csv")
-  ) |>
+  on1 <- read_d("raw_data/static/on/on_cases_hr_ts.csv") |>
     convert_hr_names()
+  on2 <- read_d("raw_data/reports/on/on_pho_cases.csv") |>
+    report_pluck("cases", "cases_weekly", "value_daily", "hr") |>
+    dplyr::filter(.data$date >= as.Date("2023-09-02")) |>
+    convert_hr_names()
+  cases_on <- append_daily_d(on1, on2)
+  rm(on1, on2) # clean up
 
   ## pe
   cases_pe <- dplyr::bind_rows(
@@ -325,10 +329,15 @@ assemble_final_datasets <- function() {
   )
 
   ## on
-  deaths_on <- dplyr::bind_rows(
-    read_d("raw_data/static/on/on_deaths_hr_ts.csv")
-  ) |>
+  on1 <- read_d("raw_data/static/on/on_deaths_hr_ts.csv") |>
     convert_hr_names()
+  on2 <- read_d("raw_data/reports/on/on_pho_outcomes.csv") |>
+    dplyr::filter(.data$outcome_weekly_type == "COVID-19 deaths") |>
+    report_pluck("deaths", "outcome_weekly_value", "value_daily", "hr") |>
+    dplyr::filter(.data$date >= as.Date("2023-09-02")) |>
+    convert_hr_names()
+  deaths_on <- append_daily_d(on1, on2)
+  rm(on1, on2) # clean up
 
   ## pe
   deaths_pe <- dplyr::bind_rows(
