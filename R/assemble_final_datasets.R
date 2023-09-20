@@ -265,8 +265,19 @@ assemble_final_datasets <- function() {
       convert_hr_names(),
     read_d("raw_data/static/nl/nl_deaths_hr_ts_2.csv") %>%
       convert_hr_names(),
-    read_d("raw_data/active_cumul/nl/nl_deaths_hr_ts.csv")
+    read_d("raw_data/static/nl/nl_deaths_hr_ts_3.csv")
   )
+  nl1 <- get_phac_d("deaths", "NL", keep_up_to_date = TRUE) %>%
+    dplyr::filter(.data$date >= as.Date("2023-07-01")) %>%
+    add_hr_col("Unknown")
+  deaths_hr <- deaths_nl |>
+    dplyr::filter(.data$date == max(.data$date)) |>
+    dplyr::pull(.data$value) |>
+    sum()
+  nl1$value <- nl1$value - deaths_hr # subtract deaths assigned to a health region
+  # started with 2023-07-01 instead of 2023-06-24 to avoid negative values for deaths
+  deaths_nl <- dplyr::bind_rows(deaths_nl, nl1)
+  rm(nl1, deaths_hr) # clean up
 
   ## ns
   tryCatch(

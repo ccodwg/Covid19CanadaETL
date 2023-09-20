@@ -260,18 +260,6 @@ update_active_cumul <- function(ds) {
       as_of_date = max(as.Date(read_d("raw_data/active_ts/ab/ab_cases_hr_ts.csv")[["date"]]), na.rm = TRUE))
   upload_active_cumul(ac_deaths_hr_ab, files, "covid19_cumul", "deaths_hr_ab")
   sync_active_cumul("deaths_hr_ab", "deaths", "AB", as_of_date = TRUE)
-
-  # active_cumul - death data - nl
-  ac_deaths_hr_nl <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "34f45670-34ed-415c-86a6-e14d77fcf6db",
-    val = "mortality",
-    fmt = "hr_cum_current",
-    ds = load_ds(ds, "34f45670-34ed-415c-86a6-e14d77fcf6db")) %>%
-    convert_hr_names() %>%
-    add_as_of_date(
-      as_of_date = lubridate::date(lubridate::with_tz(as.POSIXct(load_ds(ds, "34f45670-34ed-415c-86a6-e14d77fcf6db")$features$attributes$EditDate / 1000, origin = "1970-01-01")[1], tz = "America/St_Johns")))
-  upload_active_cumul(ac_deaths_hr_nl, files, "covid19_cumul", "deaths_hr_nl")
-  sync_active_cumul("deaths_hr_nl", "deaths", "NL", as_of_date = TRUE)
 }
 
 #' Update raw datasets for CovidTimelineCanada
