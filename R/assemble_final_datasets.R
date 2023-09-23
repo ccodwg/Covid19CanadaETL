@@ -441,15 +441,16 @@ assemble_final_datasets <- function() {
 
   ## nl
   hospitalizations_nl <- dplyr::bind_rows(
-    read_d("raw_data/static/nl/nl_hospitalizations_pt_ts.csv"),
-    get_covid19tracker_d("hospitalizations", "NL", from = "2022-03-12")
+    read_d("raw_data/static/nl/nl_hospitalizations_pt_ts.csv")
   )
 
   ## ns
   hospitalizations_ns <- dplyr::bind_rows(
     get_covid19tracker_d("hospitalizations", "NS", to = "2021-01-18"),
-    read_d("raw_data/static/ns/ns_hospitalizations_pt_ts.csv"),
-    get_covid19tracker_d("hospitalizations", "NS", from = "2022-01-19")
+    read_d("raw_data/static/ns/ns_hospitalizations_pt_ts_1.csv"),
+    read_d("raw_data/static/ns/ns_hospitalizations_pt_ts_2.csv"),
+    read_d("raw_data/reports/ns/ns_weekly_report.csv") |>
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt")
   )
 
   ## on
@@ -504,15 +505,16 @@ assemble_final_datasets <- function() {
   ## nl
   icu_nl <- dplyr::bind_rows(
     get_covid19tracker_d("icu", "NL", to = "2021-03-15"),
-    read_d("raw_data/static/nl/nl_icu_pt_ts.csv"),
-    get_covid19tracker_d("icu", "NL", from = "2022-03-12")
+    read_d("raw_data/static/nl/nl_icu_pt_ts.csv")
   )
 
   ## ns
   icu_ns <- dplyr::bind_rows(
     get_covid19tracker_d("icu", "NS", to = "2021-01-18"),
-    read_d("raw_data/static/ns/ns_icu_pt_ts.csv"),
-    get_covid19tracker_d("icu", "NS", from = "2022-01-19")
+    read_d("raw_data/static/ns/ns_icu_pt_ts_1.csv"),
+    read_d("raw_data/static/ns/ns_icu_pt_ts_2.csv"),
+    read_d("raw_data/reports/ns/ns_weekly_report.csv") |>
+      report_pluck("icu", "active_icu", "value", "pt")
   )
 
   ## on
