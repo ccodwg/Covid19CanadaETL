@@ -452,12 +452,6 @@ assemble_final_datasets <- function() {
     get_covid19tracker_d("hospitalizations", "NS", from = "2022-01-19")
   )
 
-  ## nt
-  hospitalizations_nt <- get_covid19tracker_d("hospitalizations", "NT")
-
-  ## nu
-  hospitalizations_nu <- get_covid19tracker_d("hospitalizations", "NU")
-
   ## on
   hospitalizations_on <- read_d("raw_data/active_ts/on/on_hospitalizations_pt_ts.csv")
 
@@ -471,11 +465,9 @@ assemble_final_datasets <- function() {
   ## sk
   hospitalizations_sk <- dplyr::bind_rows(
     read_d("raw_data/static/sk/sk_hospitalizations_pt_ts.csv"),
-    get_covid19tracker_d("hospitalizations", "SK", from = "2022-02-07")
+    read_d("raw_data/reports/sk/sk_weekly_report.csv") |>
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt")
   )
-
-  ## yt
-  hospitalizations_yt <- get_covid19tracker_d("hospitalizations", "YT")
 
   ## collate and process final dataset
   suppressWarnings(rm(hospitalizations_pt)) # if re-running manually
@@ -523,12 +515,6 @@ assemble_final_datasets <- function() {
     get_covid19tracker_d("icu", "NS", from = "2022-01-19")
   )
 
-  ## nt
-  icu_nt <- get_covid19tracker_d("icu", "NT")
-
-  ## nu
-  icu_nu <- get_covid19tracker_d("icu", "NU")
-
   ## on
   icu_on <- read_d("raw_data/active_ts/on/on_icu_pt_ts.csv")
 
@@ -542,11 +528,9 @@ assemble_final_datasets <- function() {
   ## sk
   icu_sk <- dplyr::bind_rows(
     read_d("raw_data/static/sk/sk_icu_pt_ts.csv"),
-    get_covid19tracker_d("icu", "SK", from = "2022-02-07")
+    read_d("raw_data/reports/sk/sk_weekly_report.csv") |>
+      report_pluck("icu", "active_icu", "value", "pt")
   )
-
-  ## yt
-  icu_yt <- get_covid19tracker_d("icu", "YT")
 
   ## collate and process final dataset
   suppressWarnings(rm(icu_pt)) # if re-running manually
@@ -568,6 +552,9 @@ assemble_final_datasets <- function() {
   hosp_admissions_mb <- dplyr::bind_rows(mb1, mb2)
   hosp_admissions_mb <- append_daily_d(hosp_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
+
+  ## yt
+  hosp_admissions_yt <- read_d("raw_data/static/yt/yt_hosp_admissions_pt_ts.csv")
 
   ## collate and process final dataset
   suppressWarnings(rm(hosp_admissions_pt)) # if re-running manually
