@@ -21,7 +21,8 @@ assemble_final_datasets <- function() {
   bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
     report_pluck("cases", "cases", "value_daily", "hr") %>%
     dplyr::filter(.data$date > as.Date("2023-04-15")) %>%
-    convert_hr_names()
+    convert_hr_names() %>%
+    report_recent()
   cases_bc <- append_daily_d(bc1, bc2)
   rm(bc1, bc2) # cleanup
 
@@ -205,7 +206,8 @@ assemble_final_datasets <- function() {
   bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
     report_pluck("deaths", "deaths", "value_daily", "hr") %>%
     dplyr::filter(.data$date > as.Date("2023-04-15")) %>%
-    convert_hr_names()
+    convert_hr_names() %>%
+    report_recent()
   deaths_bc <- append_daily_d(bc1, bc2)
   rm(bc1, bc2) # cleanup
 
