@@ -11,7 +11,7 @@ assemble_final_datasets <- function() {
   # case dataset
 
   ## ab
-  cases_ab <- read_d("raw_data/active_ts/ab/ab_cases_hr_ts.csv") %>%
+  cases_ab <- read_d("raw_data/static/ab/ab_cases_hr_ts.csv") %>%
     convert_hr_names()
 
   ## bc
@@ -194,7 +194,7 @@ assemble_final_datasets <- function() {
   deaths_ab <- dplyr::bind_rows(
     get_ccodwg_d("deaths", "AB", to = "2020-06-22", drop_not_reported = FALSE) %>%
       convert_hr_names(),
-    read_d("raw_data/active_cumul/ab/ab_deaths_hr_ts.csv")
+    read_d("raw_data/static/ab/ab_deaths_hr_ts.csv")
   )
 
   ## bc
@@ -598,7 +598,9 @@ assemble_final_datasets <- function() {
   ## add AB and YT data
   tests_completed_pt <- dplyr::bind_rows(
     tests_completed_pt,
-    read_d("raw_data/active_ts/ab/ab_tests_completed_pt_ts.csv"),
+    read_d("raw_data/static/ab/ab_tests_completed_pt_ts_1.csv") |>
+      dplyr::filter(.data$date <= as.Date("2020-03-05")),
+    read_d("raw_data/static/ab/ab_tests_completed_pt_ts_2.csv"),
     read_d("raw_data/static/yt/yt_tests_completed_pt_ts.csv")
   )
 

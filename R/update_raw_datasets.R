@@ -43,14 +43,6 @@ update_active_ts <- function(ds) {
   # active_ts - case data
   cat("Updating active_ts: case data", fill = TRUE)
 
-  ## ab
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
-    val = "cases",
-    fmt = "hr_ts",
-    ds = load_ds(ds, "24a572ea-0de3-4f83-b9b7-8764ea203eb6")) %>%
-    write_ts("active_ts", "ab", "cases")
-
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "314c507d-7e48-476e-937b-965499f51e8e",
@@ -151,16 +143,7 @@ update_active_ts <- function(ds) {
     write_ts("active_ts", "qc", "icu")
 
   # active_ts - testing data
-  cat("Updating active_ts: testing data", fill = TRUE)
-
-  ## ab
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "24a572ea-0de3-4f83-b9b7-8764ea203eb6",
-    val = "testing",
-    fmt = "prov_ts",
-    ds = load_ds(ds, "24a572ea-0de3-4f83-b9b7-8764ea203eb6")) %>%
-    add_name_col("tests_completed") %>%
-    write_ts("active_ts", "ab", "tests_completed")
+  # cat("Updating active_ts: testing data", fill = TRUE)
 
   # vaccine coverage data
   cat("Updating active_ts: vaccine coverage data", fill = TRUE)
@@ -248,18 +231,6 @@ update_active_cumul <- function(ds) {
 
   # active_cumul - death data
   cat("Updating active_cumul: death data", fill = TRUE)
-
-  # active_cumul - death data - ab
-  ac_deaths_hr_ab <- Covid19CanadaDataProcess::process_dataset(
-    uuid = "d3b170a7-bb86-4bb0-b362-2adc5e6438c2",
-    val = "mortality",
-    fmt = "hr_cum_current",
-    ds = load_ds(ds, "d3b170a7-bb86-4bb0-b362-2adc5e6438c2")) %>%
-    convert_hr_names() %>%
-    add_as_of_date(
-      as_of_date = max(as.Date(read_d("raw_data/active_ts/ab/ab_cases_hr_ts.csv")[["date"]]), na.rm = TRUE))
-  upload_active_cumul(ac_deaths_hr_ab, files, "covid19_cumul", "deaths_hr_ab")
-  sync_active_cumul("deaths_hr_ab", "deaths", "AB", as_of_date = TRUE)
 }
 
 #' Update raw datasets for CovidTimelineCanada
@@ -296,7 +267,7 @@ update_raw_datasets <- function() {
   update_covid19tracker()
 
   # update active_cumul datasets
-  update_active_cumul(ds)
+  # update_active_cumul(ds)
 
   # close sink
   sink(NULL, type = "message")
