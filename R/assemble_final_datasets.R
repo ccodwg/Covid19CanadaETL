@@ -11,8 +11,23 @@ assemble_final_datasets <- function() {
   # case dataset
 
   ## ab
-  cases_ab <- read_d("raw_data/static/ab/ab_cases_hr_ts.csv") %>%
+  ab1 <- read_d("raw_data/static/ab/ab_cases_hr_ts_1.csv") %>%
+    convert_hr_names() %>%
+    dplyr::filter(.data$date <= as.Date("2020-03-31"))
+  ab2 <- read_d("raw_data/static/ab/ab_cases_hr_ts_2.csv") %>%
     convert_hr_names()
+  ab3 <- read_d("raw_data/static/ab/ab_cases_pt_ts.csv") %>%
+    dplyr::filter(.data$date >= as.Date("2020-04-01"))
+  # calculate time series for "unknown" health region based on diff between PT and agg HR
+  ab4 <- ab2 %>%
+    dplyr::select(-.data$sub_region_1) %>%
+    dplyr::group_by(.data$name, .data$region, .data$date) %>%
+    dplyr::summarize(value = sum(.data$value), .groups = "drop")
+  ab5 <- ab3 %>%
+    add_hr_col("Unknown")
+  ab5$value <- ab5$value - ab4$value
+  cases_ab <- dplyr::bind_rows(ab1, ab2, ab5)
+  rm(ab1, ab2, ab3, ab4, ab5) # clean up
 
   ## bc
   bc1 <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
