@@ -251,7 +251,11 @@ write_dataset <- function(d, geo, name, ext = "csv") {
       # construct path
       out_path <- file.path("data", geo, paste(name, ext, sep = "."))
       # check maximum date: stop with error if max date is greater than current date
-      date_max <- max(d$date)
+      if (ext == "csv") {
+        date_max <- max(d$date)
+      } else {
+        date_max <- max(as.Date(names(d)))
+      }
       if (date_max > get_current_date()) stop(paste0("Failed to write dataset: ", out_path, " (current date is earlier than max date: ", date_max, ")"))
       # save file
       if (ext == "csv") {
