@@ -481,8 +481,11 @@ assemble_final_datasets <- function() {
   hospitalizations_pe <- get_covid19tracker_d("hospitalizations", "PE")
 
   ## qc
-  hospitalizations_qc <- read_d("raw_data/active_ts/qc/qc_hospitalizations_pt_ts.csv") %>%
-    date_shift(1)
+  hospitalizations_qc <- dplyr::bind_rows(
+    read_d("raw_data/static/qc/qc_hospitalizations_pt_ts.csv") |>
+      dplyr::filter(.data$date <= as.Date("2020-04-09")),
+    read_d("raw_data/active_ts/qc/qc_hospitalizations_pt_ts.csv")) |>
+    date_shift(1) # shift both datasets
 
   ## sk
   hospitalizations_sk <- dplyr::bind_rows(
@@ -549,8 +552,11 @@ assemble_final_datasets <- function() {
   icu_pe <- get_covid19tracker_d("icu", "PE")
 
   ## qc
-  icu_qc <- read_d("raw_data/active_ts/qc/qc_icu_pt_ts.csv") %>%
-    date_shift(1)
+  icu_qc <- dplyr::bind_rows(
+    read_d("raw_data/static/qc/qc_icu_pt_ts.csv") |>
+      dplyr::filter(.data$date <= as.Date("2020-04-09")),
+    read_d("raw_data/active_ts/qc/qc_icu_pt_ts.csv")) |>
+    date_shift(1) # shift both datasets
 
   ## sk
   icu_sk <- dplyr::bind_rows(
