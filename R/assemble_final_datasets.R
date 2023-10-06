@@ -173,7 +173,8 @@ assemble_final_datasets <- function() {
       sk1 <- read_d("raw_data/static/sk/sk_cases_hr_ts.csv")
       sk2 <- read_d("raw_data/reports/sk/sk_weekly_report.csv") %>%
         report_pluck("cases", "cases", "value_daily", "hr") %>%
-        dplyr::filter(.data$date > as.Date("2022-02-06")) # overlaps with end of TS
+        dplyr::filter(.data$date > as.Date("2022-02-06")) %>% # overlaps with end of TS
+        report_recent()
       sk3 <- read_d("raw_data/reports/sk/sk_monthly_report.csv") %>%
         report_pluck("cases", "cases", "value_daily", "hr")
       sk4 <- read_d("raw_data/reports/sk/sk_crisp_report.csv") %>%
@@ -399,7 +400,8 @@ assemble_final_datasets <- function() {
         dplyr::filter(.data$sub_region_1 != "Total") # may want to fix in source data
       sk2 <- read_d("raw_data/reports/sk/sk_weekly_report.csv") %>%
         report_pluck("deaths", "deaths", "value_daily", "hr") %>%
-        dplyr::filter(.data$date > as.Date("2022-02-06")) # overlaps with end of TS
+        dplyr::filter(.data$date > as.Date("2022-02-06")) %>% # overlaps with end of TS
+        report_recent()
       sk3 <- read_d("raw_data/reports/sk/sk_monthly_report.csv") %>%
         report_pluck("deaths", "deaths", "value_daily", "hr")
       sk4 <- read_d("raw_data/reports/sk/sk_crisp_report.csv") %>%
@@ -496,7 +498,9 @@ assemble_final_datasets <- function() {
   hospitalizations_sk <- dplyr::bind_rows(
     read_d("raw_data/static/sk/sk_hospitalizations_pt_ts.csv"),
     read_d("raw_data/reports/sk/sk_weekly_report.csv") |>
-      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt")
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
+      dplyr::filter(.data$date > as.Date("2022-02-06")) |> # overlaps with end of TS
+      report_recent()
   )
 
   ## collate and process final dataset
@@ -572,7 +576,9 @@ assemble_final_datasets <- function() {
   icu_sk <- dplyr::bind_rows(
     read_d("raw_data/static/sk/sk_icu_pt_ts.csv"),
     read_d("raw_data/reports/sk/sk_weekly_report.csv") |>
-      report_pluck("icu", "active_icu", "value", "pt")
+      report_pluck("icu", "active_icu", "value", "pt") |>
+      dplyr::filter(.data$date > as.Date("2022-02-06")) |> # overlaps with end of TS
+      report_recent()
   )
 
   ## collate and process final dataset
@@ -749,6 +755,28 @@ assemble_final_datasets <- function() {
   vaccine_administration_total_doses_can <- get_phac_d("vaccine_administration_total_doses", "CAN") %>%
     dataset_format("pt")
 
+  # vaccine_distribution dataset
+
+  ## collate and process final datasets
+  vaccine_distribution_total_doses_pt <- dplyr::bind_rows(
+    read_d("raw_data/ccodwg/can_vaccine_distribution_pt_ts.csv") |>
+      dplyr::mutate(name = "vaccine_distribution_total_doses") |>
+      dplyr::filter(.data$date <= as.Date("2021-01-01")),
+    get_phac_d("vaccine_distribution_total_doses", "all") |>
+      dplyr::filter(.data$region != "Federal allocation")) |>
+    dataset_format("pt")
+
+  ## Canadian dataset (NOT an aggregate of PT dataset)
+  vaccine_distribution_total_doses_can <- dplyr::bind_rows(
+    read_d("raw_data/ccodwg/can_vaccine_distribution_pt_ts.csv") |>
+      dplyr::mutate(name = "vaccine_distribution_total_doses") |>
+      dplyr::filter(.data$date <= as.Date("2021-01-01")) |>
+      dplyr::mutate(region = "CAN") |>
+      dplyr::group_by(.data$name, .data$region, .data$date) |>
+      dplyr::summarize(value = sum(.data$value), .groups = "drop"),
+    get_phac_d("vaccine_distribution_total_doses", "CAN")) |>
+    dataset_format("pt")
+
   # create aggregated datasets (HR -> PT)
   cases_pt <- agg2pt(cases_hr)
   deaths_pt <- agg2pt(deaths_hr)
@@ -800,4 +828,6 @@ assemble_final_datasets <- function() {
   write_dataset(vaccine_administration_dose_4_can, "can", "vaccine_administration_dose_4_can")
   write_dataset(vaccine_administration_total_doses_pt, "pt", "vaccine_administration_total_doses_pt")
   write_dataset(vaccine_administration_total_doses_can, "can", "vaccine_administration_total_doses_can")
+  write_dataset(vaccine_distribution_total_doses_pt, "pt", "vaccine_distribution_total_doses")
+  write_dataset(vaccine_administration_total_doses_can, "can", "vaccine_distribution_total_doses")
 }

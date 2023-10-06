@@ -117,7 +117,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
         "vaccine_coverage_dose_3", "vaccine_coverage_dose_4",
         "vaccine_administration_dose_1", "vaccine_administration_dose_2",
         "vaccine_administration_dose_3", "vaccine_administration_dose_4",
-        "vaccine_administration_total_doses"))
+        "vaccine_administration_total_doses", "vaccine_distribution_total_doses"))
       # get relevant value
       d <- switch(
         val,
@@ -145,7 +145,9 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
         "vaccine_administration_dose_4" = {read_d(
           "raw_data/active_ts/can/can_vaccine_administration_dose_4_pt_ts.csv")},
         "vaccine_administration_total_doses" = {read_d(
-          "raw_data/active_ts/can/can_vaccine_administration_total_doses_pt_ts.csv")}
+          "raw_data/active_ts/can/can_vaccine_administration_total_doses_pt_ts.csv")},
+        "vaccine_distribution_total_doses" = {read_d(
+          "raw_data/static/can/can_vaccine_distribution_total_doses_pt_ts.csv")}
       )
       # exclude repatriated
       if (exclude_repatriated) {
