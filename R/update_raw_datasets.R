@@ -247,7 +247,7 @@ update_active_cumul <- function(ds) {
         stringr::str_extract("(?<=up-to-date as(?: of)? )((January|February|March|April|May|June|July|August|September|October|November|December) \\d{1,2}, \\d{4})") |>
         as.Date(format = "%B %d, %Y"))
   upload_active_cumul(ac_deaths_hr_ab, files, "covid19_cumul", "deaths_hr_ab_2")
-  sync_active_cumul("deaths_hr_ab", "deaths", "AB", as_of_date = TRUE)
+  sync_active_cumul("deaths_hr_ab_2", "deaths", "AB", as_of_date = TRUE)
 }
 
 #' Update raw datasets for CovidTimelineCanada
