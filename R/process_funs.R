@@ -13,6 +13,8 @@
 #' @param val The value to select.
 #' @param out_col The name of the value column in the output dataset.
 #' @param sr A vector of sub-regions to drop.
+#' @param raw Is this function operating on raw data with only one of "value" or
+#' "value_daily" columns?
 #' @param as_of_date The date to add as the "as-of date".
 #' @param geo The geographic level of the data. One of "pt", "hr", "sub-hr".
 #' @param d1 Dataset to append to. A cumulative value dataset.
@@ -318,13 +320,31 @@ add_hr_col <- function(d, name) {
 #' @rdname process_funs
 #'
 #' @export
-agg2pt <- function(d) {
+agg2pt <- function(d, raw = FALSE) {
   tryCatch(
     {
-      d %>%
-        dplyr::select(-.data$sub_region_1) %>%
-        dplyr::group_by(.data$name, .data$region, .data$date) %>%
-        dplyr::summarise(value = sum(.data$value), value_daily = sum(.data$value_daily), .groups = "drop")
+      if (!raw) {
+        d %>%
+          dplyr::select(-.data$sub_region_1) %>%
+          dplyr::group_by(.data$name, .data$region, .data$date) %>%
+          dplyr::summarise(value = sum(.data$value), value_daily = sum(.data$value_daily), .groups = "drop")
+      } else {
+        if ("value" %in% names(d) & "value_daily" %in% names(d)) {
+          stop("Argument 'raw' can only be used on raw data with one of 'value' or 'value_daily'.")
+        } else {
+          if ("value" %in% names(d)) {
+            d %>%
+              dplyr::select(-.data$sub_region_1) %>%
+              dplyr::group_by(.data$name, .data$region, .data$date) %>%
+              dplyr::summarise(value = sum(.data$value), .groups = "drop")
+          } else {
+            d %>%
+              dplyr::select(-.data$sub_region_1) %>%
+              dplyr::group_by(.data$name, .data$region, .data$date) %>%
+              dplyr::summarise(value_daily = sum(.data$value_daily), .groups = "drop")
+          }
+        }
+      }
     },
     error = function(e) {
       print(e)

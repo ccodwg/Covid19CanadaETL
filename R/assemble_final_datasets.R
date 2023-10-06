@@ -443,7 +443,12 @@ assemble_final_datasets <- function() {
   )
 
   ## bc
-  hospitalizations_bc <- get_covid19tracker_d("hospitalizations", "BC")
+  hospitalizations_bc <- dplyr::bind_rows(
+    get_covid19tracker_d("hospitalizations", "BC") |>
+      dplyr::filter(.data$date <= as.Date("2021-03-12")),
+    read_d("raw_data/static/bc/bc_hospitalizations_hr_ts.csv") |>
+      agg2pt(raw = TRUE)
+  )
 
   ## mb
   hospitalizations_mb <- dplyr::bind_rows(
@@ -513,7 +518,12 @@ assemble_final_datasets <- function() {
   )
 
   ## bc
-  icu_bc <- get_covid19tracker_d("icu", "BC")
+  icu_bc <- dplyr::bind_rows(
+    get_covid19tracker_d("icu", "BC") |>
+      dplyr::filter(.data$date <= as.Date("2021-03-12")),
+    read_d("raw_data/static/bc/bc_icu_hr_ts.csv") |>
+      agg2pt(raw = TRUE)
+  )
 
   ## mb
   icu_mb <- dplyr::bind_rows(

@@ -38,7 +38,7 @@ collate_datasets(val)
 
 add_hr_col(d, name)
 
-agg2pt(d)
+agg2pt(d, raw = FALSE)
 
 agg2can(d)
 
@@ -66,6 +66,9 @@ dataset_format(d, geo = c("pt", "hr", "sub-hr"), digits)
 \item{d1}{Dataset to append to. A cumulative value dataset.}
 
 \item{d2}{Dataset being appended. A daily value dataset.}
+
+\item{raw}{Is this function operating on raw data with only one of "value" or
+"value_daily" columns?}
 
 \item{digits}{The number of digits to round to for numeric values. If not
 provided, no rounding will be done for numeric values.}
