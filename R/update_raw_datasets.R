@@ -231,6 +231,23 @@ update_active_cumul <- function(ds) {
 
   # active_cumul - death data
   cat("Updating active_cumul: death data", fill = TRUE)
+
+  # active_cumul - death data - ab
+  ac_deaths_hr_ab <- Covid19CanadaDataProcess::process_dataset(
+    uuid = "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb",
+    val = "mortality",
+    fmt = "hr_cum_current",
+    ds = load_ds(ds, "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb")) %>%
+    convert_hr_names() %>%
+    add_as_of_date(
+      as_of_date = load_ds(ds, "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb") |>
+        rvest::html_elements(".goa-callout") %>%
+        .[2] %>%
+        rvest::html_text2() |>
+        stringr::str_extract("(?<=up-to-date as(?: of)? )((January|February|March|April|May|June|July|August|September|October|November|December) \\d{1,2}, \\d{4})") |>
+        as.Date(format = "%B %d, %Y"))
+  upload_active_cumul(ac_deaths_hr_ab, files, "covid19_cumul", "deaths_hr_ab_2")
+  sync_active_cumul("deaths_hr_ab", "deaths", "AB", as_of_date = TRUE)
 }
 
 #' Update raw datasets for CovidTimelineCanada
@@ -267,7 +284,7 @@ update_raw_datasets <- function() {
   update_covid19tracker()
 
   # update active_cumul datasets
-  # update_active_cumul(ds)
+  update_active_cumul(ds)
 
   # close sink
   sink(NULL, type = "message")
