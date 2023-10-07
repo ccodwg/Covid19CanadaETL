@@ -14,7 +14,7 @@ assemble_final_datasets <- function() {
   ab1 <- read_d("raw_data/static/ab/ab_cases_hr_ts_1.csv") %>%
     convert_hr_names() %>%
     dplyr::filter(.data$date <= as.Date("2020-03-31"))
-  ab2 <- read_d("raw_data/static/ab/ab_cases_hr_ts_2.csv") %>%
+  ab2 <- read_d("raw_data/static/ab/ab_cases_hr_ts_2.csv") %>% # begins 2020-04-01
     convert_hr_names()
   ab3 <- read_d("raw_data/static/ab/ab_cases_pt_ts.csv") %>%
     dplyr::filter(.data$date >= as.Date("2020-04-01"))
@@ -210,11 +210,20 @@ assemble_final_datasets <- function() {
   # death dataset
 
   ## ab
-  deaths_ab <- dplyr::bind_rows(
-    get_ccodwg_d("deaths", "AB", to = "2020-06-22", drop_not_reported = FALSE) %>%
-      convert_hr_names(),
-    read_d("raw_data/static/ab/ab_deaths_hr_ts.csv")
-  )
+  ab1 <- get_ccodwg_d("deaths", "AB", to = "2020-06-22", drop_not_reported = FALSE) %>%
+    convert_hr_names()
+  ab2 <- read_d("raw_data/static/ab/ab_deaths_hr_ts.csv") # 2020-06-23 to 2023-07-24
+  ab2_max <- ab2 |>
+    dplyr::filter(.data$date == as.Date("2023-07-24") & .data$sub_region_1 != "9999") |>
+    dplyr::pull(.data$value) |>
+    sum() # deaths on 2023-07-24, excluding unknown
+  ab3 <- read_d("raw_data/static/ab/ab_deaths_pt_ts.csv") |> # ends 2023-08-28
+    dplyr::filter(.data$date  >= as.Date("2023-07-25")) |>
+    dplyr::mutate(value = .data$value - ab2_max) |>
+    add_hr_col("9999") |> # add unknown column
+    dplyr::filter(.data$value >= 0) # exclude negative values
+  deaths_ab <- dplyr::bind_rows(ab1, ab2, ab3)
+  rm(ab1, ab2, ab2_max, ab3) # clean up
 
   ## bc
   bc1 <- dplyr::bind_rows(
