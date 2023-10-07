@@ -43,6 +43,14 @@ update_active_ts <- function(ds) {
   # active_ts - case data
   cat("Updating active_ts: case data", fill = TRUE)
 
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "3e4fd9ff-48f9-4de1-a48a-97fd33b68337",
+    val = "cases",
+    fmt = "hr_ts",
+    ds = load_ds(ds, "3e4fd9ff-48f9-4de1-a48a-97fd33b68337")) |>
+    write_ts("active_ts", "ab", "cases")
+
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "314c507d-7e48-476e-937b-965499f51e8e",

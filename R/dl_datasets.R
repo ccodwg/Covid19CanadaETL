@@ -20,6 +20,7 @@ dl_datasets <- function() {
   covid_datasets <- matrix(
     c(
       # ab
+      "3e4fd9ff-48f9-4de1-a48a-97fd33b68337", NA, NA, # c
       "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb", NA, NA, # d
       # bc
       # can
