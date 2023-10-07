@@ -118,10 +118,13 @@ assemble_final_datasets <- function() {
   ## nt
   cases_nt <- dplyr::bind_rows(
     get_phac_d("cases_daily", "NT", keep_up_to_date = TRUE) %>%
-      add_hr_col("Northwest Territories"),
+      add_hr_col("Northwest Territories") %>%
+      dplyr::filter(.data$date <= as.Date("2022-06-08")),
     get_phac_d("cases", "NT", keep_up_to_date = TRUE) %>%
       add_hr_col("Northwest Territories") %>%
-      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+      dplyr::filter(.data$date == "2022-06-11"),
+    read_d("raw_data/static/nt/nt_cases_pt_ts.csv") |>
+      add_hr_col("Northwest Territories")
   )
 
   ## nu
@@ -342,10 +345,13 @@ assemble_final_datasets <- function() {
   ## nt
   deaths_nt <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "NT", keep_up_to_date = TRUE) %>%
-      add_hr_col("Northwest Territories"),
+      add_hr_col("Northwest Territories") %>%
+      dplyr::filter(.data$date <= as.Date("2022-06-08")),
     get_phac_d("deaths", "NT", keep_up_to_date = TRUE) %>%
       add_hr_col("Northwest Territories") %>%
-      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+      dplyr::filter(.data$date == "2022-06-11"),
+    read_d("raw_data/static/nt/nt_deaths_pt_ts.csv") |>
+      add_hr_col("Northwest Territories")
   )
 
   ## nu
