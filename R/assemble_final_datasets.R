@@ -24,10 +24,22 @@ assemble_final_datasets <- function() {
     dplyr::group_by(.data$name, .data$region, .data$date) %>%
     dplyr::summarize(value = sum(.data$value), .groups = "drop")
   ab5 <- ab3 %>%
-    add_hr_col("Unknown")
+    add_hr_col("9999")
   ab5$value <- ab5$value - ab4$value
   cases_ab <- dplyr::bind_rows(ab1, ab2, ab5)
-  rm(ab1, ab2, ab3, ab4, ab5) # clean up
+  # 2023-09-02 and later
+  ab6 <- read_d("raw_data/active_ts/ab/ab_cases_hr_ts.csv") |>
+    dplyr::filter(.data$date >= as.Date("2023-09-02")) |>
+    convert_hr_names()
+  ab6_pt <- ab6 |>
+    agg2pt(raw = TRUE)
+  ab7 <- read_d("raw_data/active_ts/ab/ab_cases_pt_ts.csv")
+  ab7$value_daily <- ab7$value_daily - ab6_pt$value_daily
+  ab7 <- ab7 |>
+    add_hr_col("9999")
+  ab8 <- dplyr::bind_rows(ab6, ab7)
+  cases_ab <- append_daily_d(cases_ab, ab8)
+  rm(ab1, ab2, ab3, ab4, ab5, ab6, ab6_pt, ab7, ab8) # clean up
 
   ## bc
   bc1 <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
@@ -191,9 +203,9 @@ assemble_final_datasets <- function() {
       cases_sk <- append_daily_d(cases_sk, sk4)
       rm(sk1, sk2, sk3, sk4) # cleanup
     },
-  error = function(e) {
-    print(e)
-    cat("Error in processing pipeline", fill = TRUE)
+    error = function(e) {
+      print(e)
+      cat("Error in processing pipeline", fill = TRUE)
     }
   )
 
@@ -223,7 +235,18 @@ assemble_final_datasets <- function() {
     add_hr_col("9999") |> # add unknown column
     dplyr::filter(.data$value >= 0) # exclude negative values
   deaths_ab <- dplyr::bind_rows(ab1, ab2, ab3)
-  rm(ab1, ab2, ab2_max, ab3) # clean up
+  ab_max <- deaths_ab |>
+    dplyr::group_by(.data$name, .data$region, .data$sub_region_1) |>
+    dplyr::filter(.data$date == max(.data$date)) |>
+    dplyr::ungroup() |>
+    dplyr::select("sub_region_1", "value2" = "value")
+  # 2023-09-02 and later
+  ab4 <- read_d("raw_data/active_cumul/ab/ab_deaths_hr_ab_2_ts.csv") |>
+    dplyr::left_join(ab_max, by = c("sub_region_1")) |>
+    dplyr::transmute(
+      .data$name, .data$region, .data$sub_region_1, .data$date, value = .data$value + .data$value2)
+  deaths_ab <- dplyr::bind_rows(deaths_ab, ab4)
+  rm(ab1, ab2, ab2_max, ab3, ab_max, ab4) # clean up
 
   ## bc
   bc1 <- dplyr::bind_rows(
@@ -256,7 +279,7 @@ assemble_final_datasets <- function() {
         dplyr::mutate(value = .data$value - deaths_hr) # subtract deaths assigned to a health region
       mb3 <- get_phac_d("deaths", "MB", keep_up_to_date = TRUE) %>%
         dplyr::filter(.data$date >= as.Date("2022-11-12")) %>%
-          add_hr_col("Unknown") %>%
+        add_hr_col("Unknown") %>%
         dplyr::mutate(value = .data$value - deaths_hr) # subtract deaths assigned to a health region
       deaths_mb <- dplyr::bind_rows(mb1, mb2, mb3)
       rm(mb1, mb2, mb3, deaths_hr) # cleanup
@@ -367,9 +390,9 @@ assemble_final_datasets <- function() {
   deaths_nu <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "NU", keep_up_to_date = TRUE) %>%
       add_hr_col("Nunavut"),
-  get_phac_d("deaths", "NU", keep_up_to_date = TRUE) %>%
-    add_hr_col("Nunavut") %>%
-    dplyr::filter(.data$date >= as.Date("2022-06-11"))
+    get_phac_d("deaths", "NU", keep_up_to_date = TRUE) %>%
+      add_hr_col("Nunavut") %>%
+      dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
 
   ## on

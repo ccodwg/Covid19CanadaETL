@@ -21,7 +21,7 @@ dl_datasets <- function() {
     c(
       # ab
       "3e4fd9ff-48f9-4de1-a48a-97fd33b68337", NA, NA, # c
-      "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb", NA, NA, # d
+      "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb", NA, NA, # c, d
       # bc
       # can
       "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c, d
