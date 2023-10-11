@@ -84,6 +84,15 @@ update_active_ts <- function(ds) {
   # active_ts - death data
   cat("Updating active_ts: death data", fill = TRUE)
 
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "e477791b-bced-4b20-b40b-f8d7629c9b69",
+    val = "mortality",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "e477791b-bced-4b20-b40b-f8d7629c9b69")) %>%
+    add_name_col("deaths") %>%
+    write_ts("active_ts", "ab", "deaths")
+
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "314c507d-7e48-476e-937b-965499f51e8e",
@@ -92,6 +101,15 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "314c507d-7e48-476e-937b-965499f51e8e")) %>%
     add_name_col("deaths")  %>%
     write_ts("active_ts", "can", "deaths")
+
+  ## on
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "75dd0545-f728-4af5-8185-4269596785ef",
+    val = "mortality",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "75dd0545-f728-4af5-8185-4269596785ef")) %>%
+    add_name_col("deaths") %>%
+    write_ts("active_ts", "on", "deaths")
 
   ## qc
   Covid19CanadaDataProcess::process_dataset(
@@ -159,6 +177,14 @@ update_active_ts <- function(ds) {
   # active_ts - hosp_admissions data
   cat("Updating active_ts: hosp admissions data", fill = TRUE)
 
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "e477791b-bced-4b20-b40b-f8d7629c9b69",
+    val = "hosp_admissions",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "e477791b-bced-4b20-b40b-f8d7629c9b69")) %>%
+    write_ts("active_ts", "ab", "hosp_admissions")
+
   ## qc
   Covid19CanadaDataProcess::process_dataset(
     uuid = "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5",
@@ -169,6 +195,14 @@ update_active_ts <- function(ds) {
 
   # active_ts - icu_admissions data
   cat("Updating active_ts: icu admissions data", fill = TRUE)
+
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "e477791b-bced-4b20-b40b-f8d7629c9b69",
+    val = "icu_admissions",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "e477791b-bced-4b20-b40b-f8d7629c9b69")) %>%
+    write_ts("active_ts", "ab", "icu_admissions")
 
   ## qc
   Covid19CanadaDataProcess::process_dataset(

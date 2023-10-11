@@ -630,6 +630,14 @@ assemble_final_datasets <- function() {
 
   # hosp_admissions dataset
 
+  ## ab
+  hosp_admissions_ab <- read_d("raw_data/active_ts/ab/ab_hosp_admissions_pt_ts.csv") |>
+    dplyr::transmute(
+      .data$name,
+      .data$region,
+      .data$date,
+      value = cumsum(.data$value_daily))
+
   ## mb
   mb1 <- read_d("raw_data/static/mb/mb_hosp_admissions_pt_ts.csv") # up to 2022-03-19
   mb2 <- read_d("raw_data/reports/mb/mb_weekly_report.csv") %>%
@@ -639,6 +647,16 @@ assemble_final_datasets <- function() {
   hosp_admissions_mb <- dplyr::bind_rows(mb1, mb2)
   hosp_admissions_mb <- append_daily_d(hosp_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
+
+  ## on
+  hosp_admissions_on <- read_d("raw_data/reports/on/on_pho_outcomes.csv") |>
+    dplyr::filter(.data$outcome_weekly_type == "COVID-19 hospitalizations" & is.na(.data$sub_region_1)) |>
+    report_pluck("hosp_admissions", "outcome_weekly_value", "value_daily", "pt") |>
+    dplyr::transmute(
+      .data$name,
+      .data$region,
+      .data$date,
+      value = cumsum(.data$value_daily))
 
   ## qc
   hosp_admissions_qc <- read_d("raw_data/active_ts/qc/qc_hosp_admissions_pt_ts.csv") |>
@@ -655,6 +673,14 @@ assemble_final_datasets <- function() {
   ## no Canadian dataset
 
   # icu_admissions dataset
+
+  ## ab
+  icu_admissions_ab <- read_d("raw_data/active_ts/ab/ab_icu_admissions_pt_ts.csv") |>
+    dplyr::transmute(
+      .data$name,
+      .data$region,
+      .data$date,
+      value = cumsum(.data$value_daily))
 
   ## mb
   mb1 <- read_d("raw_data/static/mb/mb_icu_admissions_pt_ts.csv") # up to 2022-03-19

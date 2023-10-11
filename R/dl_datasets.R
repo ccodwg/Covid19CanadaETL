@@ -22,6 +22,7 @@ dl_datasets <- function() {
       # ab
       "3e4fd9ff-48f9-4de1-a48a-97fd33b68337", NA, NA, # c
       "2a11bbcc-7b43-47d1-952d-437cdc9b2ffb", NA, NA, # c, d
+      "e477791b-bced-4b20-b40b-f8d7629c9b69", NA, NA, # h_a, i_a
       # bc
       # can
       "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c, d
@@ -37,6 +38,7 @@ dl_datasets <- function() {
       # nt
       # nu
       # on
+      "75dd0545-f728-4af5-8185-4269596785ef", NA, NA, # d (pt)
       "4b214c24-8542-4d26-a850-b58fc4ef6a30", NA, NA, # h, i
       # pe
       # qc
