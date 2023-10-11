@@ -156,6 +156,28 @@ update_active_ts <- function(ds) {
     ds = load_ds(ds, "f0c25e20-2a6c-4f9a-adc3-61b28ab97245")) %>%
     write_ts("active_ts", "qc", "icu")
 
+  # active_ts - hosp_admissions data
+  cat("Updating active_ts: hosp admissions data", fill = TRUE)
+
+  ## qc
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5",
+    val = "hosp_admissions",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5")) %>%
+    write_ts("active_ts", "qc", "hosp_admissions")
+
+  # active_ts - icu_admissions data
+  cat("Updating active_ts: icu admissions data", fill = TRUE)
+
+  ## qc
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5",
+    val = "icu_admissions",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5")) %>%
+    write_ts("active_ts", "qc", "icu_admissions")
+
   # active_ts - testing data
   # cat("Updating active_ts: testing data", fill = TRUE)
 

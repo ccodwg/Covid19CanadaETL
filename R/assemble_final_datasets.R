@@ -640,6 +640,10 @@ assemble_final_datasets <- function() {
   hosp_admissions_mb <- append_daily_d(hosp_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
 
+  ## qc
+  hosp_admissions_qc <- read_d("raw_data/active_ts/qc/qc_hosp_admissions_pt_ts.csv") |>
+    date_shift(1)
+
   ## yt
   hosp_admissions_yt <- read_d("raw_data/static/yt/yt_hosp_admissions_pt_ts.csv")
 
@@ -661,6 +665,10 @@ assemble_final_datasets <- function() {
   icu_admissions_mb <- dplyr::bind_rows(mb1, mb2)
   icu_admissions_mb <- append_daily_d(icu_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
+
+  ## qc
+  icu_admissions_qc <- read_d("raw_data/active_ts/qc/qc_icu_admissions_pt_ts.csv") |>
+    date_shift(1)
 
   ## collate and process final dataset
   suppressWarnings(rm(icu_admissions_pt)) # if re-running manually
