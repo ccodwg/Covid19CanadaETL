@@ -149,14 +149,8 @@ assemble_final_datasets <- function() {
   )
 
   ## on
-  on1 <- read_d("raw_data/static/on/on_cases_hr_ts.csv") |>
+  cases_on <- read_d("raw_data/active_ts/on/on_cases_hr_ts.csv") |>
     convert_hr_names()
-  on2 <- read_d("raw_data/reports/on/on_pho_cases.csv") |>
-    report_pluck("cases", "cases_weekly", "value_daily", "hr") |>
-    dplyr::filter(.data$date >= as.Date("2023-09-02")) |>
-    convert_hr_names()
-  cases_on <- append_daily_d(on1, on2)
-  rm(on1, on2) # clean up
 
   ## pe
   cases_pe <- dplyr::bind_rows(
