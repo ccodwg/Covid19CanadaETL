@@ -43,7 +43,7 @@ assemble_final_datasets <- function() {
 
   ## bc
   bc1 <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
-    drop_sub_regions("Out of Canada") %>%
+    dplyr::mutate(sub_region_1 = ifelse(.data$sub_region_1 == "Out of Canada", "Unknown", .data$sub_region_1)) %>%
     convert_hr_names()
   bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
     report_pluck("cases", "cases", "value_daily", "hr") %>%
