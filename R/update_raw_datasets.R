@@ -269,6 +269,7 @@ update_reports <- function() {
 
   # actively updated reports
   sync_report("bc_monthly_report", "bc", "hr")
+  sync_report("bc_monthly_report_cumulative", "bc", "hr")
   sync_report("mb_weekly_report_2", "mb", "hr")
   sync_report("nb_weekly_report_3", "nb", "hr")
   sync_report("ns_monthly_report", "ns", "hr")

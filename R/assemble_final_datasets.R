@@ -42,16 +42,11 @@ assemble_final_datasets <- function() {
   rm(ab1, ab2, ab3, ab4, ab5, ab6, ab6_pt, ab7, ab8) # clean up
 
   ## bc
-  bc1 <- read_d("raw_data/static/bc/bc_cases_hr_ts.csv") %>%
-    dplyr::mutate(sub_region_1 = ifelse(.data$sub_region_1 == "Out of Canada", "Unknown", .data$sub_region_1)) %>%
-    convert_hr_names()
-  bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
-    report_pluck("cases", "cases", "value_daily", "hr") %>%
-    dplyr::filter(.data$date > as.Date("2023-04-15")) %>%
-    convert_hr_names() %>%
-    report_recent()
-  cases_bc <- append_daily_d(bc1, bc2)
-  rm(bc1, bc2) # cleanup
+  cases_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
+    report_pluck("cases", "cases", "value", "hr") |>
+    dplyr::mutate(sub_region_1 = ifelse(.data$sub_region_1 == "Out of Canada", "Unknown", .data$sub_region_1)) |>
+    convert_hr_names() |>
+    dplyr::filter(.data$date >= as.Date("2020-01-29")) # first case
 
   ## mb
   mb1 <- dplyr::bind_rows(
@@ -243,18 +238,11 @@ assemble_final_datasets <- function() {
   rm(ab1, ab2, ab2_max, ab3, ab_max, ab4) # clean up
 
   ## bc
-  bc1 <- dplyr::bind_rows(
-    get_ccodwg_d("deaths", "BC", to = "2022-04-01", drop_not_reported = TRUE) %>%
-      convert_hr_names(),
-    read_d("raw_data/static/bc/bc_deaths_hr_ts.csv")
-  )
-  bc2 <- read_d("raw_data/reports/bc/bc_monthly_report.csv") %>%
-    report_pluck("deaths", "deaths", "value_daily", "hr") %>%
-    dplyr::filter(.data$date > as.Date("2023-04-15")) %>%
-    convert_hr_names() %>%
-    report_recent()
-  deaths_bc <- append_daily_d(bc1, bc2)
-  rm(bc1, bc2) # cleanup
+  deaths_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
+    report_pluck("deaths", "deaths", "value", "hr") |>
+    dplyr::mutate(sub_region_1 = ifelse(.data$sub_region_1 == "Out of Canada", "Unknown", .data$sub_region_1)) |>
+    convert_hr_names() |>
+    dplyr::filter(.data$date >= as.Date("2020-01-29")) # first case
 
   ## mb
   tryCatch(
@@ -481,7 +469,9 @@ assemble_final_datasets <- function() {
     get_covid19tracker_d("hospitalizations", "BC") |>
       dplyr::filter(.data$date <= as.Date("2021-03-12")),
     read_d("raw_data/static/bc/bc_hospitalizations_hr_ts.csv") |>
-      agg2pt(raw = TRUE)
+      agg2pt(raw = TRUE),
+    read_d("raw_data/reports/bc/bc_monthly_report.csv") |>
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt")
   )
 
   ## mb
@@ -558,7 +548,9 @@ assemble_final_datasets <- function() {
     get_covid19tracker_d("icu", "BC") |>
       dplyr::filter(.data$date <= as.Date("2021-03-12")),
     read_d("raw_data/static/bc/bc_icu_hr_ts.csv") |>
-      agg2pt(raw = TRUE)
+      agg2pt(raw = TRUE),
+    read_d("raw_data/reports/bc/bc_monthly_report.csv") |>
+      report_pluck("icu", "active_icu", "value", "pt")
   )
 
   ## mb
@@ -632,6 +624,11 @@ assemble_final_datasets <- function() {
       .data$date,
       value = cumsum(.data$value_daily))
 
+  ## bc
+  hosp_admissions_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
+    report_pluck("hosp_admissions", "hosp_admissions", "value", "pt") |>
+    dplyr::filter(.data$date >= as.Date("2020-01-03")) # first admission
+
   ## mb
   mb1 <- read_d("raw_data/static/mb/mb_hosp_admissions_pt_ts.csv") # up to 2022-03-19
   mb2 <- read_d("raw_data/reports/mb/mb_weekly_report.csv") %>%
@@ -675,6 +672,11 @@ assemble_final_datasets <- function() {
       .data$region,
       .data$date,
       value = cumsum(.data$value_daily))
+
+  ## bc
+  icu_admissions_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
+    report_pluck("icu_admissions", "icu_admissions", "value", "pt") |>
+    dplyr::filter(.data$date >= as.Date("2020-01-03")) # first admission
 
   ## mb
   mb1 <- read_d("raw_data/static/mb/mb_icu_admissions_pt_ts.csv") # up to 2022-03-19
