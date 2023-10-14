@@ -422,17 +422,21 @@ assemble_final_datasets <- function() {
         report_pluck("deaths", "deaths", "value_daily", "hr") %>%
         dplyr::filter(.data$date > as.Date("2022-02-06")) %>% # overlaps with end of TS
         report_recent()
-      sk3 <- read_d("raw_data/reports/sk/sk_monthly_report.csv") %>%
-        report_pluck("deaths", "deaths", "value_daily", "hr")
-      sk4 <- read_d("raw_data/reports/sk/sk_crisp_report.csv") %>%
-        report_pluck("deaths", "deaths", "value_daily", "hr") %>%
-        report_recent()
       deaths_sk <- append_daily_d(sk1, sk2) %>%
         dplyr::mutate(
           sub_region_1 = ifelse(.data$sub_region_1 == "Not Assigned", "Unknown", .data$sub_region_1))
-      deaths_sk <- append_daily_d(deaths_sk, sk3)
-      deaths_sk <- append_daily_d(deaths_sk, sk4)
-      rm(sk1, sk2, sk3, sk4) # cleanup
+      sk_sum <- deaths_sk |>
+        dplyr::filter(.data$sub_region_1 != "Unknown") |>
+        dplyr::group_by(.data$sub_region_1) |>
+        dplyr::filter(.data$date == max(.data$date)) |>
+        dplyr::pull(.data$value) |>
+        sum()
+      sk3 <- get_phac_d("deaths", "SK", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date >= as.Date("2022-07-02")) |>
+        dplyr::mutate(value = .data$value - sk_sum) |>
+        add_hr_col("Unknown")
+      deaths_sk <- dplyr::bind_rows(deaths_sk, sk3)
+      rm(sk1, sk2, sk_sum, sk3) # cleanup
     },
     error = function(e) {
       print(e)
