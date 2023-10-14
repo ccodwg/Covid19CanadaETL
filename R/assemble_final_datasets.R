@@ -447,10 +447,10 @@ assemble_final_datasets <- function() {
   ## yt
   deaths_yt <- dplyr::bind_rows(
     get_phac_d("deaths_daily", "YT", keep_up_to_date = TRUE) %>%
-      add_hr_col("Yukon"),
-    get_phac_d("deaths", "YT", keep_up_to_date = TRUE) %>%
       add_hr_col("Yukon") %>%
-      dplyr::filter(.data$date >= as.Date("2022-06-11"))
+      dplyr::filter(.data$date <= as.Date("2022-02-17")),
+    read_d("raw_data/static/yt/yt_deaths_pt_ts.csv") |>
+      add_hr_col("Yukon")
   )
 
   ## collate and process final dataset
