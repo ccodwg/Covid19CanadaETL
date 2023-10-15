@@ -215,7 +215,14 @@ assemble_final_datasets <- function() {
   ## ab
   ab1 <- get_ccodwg_d("deaths", "AB", to = "2020-06-22", drop_not_reported = FALSE) %>%
     convert_hr_names()
-  ab2 <- read_d("raw_data/static/ab/ab_deaths_hr_ts.csv") # 2020-06-23 to 2023-07-24
+  ab2 <- dplyr::bind_rows(
+    read_d("raw_data/static/ab/ab_deaths_hr_ts_1.csv") |> # 2020-06-23 to 2021-11-17
+      dplyr::filter(.data$date <= as.Date("2021-11-17")) |>
+      convert_hr_names(),
+    read_d("raw_data/static/ab/ab_deaths_hr_ts_2.csv") |> # 2021-11-18 to 2023-07-24
+      dplyr::filter(!is.na(.data$sub_region_1)) |>
+      convert_hr_names()
+  )
   ab2_max <- ab2 |>
     dplyr::filter(.data$date == as.Date("2023-07-24") & .data$sub_region_1 != "9999") |>
     dplyr::pull(.data$value) |>
