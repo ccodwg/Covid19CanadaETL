@@ -160,9 +160,11 @@ assemble_final_datasets <- function() {
   tryCatch(
     {
       cases_qc <- read_d("raw_data/active_ts/qc/qc_cases_hr_ts.csv") %>%
-        dplyr::filter(.data$sub_region_1 != "Hors Qu\u00E9bec") %>%
         dplyr::mutate(
-          sub_region_1 = ifelse(.data$sub_region_1 == "Inconnu", "Unknown", .data$sub_region_1)) %>%
+          sub_region_1 = ifelse(.data$sub_region_1 %in% c("Inconnu", "Hors Qu\u00E9bec"),
+                                "Unknown", .data$sub_region_1)) %>%
+        dplyr::group_by(.data$name, .data$region, .data$sub_region_1, .data$date) %>%
+        dplyr::summarize(value = sum(.data$value), .groups = "drop") %>%
         date_shift(1)
     },
     error = function(e) {
@@ -401,9 +403,11 @@ assemble_final_datasets <- function() {
   tryCatch(
     {
       deaths_qc <- read_d("raw_data/active_ts/qc/qc_deaths_hr_ts.csv") %>%
-        dplyr::filter(.data$sub_region_1 != "Hors Qu\u00E9bec") %>%
         dplyr::mutate(
-          sub_region_1 = ifelse(.data$sub_region_1 == "Inconnu", "Unknown", .data$sub_region_1)) %>%
+          sub_region_1 = ifelse(.data$sub_region_1 %in% c("Inconnu", "Hors Qu\u00E9bec"),
+                                "Unknown", .data$sub_region_1)) %>%
+        dplyr::group_by(.data$name, .data$region, .data$sub_region_1, .data$date) %>%
+        dplyr::summarize(value = sum(.data$value), .groups = "drop") %>%
         date_shift(1)
     },
     error = function(e) {
