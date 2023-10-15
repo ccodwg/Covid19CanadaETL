@@ -4,7 +4,7 @@
 \alias{update_raw_datasets}
 \title{Update raw datasets for CovidTimelineCanada}
 \usage{
-update_raw_datasets()
+update_raw_datasets(skip_raw_update = FALSE)
 }
 \description{
 Update raw datasets for CovidTimelineCanada

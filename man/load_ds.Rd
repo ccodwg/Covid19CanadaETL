@@ -12,6 +12,8 @@ load_ds(ds, ds_name, d)
 \item{ds_name}{The UUID of the dataset to load.}
 
 \item{d}{The object already loaded into memory. If provided, all other arguments will be ignored.}
+
+\item{skip_raw_update}{If TRUE, skip updating raw datasets and just assemble final datasets. Default: FALSE.}
 }
 \description{
 Load data from temporary directory
