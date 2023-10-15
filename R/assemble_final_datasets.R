@@ -766,25 +766,21 @@ assemble_final_datasets <- function() {
   # vaccine_coverage dataset
 
   ## collate and process final datasets
-  vaccine_coverage_dose_1_pt <- get_phac_d("vaccine_coverage_dose_1", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_coverage_dose_1_pt_ts_qc.csv", val_numeric = TRUE)) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
+  vaccine_coverage_dose_1_pt <- get_phac_d("vaccine_coverage_dose_1", "all") |>
+    # censor Quebec after 2022-07-17
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
     dataset_format("pt", digits = 2)
-  vaccine_coverage_dose_2_pt <- get_phac_d("vaccine_coverage_dose_2", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_coverage_dose_2_pt_ts_qc.csv", val_numeric = TRUE)) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
+  vaccine_coverage_dose_2_pt <- get_phac_d("vaccine_coverage_dose_2", "all") |>
+    # censor Quebec after 2022-07-17
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
     dataset_format("pt", digits = 2)
-  vaccine_coverage_dose_3_pt <- get_phac_d("vaccine_coverage_dose_3", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_coverage_dose_3_pt_ts_qc.csv", val_numeric = TRUE)) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
+  vaccine_coverage_dose_3_pt <- get_phac_d("vaccine_coverage_dose_3", "all") |>
+    # censor Quebec after 2022-07-17
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
     dataset_format("pt", digits = 2)
-  vaccine_coverage_dose_4_pt <- get_phac_d("vaccine_coverage_dose_4", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_coverage_dose_4_pt_ts_qc.csv", val_numeric = TRUE)) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
+  vaccine_coverage_dose_4_pt <- get_phac_d("vaccine_coverage_dose_4", "all") |>
+    # censor Quebec after 2022-07-17
+    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
     dataset_format("pt", digits = 2)
 
   ## Canadian datasets (NOT an aggregate of PT datasets)
