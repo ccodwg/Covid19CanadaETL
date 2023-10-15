@@ -247,20 +247,29 @@ update_active_ts <- function(ds) {
 
   # vaccine administration data
   cat("Updating active_ts: vaccine administration data", fill = TRUE)
-  for (dose in 1:4) {
+
+  ## define doses
+  doses <- c("total_doses", "dose_1", "dose_2", "dose_3", "dose_4", "dose_5plus")
+
+  ## can
+  for (dose in doses) {
     Covid19CanadaDataProcess::process_dataset(
-      uuid = "d0bfcd85-9552-47a5-a699-aa6fe4815e00",
-      val = paste0("vaccine_administration_dose_", dose),
+      uuid = "194a0002-5ad1-4016-8788-e7a216216a92",
+      val = paste0("vaccine_administration_", dose),
       fmt = "prov_ts",
-      ds = load_ds(ds, "d0bfcd85-9552-47a5-a699-aa6fe4815e00")) %>%
-      write_ts("active_ts", "can", paste0("vaccine_administration_dose_", dose))
+      ds = load_ds(ds, "194a0002-5ad1-4016-8788-e7a216216a92")) %>%
+      write_ts("active_ts", "can", paste0("vaccine_administration_", dose))
   }
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "d0bfcd85-9552-47a5-a699-aa6fe4815e00",
-    val = "vaccine_administration_total_doses",
-    fmt = "prov_ts",
-    ds = load_ds(ds, "d0bfcd85-9552-47a5-a699-aa6fe4815e00")) %>%
-    write_ts("active_ts", "can", "vaccine_administration_total_doses")
+
+  ## qc
+  for (dose in doses) {
+    Covid19CanadaDataProcess::process_dataset(
+      uuid = "4e04442d-f372-4357-ba15-3b64f4e03fbe",
+      val = paste0("vaccine_administration_", dose),
+      fmt = "prov_ts",
+      ds = load_ds(ds, "4e04442d-f372-4357-ba15-3b64f4e03fbe")) %>%
+      write_ts("active_ts", "qc", paste0("vaccine_administration_", dose))
+  }
 
   # wastewater data
 

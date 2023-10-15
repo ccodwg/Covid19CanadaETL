@@ -800,42 +800,120 @@ assemble_final_datasets <- function() {
   # vaccine_administration dataset
 
   ## collate and process final datasets
-  vaccine_administration_dose_1_pt <- get_phac_d("vaccine_administration_dose_1", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_administration_dose_1_pt_ts_qc.csv")) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
-    dataset_format("pt")
-  vaccine_administration_dose_2_pt <- get_phac_d("vaccine_administration_dose_2", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_administration_dose_2_pt_ts_qc.csv")) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
-    dataset_format("pt")
-  vaccine_administration_dose_3_pt <- get_phac_d("vaccine_administration_dose_3", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_administration_dose_3_pt_ts_qc.csv")) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
-    dataset_format("pt")
-  vaccine_administration_dose_4_pt <- get_phac_d("vaccine_administration_dose_4", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_administration_dose_4_pt_ts_qc.csv")) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
-    dataset_format("pt")
-  vaccine_administration_total_doses_pt <- get_phac_d("vaccine_administration_total_doses", "all") %>%
-    dplyr::filter(.data$region != "QC") %>%
-    dplyr::bind_rows(read_d("raw_data/static/can/can_vaccine_administration_total_doses_pt_ts_qc.csv")) %>%
-    dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-09-11"))) %>%
-    dataset_format("pt")
 
-  ## Canadian datasets (NOT an aggregate of PT datasets)
-  vaccine_administration_dose_1_can <- get_phac_d("vaccine_administration_dose_1", "CAN") %>%
-    dataset_format("pt")
-  vaccine_administration_dose_2_can <- get_phac_d("vaccine_administration_dose_2", "CAN") %>%
-    dataset_format("pt")
-  vaccine_administration_dose_3_can <- get_phac_d("vaccine_administration_dose_3", "CAN") %>%
-    dataset_format("pt")
-  vaccine_administration_dose_4_can <- get_phac_d("vaccine_administration_dose_4", "CAN") %>%
-    dataset_format("pt")
-  vaccine_administration_total_doses_can <- get_phac_d("vaccine_administration_total_doses", "CAN") %>%
+  ## dose 1
+  vaccine_administration_dose_1_pt <- dplyr::bind_rows(
+    # 2020-12-14 to 2022-05-03
+    read_d("raw_data/ccodwg/can_vaccine_administration_dose_1_pt_ts.csv") |>
+      dplyr::filter(.data$region != "QC"),
+    get_phac_d("vaccine_administration_dose_1", "all") |>
+      dplyr::filter(.data$region != "QC") |>
+      # 2022-05-08 onward
+      dplyr::filter(.data$date >= as.Date("2022-05-08")) |>
+      # only include MB data from 2022-05-22 onward due to bad data before this
+      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
+    )
+  # add QC data
+  vaccine_administration_dose_1_pt <- vaccine_administration_dose_1_pt |>
+    dplyr::bind_rows(
+      read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_1_pt_ts.csv") |>
+        # filter to max date of main dataset
+        dplyr::filter(.data$date <= max(vaccine_administration_dose_1_pt$date))
+    ) |> dataset_format("pt")
+
+  ## dose 2
+  vaccine_administration_dose_2_pt <- dplyr::bind_rows(
+    # 2021-01-12 to 2022-05-03
+    read_d("raw_data/ccodwg/can_vaccine_administration_dose_2_pt_ts.csv") |>
+      dplyr::filter(.data$region != "QC"),
+    get_phac_d("vaccine_administration_dose_2", "all") |>
+      dplyr::filter(.data$region != "QC") |>
+      # 2022-05-08 onward
+      dplyr::filter(.data$date >= as.Date("2022-05-08")) |>
+      # only include MB data from 2022-05-22 onward due to bad data before this
+      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
+    )
+  # add QC data
+  vaccine_administration_dose_2_pt <- vaccine_administration_dose_2_pt |>
+    dplyr::bind_rows(
+      read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_2_pt_ts.csv") |>
+        # filter to max date of main dataset
+        dplyr::filter(.data$date <= max(vaccine_administration_dose_2_pt$date))
+    ) |> dataset_format("pt")
+
+  ## dose 3
+  vaccine_administration_dose_3_pt <- dplyr::bind_rows(
+    # 2021-02-11 to 2022-05-03
+    read_d("raw_data/ccodwg/can_vaccine_administration_dose_3_pt_ts.csv") |>
+      dplyr::filter(.data$region != "QC"),
+    get_phac_d("vaccine_administration_dose_3", "all") |>
+      dplyr::filter(.data$region != "QC") |>
+      # 2022-05-08 onward
+      dplyr::filter(.data$date >= as.Date("2022-05-08")) |>
+      # only include MB data from 2022-05-22 onward due to bad data before this
+      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
+    )
+  # add QC data
+  vaccine_administration_dose_3_pt <- vaccine_administration_dose_3_pt |>
+    dplyr::bind_rows(
+      read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_3_pt_ts.csv") |>
+        # filter to max date of main dataset
+        dplyr::filter(.data$date <= max(vaccine_administration_dose_3_pt$date))
+    ) |> dataset_format("pt")
+
+  ## dose 4
+  vaccine_administration_dose_4_pt <- dplyr::bind_rows(
+    get_phac_d("vaccine_administration_dose_4", "all") |>
+      dplyr::filter(.data$region != "QC")
+    )
+  # add QC data
+  vaccine_administration_dose_4_pt <- vaccine_administration_dose_4_pt |>
+    dplyr::bind_rows(
+      read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_4_pt_ts.csv") |>
+        # filter to max date of main dataset
+        dplyr::filter(.data$date <= max(vaccine_administration_dose_4_pt$date))
+    ) |> dataset_format("pt")
+
+  # dose 5+
+  vaccine_administration_dose_5plus_pt <- dplyr::bind_rows(
+    get_phac_d("vaccine_administration_dose_5plus", "all") |>
+      dplyr::filter(.data$region != "QC")
+    )
+  # add QC data
+  vaccine_administration_dose_5plus_pt <- vaccine_administration_dose_5plus_pt |>
+    dplyr::bind_rows(
+      read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_5plus_pt_ts.csv") |>
+        # filter to max date of main dataset
+        dplyr::filter(.data$date <= max(vaccine_administration_dose_5plus_pt$date))
+    ) |> dataset_format("pt")
+
+  ## total doses
+  vaccine_administration_total_doses_pt <- dplyr::left_join(
+    vaccine_administration_dose_1_pt |>
+      dplyr::transmute(.data$date, .data$region, dose_1 = .data$value),
+    vaccine_administration_dose_2_pt |>
+      dplyr::transmute(.data$date, .data$region, dose_2 = .data$value),
+    by = c("date", "region")) |>
+    dplyr::left_join(
+      vaccine_administration_dose_3_pt |>
+        dplyr::transmute(.data$date, .data$region, dose_3 = .data$value),
+      by = c("date", "region")) |>
+    dplyr::left_join(
+      vaccine_administration_dose_4_pt |>
+        dplyr::transmute(.data$date, .data$region, dose_4 = .data$value),
+      by = c("date", "region")) |>
+    dplyr::left_join(
+      vaccine_administration_dose_5plus_pt |>
+        dplyr::transmute(.data$date, .data$region, dose_5plus = .data$value),
+      by = c("date", "region")) |>
+    dplyr::rowwise() |>
+    dplyr::transmute(
+      name = "vaccine_administration_total_doses",
+      .data$date,
+      .data$region,
+      value = sum(dose_1, dose_2, dose_3, dose_4, dose_5plus, na.rm = TRUE)
+    ) |>
+    dplyr::ungroup() |>
     dataset_format("pt")
 
   # vaccine_distribution dataset
@@ -871,6 +949,12 @@ assemble_final_datasets <- function() {
   deaths_can_completeness <- agg2can_completeness(deaths_pt)
   tests_completed_can <- agg2can(tests_completed_pt)
   tests_completed_can_completeness <- agg2can_completeness(tests_completed_pt)
+  vaccine_administration_dose_1_can <- agg2can(vaccine_administration_dose_1_pt)
+  vaccine_administration_dose_2_can <- agg2can(vaccine_administration_dose_2_pt)
+  vaccine_administration_dose_3_can <- agg2can(vaccine_administration_dose_3_pt)
+  vaccine_administration_dose_4_can <- agg2can(vaccine_administration_dose_4_pt)
+  vaccine_administration_dose_5plus_can <- agg2can(vaccine_administration_dose_5plus_pt)
+  vaccine_administration_total_doses_can <- agg2can(vaccine_administration_total_doses_pt)
 
   # write datasets
   cat("Writing final datasets...", fill = TRUE)

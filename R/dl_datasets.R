@@ -28,7 +28,8 @@ dl_datasets <- function() {
       "314c507d-7e48-476e-937b-965499f51e8e", NA, NA, # c, d
       "f1e1a857-fab8-4c25-a132-f474fab93622", NA, NA, # h, i
       "e41c63ec-ac54-47c9-8cf3-da2e1146aa75", NA, NA, # t
-      "d0bfcd85-9552-47a5-a699-aa6fe4815e00", NA, NA, # vaccine_coverage, vaccine_administration
+      "194a0002-5ad1-4016-8788-e7a216216a92", NA, NA, # vaccine_administration
+      "d0bfcd85-9552-47a5-a699-aa6fe4815e00", NA, NA, # vaccine_coverage
       "ea3718c1-83f1-46a1-8b21-e25aebd1ebee", NA, NA, # wastewater_copies_per_ml
       # mb
       # nb
@@ -45,7 +46,8 @@ dl_datasets <- function() {
       # pe
       # qc
       "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA, # c, d
-      "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA # h, i
+      "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA, # h, i
+      "4e04442d-f372-4357-ba15-3b64f4e03fbe", NA, NA # vaccine_administration
       # sk
       # yt
     ),
