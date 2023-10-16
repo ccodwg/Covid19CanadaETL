@@ -808,7 +808,7 @@ assemble_final_datasets <- function() {
       # only include MB data from 2022-05-22 onward due to bad data before this
       dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22"))) |>
     dplyr::bind_rows(
-      read_d("raw_data/ccodwg/can_vaccine_administration_dose_1_pt_ts.csv") |>
+      read_d("raw_data/static/on/on_vaccine_administration_dose_1_pt_ts.csv") |>
         # filter to ON before 2021-01-16
         dplyr::filter(.data$region == "ON" & .data$date < as.Date("2021-01-16"))) |>
     dplyr::bind_rows(
@@ -839,7 +839,7 @@ assemble_final_datasets <- function() {
     # only include MB data from 2022-05-22 onward due to bad data before this
     dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22"))) |>
     dplyr::bind_rows(
-      read_d("raw_data/ccodwg/can_vaccine_administration_dose_2_pt_ts.csv") |>
+      read_d("raw_data/static/on/on_vaccine_administration_dose_2_pt_ts.csv") |>
         # filter to ON before 2021-01-16
         dplyr::filter(.data$region == "ON" & .data$date < as.Date("2021-01-16"))) |>
     dplyr::bind_rows(
