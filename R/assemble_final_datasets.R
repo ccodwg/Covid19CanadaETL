@@ -1023,5 +1023,5 @@ assemble_final_datasets <- function() {
   write_dataset(vaccine_administration_total_doses_pt, "pt", "vaccine_administration_total_doses_pt")
   write_dataset(vaccine_administration_total_doses_can, "can", "vaccine_administration_total_doses_can")
   write_dataset(vaccine_distribution_total_doses_pt, "pt", "vaccine_distribution_total_doses")
-  write_dataset(vaccine_administration_total_doses_can, "can", "vaccine_distribution_total_doses")
+  write_dataset(vaccine_distribution_total_doses_can, "can", "vaccine_distribution_total_doses")
 }
