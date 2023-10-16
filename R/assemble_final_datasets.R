@@ -798,90 +798,119 @@ assemble_final_datasets <- function() {
   ## collate and process final datasets
 
   ## dose 1
-  vaccine_administration_dose_1_pt <- dplyr::bind_rows(
-    # 2020-12-14 to 2022-05-03
-    read_d("raw_data/ccodwg/can_vaccine_administration_dose_1_pt_ts.csv") |>
-      dplyr::filter(.data$region != "QC"),
-    get_phac_d("vaccine_administration_dose_1", "all") |>
+  vaccine_administration_dose_1_pt <- get_phac_d("vaccine_administration_dose_1", "all") |>
+      # censor QC
       dplyr::filter(.data$region != "QC") |>
-      # 2022-05-08 onward
-      dplyr::filter(.data$date >= as.Date("2022-05-08")) |>
+      # censor ON before 2021-01-16
+      dplyr::filter(!(.data$region == "ON" & .data$date < as.Date("2021-01-16"))) |>
+      # censor AB, NB, PE before 2020-12-26
+      dplyr::filter(!(.data$region %in% c("AB", "NB", "PE") & .data$date < as.Date("2020-12-26"))) |>
       # only include MB data from 2022-05-22 onward due to bad data before this
-      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
-    )
+      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22"))) |>
+    dplyr::bind_rows(
+      read_d("raw_data/ccodwg/can_vaccine_administration_dose_1_pt_ts.csv") |>
+        # filter to ON before 2021-01-16
+        dplyr::filter(.data$region == "ON" & .data$date < as.Date("2021-01-16"))) |>
+    dplyr::bind_rows(
+      read_d("raw_data/ccodwg/can_vaccine_administration_dose_1_pt_ts.csv") |>
+        # filter to AB, NB, PE before 2020-12-26
+        dplyr::filter(.data$region %in% c("AB", "NB", "PE") & .data$date < as.Date("2020-12-26"))) |>
+    dplyr::bind_rows(
+      # add old MB data
+      read_d("raw_data/static/mb/mb_vaccine_administration_dose_1_pt_ts.csv") |>
+        date_shift(1))
   # add QC data
   vaccine_administration_dose_1_pt <- vaccine_administration_dose_1_pt |>
     dplyr::bind_rows(
       read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_1_pt_ts.csv") |>
         # filter to max date of main dataset
         dplyr::filter(.data$date <= max(vaccine_administration_dose_1_pt$date))
-    ) |> dataset_format("pt")
+    ) |>
+    # filter to Saturday to match PHAC dataset
+    dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    dataset_format("pt")
 
   ## dose 2
-  vaccine_administration_dose_2_pt <- dplyr::bind_rows(
-    # 2021-01-12 to 2022-05-03
-    read_d("raw_data/ccodwg/can_vaccine_administration_dose_2_pt_ts.csv") |>
-      dplyr::filter(.data$region != "QC"),
-    get_phac_d("vaccine_administration_dose_2", "all") |>
-      dplyr::filter(.data$region != "QC") |>
-      # 2022-05-08 onward
-      dplyr::filter(.data$date >= as.Date("2022-05-08")) |>
-      # only include MB data from 2022-05-22 onward due to bad data before this
-      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
-    )
+  vaccine_administration_dose_2_pt <- get_phac_d("vaccine_administration_dose_2", "all") |>
+    # censor QC
+    dplyr::filter(.data$region != "QC") |>
+    # censor ON before 2021-01-16
+    dplyr::filter(!(.data$region == "ON" & .data$date < as.Date("2021-01-16"))) |>
+    # only include MB data from 2022-05-22 onward due to bad data before this
+    dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22"))) |>
+    dplyr::bind_rows(
+      read_d("raw_data/ccodwg/can_vaccine_administration_dose_2_pt_ts.csv") |>
+        # filter to ON before 2021-01-16
+        dplyr::filter(.data$region == "ON" & .data$date < as.Date("2021-01-16"))) |>
+    dplyr::bind_rows(
+      # add old MB data
+      read_d("raw_data/static/mb/mb_vaccine_administration_dose_2_pt_ts.csv") |>
+        date_shift(1))
   # add QC data
   vaccine_administration_dose_2_pt <- vaccine_administration_dose_2_pt |>
     dplyr::bind_rows(
       read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_2_pt_ts.csv") |>
         # filter to max date of main dataset
         dplyr::filter(.data$date <= max(vaccine_administration_dose_2_pt$date))
-    ) |> dataset_format("pt")
+    ) |>
+    # filter to Saturday to match PHAC dataset
+    dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    dataset_format("pt")
 
   ## dose 3
-  vaccine_administration_dose_3_pt <- dplyr::bind_rows(
-    # 2021-02-11 to 2022-05-03
-    read_d("raw_data/ccodwg/can_vaccine_administration_dose_3_pt_ts.csv") |>
-      dplyr::filter(.data$region != "QC"),
-    get_phac_d("vaccine_administration_dose_3", "all") |>
-      dplyr::filter(.data$region != "QC") |>
-      # 2022-05-08 onward
-      dplyr::filter(.data$date >= as.Date("2022-05-08")) |>
-      # only include MB data from 2022-05-22 onward due to bad data before this
-      dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
-    )
+  vaccine_administration_dose_3_pt <- get_phac_d("vaccine_administration_dose_3", "all") |>
+    # censor QC
+    dplyr::filter(.data$region != "QC") |>
+    # only include MB data from 2022-05-22 onward due to bad data before this
+    dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22"))) |>
+    dplyr::bind_rows(
+      # add old MB data
+      read_d("raw_data/static/mb/mb_vaccine_administration_dose_3_pt_ts.csv") |>
+        date_shift(1))
   # add QC data
   vaccine_administration_dose_3_pt <- vaccine_administration_dose_3_pt |>
     dplyr::bind_rows(
       read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_3_pt_ts.csv") |>
         # filter to max date of main dataset
         dplyr::filter(.data$date <= max(vaccine_administration_dose_3_pt$date))
-    ) |> dataset_format("pt")
+    ) |>
+    # filter to Saturday to match PHAC dataset
+    dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    dataset_format("pt")
 
   ## dose 4
-  vaccine_administration_dose_4_pt <- dplyr::bind_rows(
-    get_phac_d("vaccine_administration_dose_4", "all") |>
-      dplyr::filter(.data$region != "QC")
-    )
+  vaccine_administration_dose_4_pt <- get_phac_d("vaccine_administration_dose_4", "all") |>
+    # censor QC
+    dplyr::filter(.data$region != "QC") |>
+    # only include MB data from 2022-05-22 onward due to bad data before this
+    dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
   # add QC data
   vaccine_administration_dose_4_pt <- vaccine_administration_dose_4_pt |>
     dplyr::bind_rows(
       read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_4_pt_ts.csv") |>
         # filter to max date of main dataset
         dplyr::filter(.data$date <= max(vaccine_administration_dose_4_pt$date))
-    ) |> dataset_format("pt")
+    ) |>
+    # filter to Saturday to match PHAC dataset
+    dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    dataset_format("pt")
 
   # dose 5+
-  vaccine_administration_dose_5plus_pt <- dplyr::bind_rows(
-    get_phac_d("vaccine_administration_dose_5plus", "all") |>
-      dplyr::filter(.data$region != "QC")
-    )
-  # add QC data
-  vaccine_administration_dose_5plus_pt <- vaccine_administration_dose_5plus_pt |>
+  vaccine_administration_dose_5plus_pt <- get_phac_d("vaccine_administration_dose_5plus", "all") |>
+    # censor QC
+    dplyr::filter(.data$region != "QC") |>
+    # only include MB data from 2022-05-22 onward due to bad data before this
+    dplyr::filter(!(.data$region == "MB" & .data$date < as.Date("2022-05-22")))
+    # add QC data
+    vaccine_administration_dose_5plus_pt <- vaccine_administration_dose_5plus_pt |>
     dplyr::bind_rows(
       read_d("raw_data/active_ts/qc/qc_vaccine_administration_dose_5plus_pt_ts.csv") |>
         # filter to max date of main dataset
         dplyr::filter(.data$date <= max(vaccine_administration_dose_5plus_pt$date))
-    ) |> dataset_format("pt")
+    ) |>
+    # filter to Saturday to match PHAC dataset
+    dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    dataset_format("pt")
 
   ## total doses
   vaccine_administration_total_doses_pt <- dplyr::left_join(
