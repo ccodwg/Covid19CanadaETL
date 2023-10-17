@@ -499,7 +499,9 @@ assemble_final_datasets <- function() {
   hospitalizations_nb <- dplyr::bind_rows(
     get_covid19tracker_d("hospitalizations", "NB", to = "2021-03-07"),
     read_d("raw_data/static/nb/nb_hospitalizations_pt_ts_1.csv"),
-    read_d("raw_data/static/nb/nb_hospitalizations_pt_ts_2.csv"),
+    read_d("raw_data/static/nb/nb_hospitalizations_pt_ts_2.csv") |>
+      dplyr::filter(.data$date <= as.Date("2022-01-20")),
+    read_d("raw_data/static/nb/nb_hospitalizations_pt_ts_3.csv"),
     read_d("raw_data/reports/nb/nb_weekly_report.csv") %>%
       report_pluck("hospitalizations", "active_hospitalizations", "value", "pt")
   )
@@ -578,7 +580,9 @@ assemble_final_datasets <- function() {
   icu_nb <- dplyr::bind_rows(
     get_covid19tracker_d("icu", "NB", to = "2021-03-07"),
     read_d("raw_data/static/nb/nb_icu_pt_ts_1.csv"),
-    read_d("raw_data/static/nb/nb_icu_pt_ts_2.csv"),
+    read_d("raw_data/static/nb/nb_icu_pt_ts_2.csv") |>
+      dplyr::filter(.data$date <= as.Date("2022-01-20")),
+    read_d("raw_data/static/nb/nb_icu_pt_ts_3.csv"),
     read_d("raw_data/reports/nb/nb_weekly_report.csv") %>%
       report_pluck("icu", "active_icu", "value", "pt")
   )
