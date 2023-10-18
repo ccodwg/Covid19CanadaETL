@@ -32,6 +32,9 @@ ccodwg_update <- function(email = NULL, path = NULL, skip_raw_update = FALSE) {
   # update diffs datasets
   diff_datasets()
 
+  # assemble and write extra datasets
+  extra_datasets()
+
   # load error log
   error_log <- readLines(log_path)
 
