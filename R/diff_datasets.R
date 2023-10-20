@@ -45,90 +45,106 @@ diff_datasets <- function() {
           } else {
             # load existing dataset
             diff <- dplyr::tibble(utils::read.csv(diff_path, stringsAsFactors = FALSE))
-            # check if data have been updated
-            diff_current <- diff %>%
-              dplyr::select(dplyr::any_of(
-                c("name", "region", "sub_region_1", "sub_region_2", "date_current", "value_current"))) %>%
-              dplyr::rename("date" = "date_current", "value" = "value_current")
-            diff_previous <- diff %>%
-              dplyr::select(dplyr::any_of(
-                c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
-            # update if data have changed
-            if (!identical(dat, diff_current)) {
-              # if geographic units differ, update diff with new regions
-              if (!identical(
-                dat %>% dplyr::select(dplyr::any_of(
-                  c("name", "region", "sub_region_1", "sub_region_2"))),
-                diff_current %>% dplyr::select(dplyr::any_of(
-                  c("name", "region", "sub_region_1", "sub_region_2")))
-              )) {
-                # force geographic units from dat to match diff
-                diff <- dplyr::left_join(
-                  dat %>% dplyr::select(dplyr::any_of(c("name", "region", "sub_region_1", "sub_region_2"))),
-                  diff,
-                  by = dat %>% dplyr::select(dplyr::any_of(c("name", "region", "sub_region_1", "sub_region_2"))) %>% names())
-                # regenerate diff data
-                diff_current <- diff %>%
-                  dplyr::select(dplyr::any_of(
-                    c("name", "region", "sub_region_1", "sub_region_2", "date_current", "value_current"))) %>%
-                  dplyr::rename("date" = "date_current", "value" = "value_current")
-                diff_previous <- diff %>%
-                  dplyr::select(dplyr::any_of(
-                    c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
-              }
-              # construct new diff dataset with line-by-line comparisons
-              diff <- lapply(seq_along(1:nrow(diff)), function(x) {
-                # check if new data is the same as current data in diff
-                if (!identical(dat[x, ], diff_current[x, ])) {
-                  # use new data for current data
-                  new_diff <- dat %>%
-                    dplyr::slice(x) %>%
-                    dplyr::rename("date_current" = "date", "value_current" = "value")
-                  # if dates of new data and current data from diff are the same
-                  # (indicating that historical data have been updated but no new data added),
-                  # then update previous data as well, so that the diff is accurate
-                  if (identical(dat[x, "date", drop = TRUE], diff_current[x, "date", drop = TRUE])) {
-                    # if previous date and value are blank, then keep them blank
-                    if (is.na(diff_previous[x, "date_previous", drop = TRUE])) {
-                      new_diff_2 <- diff_previous %>%
-                        dplyr::slice(x) %>%
-                        dplyr::select(.data$date_previous, .data$value_previous)
+            # if diff is blank (due to error), regenerate diff
+            if (nrow(diff) == 0) {
+              diff <- dat %>%
+                dplyr::rename(
+                  "date_current" = "date",
+                  "value_current" = "value") %>%
+                dplyr::mutate(
+                  date_previous = "",
+                  value_previous = "",
+                  .after = "value_current") %>%
+                dplyr::mutate(
+                  date_diff = "",
+                  value_diff = ""
+                )
+            } else {
+              # check if data have been updated
+              diff_current <- diff %>%
+                dplyr::select(dplyr::any_of(
+                  c("name", "region", "sub_region_1", "sub_region_2", "date_current", "value_current"))) %>%
+                dplyr::rename("date" = "date_current", "value" = "value_current")
+              diff_previous <- diff %>%
+                dplyr::select(dplyr::any_of(
+                  c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
+              # update if data have changed
+              if (!identical(dat, diff_current)) {
+                # if geographic units differ, update diff with new regions
+                if (!identical(
+                  dat %>% dplyr::select(dplyr::any_of(
+                    c("name", "region", "sub_region_1", "sub_region_2"))),
+                  diff_current %>% dplyr::select(dplyr::any_of(
+                    c("name", "region", "sub_region_1", "sub_region_2")))
+                )) {
+                  # force geographic units from dat to match diff
+                  diff <- dplyr::left_join(
+                    dat %>% dplyr::select(dplyr::any_of(c("name", "region", "sub_region_1", "sub_region_2"))),
+                    diff,
+                    by = dat %>% dplyr::select(dplyr::any_of(c("name", "region", "sub_region_1", "sub_region_2"))) %>% names())
+                  # regenerate diff data
+                  diff_current <- diff %>%
+                    dplyr::select(dplyr::any_of(
+                      c("name", "region", "sub_region_1", "sub_region_2", "date_current", "value_current"))) %>%
+                    dplyr::rename("date" = "date_current", "value" = "value_current")
+                  diff_previous <- diff %>%
+                    dplyr::select(dplyr::any_of(
+                      c("name", "region", "sub_region_1", "sub_region_2", "date_previous", "value_previous")))
+                }
+                # construct new diff dataset with line-by-line comparisons
+                diff <- lapply(seq_along(1:nrow(diff)), function(x) {
+                  # check if new data is the same as current data in diff
+                  if (!identical(dat[x, ], diff_current[x, ])) {
+                    # use new data for current data
+                    new_diff <- dat %>%
+                      dplyr::slice(x) %>%
+                      dplyr::rename("date_current" = "date", "value_current" = "value")
+                    # if dates of new data and current data from diff are the same
+                    # (indicating that historical data have been updated but no new data added),
+                    # then update previous data as well, so that the diff is accurate
+                    if (identical(dat[x, "date", drop = TRUE], diff_current[x, "date", drop = TRUE])) {
+                      # if previous date and value are blank, then keep them blank
+                      if (is.na(diff_previous[x, "date_previous", drop = TRUE])) {
+                        new_diff_2 <- diff_previous %>%
+                          dplyr::slice(x) %>%
+                          dplyr::select(.data$date_previous, .data$value_previous)
+                      } else {
+                        new_diff_2 <- dat_raw %>%
+                          # same geographic unit
+                          dplyr::filter(.data$date == diff_previous[x, "date_previous", drop = TRUE]) %>%
+                          dplyr::slice(x) %>%
+                          dplyr::transmute(date_previous = .data$date, value_previous = .data$value)
+                      }
                     } else {
-                      new_diff_2 <- dat_raw %>%
-                        # same geographic unit
-                        dplyr::filter(.data$date == diff_previous[x, "date_previous", drop = TRUE]) %>%
+                      new_diff_2 <- diff_current %>%
                         dplyr::slice(x) %>%
                         dplyr::transmute(date_previous = .data$date, value_previous = .data$value)
                     }
+                    # create new diff row
+                    new_diff <- dplyr::bind_cols(
+                      new_diff,
+                      new_diff_2
+                    )
                   } else {
-                    new_diff_2 <- diff_current %>%
-                      dplyr::slice(x) %>%
-                      dplyr::transmute(date_previous = .data$date, value_previous = .data$value)
+                    # use current data in diff
+                    diff[x, ]
                   }
-                  # create new diff row
-                  new_diff <- dplyr::bind_cols(
-                    new_diff,
-                    new_diff_2
-                  )
-                } else {
-                  # use current data in diff
-                  diff[x, ]
-                }
-              }) %>%
-                dplyr::bind_rows() %>%
-                # calculate date and value diffs
-                dplyr::mutate(
-                  date_diff = as.Date(.data$date_current) - as.Date(.data$date_previous),
-                  value_diff = dplyr::case_when(
-                    # round vaccine coverage diff to account for floating point error
-                    grepl("^vaccine_coverage_", basename(f)) ~ as.character(round(.data$value_current - .data$value_previous, 2)),
-                    TRUE ~ as.character(.data$value_current - .data$value_previous)
-                  ))
-            } else {
-              # skip to next step of loop without re-writing diff dataset
-              next
+                }) %>%
+                  dplyr::bind_rows() %>%
+                  # calculate date and value diffs
+                  dplyr::mutate(
+                    date_diff = as.Date(.data$date_current) - as.Date(.data$date_previous),
+                    value_diff = dplyr::case_when(
+                      # round vaccine coverage diff to account for floating point error
+                      grepl("^vaccine_coverage_", basename(f)) ~ as.character(round(.data$value_current - .data$value_previous, 2)),
+                      TRUE ~ as.character(.data$value_current - .data$value_previous)
+                    ))
+              } else {
+                # skip to next step of loop without re-writing diff dataset
+                next
+              }
             }
-          }
+            }
           # calculate columns to quote
           n <- ncol(diff)
           cols <- 1:n
