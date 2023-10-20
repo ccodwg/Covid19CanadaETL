@@ -29,6 +29,7 @@ Imports:
     jsonlite,
     xml2,
     httr,
+    MMWRweek,
     googledrive,
     googlesheets4,
     ggplot2,
