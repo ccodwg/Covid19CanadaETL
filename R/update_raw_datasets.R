@@ -225,6 +225,15 @@ update_active_ts <- function(ds) {
   # active_ts - testing data
   cat("Updating active_ts: testing data", fill = TRUE)
 
+  ## ab
+  Covid19CanadaDataProcess::process_dataset(
+    uuid = "7724f4fe-6759-4c9c-be6f-91b29a76631d",
+    val = "testing",
+    fmt = "prov_ts",
+    ds = load_ds(ds, "7724f4fe-6759-4c9c-be6f-91b29a76631d")) %>%
+    add_name_col("tests_completed") %>%
+    write_ts("active_ts", "ab", "tests_completed")
+
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "e41c63ec-ac54-47c9-8cf3-da2e1146aa75",
@@ -289,6 +298,7 @@ update_reports <- function() {
 
   # actively updated reports
   sync_report("bc_monthly_report", "bc", "hr")
+  sync_report("bc_monthly_report_testing", "bc", "hr")
   sync_report("bc_monthly_report_cumulative", "bc", "hr")
   sync_report("mb_weekly_report_2", "mb", "hr")
   sync_report("nb_weekly_report_3", "nb", "hr")

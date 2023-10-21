@@ -723,38 +723,57 @@ assemble_final_datasets <- function() {
   ## all regions (up to 2022-11-12 or earlier, depending on PT)
   tests_completed_pt <- get_phac_d("tests_completed", "all", keep_up_to_date = TRUE)
 
-  ## remove regions: AB, MB, YT
+  ## remove regions with extra/alternate data
   tests_completed_pt <- tests_completed_pt %>%
-    dplyr::filter(!.data$region %in% c("AB", "MB", "YT"))
+    dplyr::filter(!.data$region %in% c("AB", "BC", "MB", "ON", "YT"))
 
-  ## add AB and YT data
+  ## add YT data
   tests_completed_pt <- dplyr::bind_rows(
     tests_completed_pt,
-    read_d("raw_data/static/ab/ab_tests_completed_pt_ts_1.csv") |>
-      dplyr::filter(.data$date <= as.Date("2020-03-05")),
-    read_d("raw_data/static/ab/ab_tests_completed_pt_ts_2.csv"),
     read_d("raw_data/static/yt/yt_tests_completed_pt_ts.csv")
   )
 
-  ## add MB data
-  mb1 <- get_phac_d("tests_completed", "MB", keep_up_to_date = TRUE)
+  ## add AB data
+  ab1 <- dplyr::bind_rows(
+    # avoid overlaps
+    read_d("raw_data/static/ab/ab_tests_completed_pt_ts_1.csv") |>
+      dplyr::filter(.data$date <= as.Date("2020-03-05")),
+    read_d("raw_data/static/ab/ab_tests_completed_pt_ts_2.csv") |>
+      dplyr::filter(.data$date <= as.Date("2023-08-26")))
+  ab2 <- read_d("raw_data/active_ts/ab/ab_tests_completed_pt_ts.csv") |>
+    dplyr::filter(.data$date >= as.Date("2023-09-02"))
+  ab3 <- append_daily_d(ab1, ab2)
+  # add AB back to main dataset
+  tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, ab3)
+  rm(ab1, ab2, ab3) # clean up
+
+  ## add BC data (2022-11-26 and later)
+  bc1 <- get_phac_d("tests_completed", "BC", keep_up_to_date = TRUE) |>
+    # avoid overlap with new dataset
+    dplyr::filter(.data$date <= as.Date("2022-11-19"))
+  bc2 <- read_d("raw_data/reports/bc/bc_monthly_report_testing.csv") |>
+    report_pluck("tests_completed", "tests_completed_weekly", "value_daily", "pt") |>
+    dplyr::filter(.data$date >= as.Date("2022-11-26"))
+  bc3 <- append_daily_d(bc1, bc2)
+  # add BC back to main dataset
+  tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, bc3)
+  rm(bc1, bc2, bc3) # clean up
+
+  ## add MB data (2022-11-26 and later)
+  mb1 <- get_phac_d("tests_completed", "MB", keep_up_to_date = TRUE) |>
+    # avoid overlap with new dataset
+    dplyr::filter(.data$date <= as.Date("2022-11-19"))
   mb2 <- read_d("raw_data/reports/mb/mb_weekly_report_2.csv") %>%
     report_pluck("tests_completed", "tests_completed", "value_daily", "pt") %>%
     dplyr::filter(.data$date >= as.Date("2022-11-26"))
   mb3 <- append_daily_d(mb1, mb2)
-  # there is technically a 1-day overlap between PHAC data ending 2022-11-20
-  # and weekly MB report data ending 2022-11-26
-  tests_completed_pt <- dplyr::bind_rows(
-    tests_completed_pt,
-    mb3
-  )
+  tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, mb3)
   rm(mb1, mb2, mb3) # cleanup
 
   ## add ON data (2022-11-26 and later)
-  on1 <- tests_completed_pt |>
-    dplyr::filter(.data$region == "ON" & .data$date <= as.Date("2022-11-19")) # avoid overlap with weekly data from 2022-11-20 to 2022-11-26
-  tests_completed_pt <- tests_completed_pt |>
-    dplyr::filter(.data$region != "ON") # remove ON from main dataset
+  on1 <- get_phac_d("tests_completed", "ON", keep_up_to_date = TRUE) |>
+    # avoid overlap with new dataset
+    dplyr::filter(.data$date <= as.Date("2022-11-19"))
   on2 <- read_d("raw_data/reports/on/on_pho_testing.csv") |>
     report_pluck("tests_completed", "tests_completed_weekly", "value_daily", "pt") |>
     dplyr::filter(.data$date >= as.Date("2022-11-26"))
