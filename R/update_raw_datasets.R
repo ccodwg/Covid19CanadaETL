@@ -2,7 +2,6 @@
 #' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
 #' @param ds_name The UUID of the dataset to load.
 #' @param d The object already loaded into memory. If provided, all other arguments will be ignored.
-#' @param skip_raw_update If TRUE, skip updating raw datasets and just assemble final datasets. Default: FALSE.
 #'
 #' @export
 load_ds <- function(ds, ds_name, d) {
@@ -362,6 +361,7 @@ update_active_cumul <- function(ds) {
 #' Update raw datasets for CovidTimelineCanada
 #'
 #' @importFrom rlang .data
+#' @param skip_raw_update If TRUE, skip updating raw datasets and just assemble final datasets. Default: FALSE.
 #'
 #' @export
 update_raw_datasets <- function(skip_raw_update = FALSE) {

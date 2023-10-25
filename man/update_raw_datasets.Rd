@@ -6,6 +6,9 @@
 \usage{
 update_raw_datasets(skip_raw_update = FALSE)
 }
+\arguments{
+\item{skip_raw_update}{If TRUE, skip updating raw datasets and just assemble final datasets. Default: FALSE.}
+}
 \description{
 Update raw datasets for CovidTimelineCanada
 }

@@ -17,7 +17,7 @@ extra_datasets <- function() {
     convert_hr_names()
 
   ## write file
-  write.csv(sk, file.path("extra_data", "sk_biweekly_cases_hr", "sk_biweekly_cases_hr.csv"), row.names = FALSE, quote = 1:4)
+  utils::write.csv(sk, file.path("extra_data", "sk_biweekly_cases_hr", "sk_biweekly_cases_hr.csv"), row.names = FALSE, quote = 1:4)
   rm(sk) # clean up
 
   # PHAC individual-level data
@@ -38,7 +38,7 @@ extra_datasets <- function() {
       } else {
         ## download file
         tmp <- tempfile()
-        download.file("https://www150.statcan.gc.ca/n1/pub/13-26-0003/2020001/COVID19-eng.zip", destfile = tmp)
+        utils::download.file("https://www150.statcan.gc.ca/n1/pub/13-26-0003/2020001/COVID19-eng.zip", destfile = tmp)
         phac <- readr::read_csv(unz(tmp, filename = "COVID19-eng.csv"), col_types = readr::cols()) # silently
 
         ## get values for episode week group from metadata webpage
@@ -46,7 +46,7 @@ extra_datasets <- function() {
           rvest::html_element(xpath = "//h2[contains(text(), 'Information on the Episode Week Group Indicator')]/following::table[1]") |>
           rvest::html_table()
         ewg <- ewg[1:nrow(ewg) - 1, ] # remove 'not applicable'
-        ewg <- setNames(
+        ewg <- stats::setNames(
           paste0("Weeks ", ewg$`Episode weeks grouped`, ", grouped with week ", ewg$`Grouped with episode week`, ", 20", ewg$`Episode year`),
           as.integer(ewg$`Episode week group`))
         ewg[1] <- "No grouping"
@@ -103,7 +103,7 @@ extra_datasets <- function() {
             ), levels = c("Yes", "No", "Not Stated"))
           )
         # create lookup table of episode week dates
-        dates <- dplyr::select(phac, episode_year, episode_week) |>
+        dates <- dplyr::select(.data$phac, .data$episode_year, .data$episode_week) |>
           dplyr::distinct()
         names(dates) <- c("episode_year", "episode_week")
         dates$episode_year <- suppressWarnings(as.integer(dates$episode_year))
@@ -190,7 +190,7 @@ extra_datasets <- function() {
             phac_d,
             by = c("region", "episode_year", "episode_week", "episode_week_date_start", "episode_week_date_end", "episode_week_group", "gender", "age_group"))
         # write dataset
-        write.csv(phac, file.path("extra_data", "phac_individual_ts", "phac_individual_ts.csv"), row.names = FALSE, quote = 1:8)
+        utils::write.csv(phac, file.path("extra_data", "phac_individual_ts", "phac_individual_ts.csv"), row.names = FALSE, quote = 1:8)
         # write new release date
         writeLines(as.character(rd_new), file.path("extra_data", "phac_individual_ts", "release_date.txt"))
         rm(tmp, phac, dates, ewg, all_groups, all_rows, phac_hs, phac_d, rd) # clean up

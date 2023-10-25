@@ -959,7 +959,7 @@ assemble_final_datasets <- function() {
       name = "vaccine_administration_total_doses",
       .data$date,
       .data$region,
-      value = sum(dose_1, dose_2, dose_3, dose_4, dose_5plus, na.rm = TRUE)
+      value = sum(.data$dose_1, .data$dose_2, .data$dose_3, .data$dose_4, .data$dose_5plus, na.rm = TRUE)
     ) |>
     dplyr::ungroup() |>
     dataset_format("pt")
