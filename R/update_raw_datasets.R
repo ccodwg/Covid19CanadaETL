@@ -93,15 +93,6 @@ update_active_ts <- function(ds) {
   # active_ts - death data
   cat("Updating active_ts: death data", fill = TRUE)
 
-  ## ab
-  Covid19CanadaDataProcess::process_dataset(
-    uuid = "e477791b-bced-4b20-b40b-f8d7629c9b69",
-    val = "mortality",
-    fmt = "prov_ts",
-    ds = load_ds(ds, "e477791b-bced-4b20-b40b-f8d7629c9b69")) %>%
-    add_name_col("deaths") %>%
-    write_ts("active_ts", "ab", "deaths")
-
   ## can
   Covid19CanadaDataProcess::process_dataset(
     uuid = "314c507d-7e48-476e-937b-965499f51e8e",

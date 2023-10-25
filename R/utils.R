@@ -254,7 +254,8 @@ replace_hr_phac <- function(d, val, region, date) {
           get_phac_d(paste0(val, "_daily"), region, keep_up_to_date = FALSE) |> # update column is sometimes wrong
             dplyr::filter(.data$date >= as.Date(.env$date)), # up to 2022-06-08
           get_phac_d(val, region, keep_up_to_date = TRUE) |>
-            dplyr::filter(.data$date >= as.Date("2022-06-11"))) # 2022-06-11 and later
+            dplyr::filter(.data$date >= as.Date("2022-06-11"))) |> # 2022-06-11 and later
+          dplyr::select(-.data$update)
       }
       # replace data
       replace_hr(d, phac_d, val, region, date)

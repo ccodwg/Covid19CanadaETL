@@ -991,6 +991,36 @@ assemble_final_datasets <- function() {
   cases_pt <- agg2pt(cases_hr)
   deaths_pt <- agg2pt(deaths_hr)
 
+  # replace PT-level death data for some regions
+
+  ## AB
+  deaths_pt <- replace_hr(
+    deaths_pt,
+    dplyr::bind_rows(
+      read_d("raw_data/static/ab/ab_deaths_pt_ts.csv") |>
+        dplyr::filter(.data$date <= "2023-08-19"),
+      get_phac_d("deaths", "AB", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date >= as.Date("2023-08-26"))
+    ),
+    "deaths",
+    "AB",
+    "2020-01-01") # entire time series
+
+  ## ON
+  deaths_pt <- replace_hr(
+    deaths_pt,
+    read_d("raw_data/active_ts/on/on_deaths_pt_ts.csv"),
+    "deaths",
+    "ON",
+    "2020-01-01") # entire time series
+
+  ## SK
+  deaths_pt <- replace_hr_phac(
+    deaths_pt,
+    "deaths",
+    "SK",
+    "2022-02-07")
+
   # create aggregated datasets (PT -> CAN)
   cases_can <- agg2can(cases_pt)
   cases_can_completeness <- agg2can_completeness(cases_pt)
