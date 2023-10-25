@@ -527,6 +527,8 @@ assemble_final_datasets <- function() {
   ## pe
   hospitalizations_pe <- read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
     report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
+    # exclude dates with no data
+    dplyr::filter(!.data$date %in% c("2022-02-05", "2022-02-19", "2022-02-20", "2022-02-21", "2022-02-23")) |>
     # add 0 for period between 2021-04-19 and 2021-12-28 when no new hosp admissions were reported
     dplyr::bind_rows(
       data.frame(
@@ -618,7 +620,15 @@ assemble_final_datasets <- function() {
 
   ## pe
   icu_pe <- read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
-    report_pluck("icu", "active_icu", "value", "pt") |>
+    # exclude dates with no data
+    dplyr::filter(!.data$date %in% c("2022-02-05", "2022-02-19", "2022-02-20", "2022-02-21", "2022-02-23")) |>
+    # handle implicit zeroes
+    dplyr::transmute(
+      name = "icu",
+      region = "PE",
+      date = .data$date,
+      value = ifelse(is.na(.data$active_icu), 0, .data$active_icu) # assume if ICU is not mentioned, it is zero
+    ) |>
     # add 0 for period between 2021-04-19 and 2021-12-28 when no new hosp admissions were reported
     dplyr::bind_rows(
       data.frame(
