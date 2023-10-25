@@ -525,7 +525,17 @@ assemble_final_datasets <- function() {
   hospitalizations_on <- read_d("raw_data/active_ts/on/on_hospitalizations_pt_ts.csv")
 
   ## pe
-  hospitalizations_pe <- get_covid19tracker_d("hospitalizations", "PE")
+  hospitalizations_pe <- read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
+    report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
+    # add 0 for period between 2021-04-19 and 2021-12-28 when no new hosp admissions were reported
+    dplyr::bind_rows(
+      data.frame(
+        name = "hospitalizations",
+        region = "PE",
+        date = seq.Date(from = as.Date("2021-04-19"), to = as.Date("2021-12-28"), by = "day"),
+        value = 0
+      )
+    )
 
   ## qc
   hospitalizations_qc <- dplyr::bind_rows(
@@ -607,7 +617,17 @@ assemble_final_datasets <- function() {
   icu_on <- read_d("raw_data/active_ts/on/on_icu_pt_ts.csv")
 
   ## pe
-  icu_pe <- get_covid19tracker_d("icu", "PE")
+  icu_pe <- read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
+    report_pluck("icu", "active_icu", "value", "pt") |>
+    # add 0 for period between 2021-04-19 and 2021-12-28 when no new hosp admissions were reported
+    dplyr::bind_rows(
+      data.frame(
+        name = "icu",
+        region = "PE",
+        date = seq.Date(from = as.Date("2021-04-19"), to = as.Date("2021-12-28"), by = "day"),
+        value = 0
+      )
+    )
 
   ## qc
   icu_qc <- dplyr::bind_rows(
