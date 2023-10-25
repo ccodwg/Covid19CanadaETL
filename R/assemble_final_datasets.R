@@ -1,6 +1,7 @@
 #' Assemble and write final datasets from raw datasets for CovidTimelineCanada
 #'
 #' @importFrom rlang .data
+#' @importFrom rlang .env
 #'
 #' @export
 assemble_final_datasets <- function() {

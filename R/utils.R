@@ -202,6 +202,70 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
   )
 }
 
+#' Replace part of a health region-level time series
+#'
+#' @param d1 The health region-level time series to replace data in.
+#' @param d2 The replacement data for a specific region.
+#' @param val The value to replace. One of "cases" or "deaths".
+#' @param region The region to replace data for.
+#' @param date The date to start replacing data from.
+#'
+#' @export
+replace_hr <- function(d1, d2, val, region, date) {
+  tryCatch(
+    {
+      match.arg(val, c("cases", "deaths"))
+      # filter to date
+      d2 <- d2[d2$date >= as.Date({{date}}), ]
+      # replace data
+      d1 <- d1 |>
+        dplyr::filter(!(.data$region == .env$region & .data$date >= as.Date(.env$date))) |>
+        dplyr::bind_rows(d2)
+      # return data
+      dataset_format(d1, "pt")
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in replace_hr", fill = TRUE)
+    }
+  )
+}
+
+#' Replace part of health region-level time series with PHAC data
+#'
+#' @param d The health region-level time series to replace data in.
+#' @param val The value to replace. One of "cases" or "deaths".
+#' @param region The region to replace data for.
+#' @param date The date to start replacing data from.
+#'
+#' @export
+replace_hr_phac <- function(d, val, region, date) {
+  tryCatch(
+    {
+      match.arg(val, c("cases", "deaths"))
+      # get PHAC data
+      if (date > as.Date("2022-06-08")) {
+        # get only weekly data
+        phac_d <- get_phac_d(val, region, keep_up_to_date = TRUE) |>
+          dplyr::filter(.data$date >= as.Date(.env$date))
+      } else {
+        # merge weekly and daily data
+        phac_d <- dplyr::bind_rows(
+          get_phac_d(paste0(val, "_daily"), region, keep_up_to_date = FALSE) |> # update column is sometimes wrong
+            dplyr::filter(.data$date >= as.Date(.env$date)), # up to 2022-06-08
+          get_phac_d(val, region, keep_up_to_date = TRUE) |>
+            dplyr::filter(.data$date >= as.Date("2022-06-11"))) # 2022-06-11 and later
+      }
+      # replace data
+      replace_hr(d, phac_d, val, region, date)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in replace_hr_phac", fill = TRUE)
+    }
+  )
+}
+
 #' Get CCODWG data for a particular value and region
 #'
 #' @param val The value to read data for. One of "cases" or "deaths".

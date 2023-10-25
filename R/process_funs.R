@@ -431,6 +431,8 @@ dataset_format <- function(d, geo = c("pt", "hr", "sub-hr"), digits) {
   tryCatch(
     {
       match.arg(geo, c("pt", "hr", "sub-hr"), several.ok = FALSE)
+      # drop value_daily column if present
+      d <- d[, names(d) != "value_daily"]
       # expand dates and regions
       out <- split(d, d$region) # ensure separate date ranges for each region
       switch(
