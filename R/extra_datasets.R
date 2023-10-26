@@ -8,6 +8,32 @@ extra_datasets <- function() {
   # announce start
   cat("Assembling extra datasets...", fill = TRUE)
 
+  # territories: case and testing data from RVDSS since week ending 2022-09-03
+  tryCatch(
+    {
+      ter <- Covid19CanadaData::dl_dataset("e41c63ec-ac54-47c9-8cf3-da2e1146aa75")
+      ter <- ter |>
+        dplyr::filter(.data$prname %in% c("Yukon", "Northwest Territories", "Nunavut")) |>
+        dplyr::transmute(
+          region = dplyr::case_when(
+            .data$prname == "Yukon" ~ "YT",
+            .data$prname == "Northwest Territories" ~ "NT",
+            .data$prname == "Nunavut" ~ "NU"),
+          date_start = as.Date(.data$date) - 6,
+          date_end = as.Date(.data$date),
+          tests_completed_weekly = numtests_weekly,
+          percent_positivity_weekly = percentpositivity_weekly,
+          cases_weekly = round(percent_positivity_weekly * tests_completed_weekly / 100),
+          .data$update
+        )
+      write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3)
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in downloading territories data", fill = TRUE)
+    }
+  )
+
   # sk biweekly HR-level case snapshots
 
   ## process
