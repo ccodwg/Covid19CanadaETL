@@ -804,13 +804,12 @@ assemble_final_datasets <- function() {
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, mb3)
   rm(mb1, mb2, mb3) # cleanup
 
-  ## add ON data (2022-11-26 and later)
-  on1 <- get_phac_d("tests_completed", "ON", keep_up_to_date = TRUE) |>
-    # avoid overlap with new dataset
-    dplyr::filter(.data$date <= as.Date("2022-11-19"))
+  ## add ON data
+  on1 <- read_d("raw_data/static/on/on_tests_completed_pt_ts.csv") |>
+    dplyr::filter(.data$date <= as.Date("2023-04-01"))
   on2 <- read_d("raw_data/reports/on/on_pho_testing.csv") |>
     report_pluck("tests_completed", "tests_completed_weekly", "value_daily", "pt") |>
-    dplyr::filter(.data$date >= as.Date("2022-11-26"))
+    dplyr::filter(.data$date >= as.Date("2023-04-08"))
   on3 <- append_daily_d(on1, on2)
   # add ON back to main dataset
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, on3)
