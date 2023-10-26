@@ -312,17 +312,11 @@ assemble_final_datasets <- function() {
       convert_hr_names(),
     read_d("raw_data/static/nl/nl_deaths_hr_ts_3.csv")
   )
-  nl1 <- get_phac_d("deaths", "NL", keep_up_to_date = TRUE) %>%
-    dplyr::filter(.data$date >= as.Date("2023-07-01")) %>%
-    add_hr_col("Unknown")
-  deaths_hr <- deaths_nl |>
-    dplyr::filter(.data$date == max(.data$date)) |>
-    dplyr::pull(.data$value) |>
-    sum()
-  nl1$value <- nl1$value - deaths_hr # subtract deaths assigned to a health region
-  # started with 2023-07-01 instead of 2023-06-24 to avoid negative values for deaths
-  deaths_nl <- dplyr::bind_rows(deaths_nl, nl1)
-  rm(nl1, deaths_hr) # clean up
+  nl1 <- read_d("raw_data/reports/nl/nl_monthly_report.csv") %>%
+    report_pluck("deaths", "deaths", "value_daily", "hr") %>%
+    convert_hr_names()
+  deaths_nl <- append_daily_d(deaths_nl, nl1)
+  rm(nl1) # clean up
 
   ## ns
   tryCatch(
@@ -528,8 +522,9 @@ assemble_final_datasets <- function() {
   hospitalizations_pe <- read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
     report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
     # exclude dates with no data
-    dplyr::filter(!.data$date %in% c("2022-02-05", "2022-02-19", "2022-02-20", "2022-02-21", "2022-02-23")) |>
+    dplyr::filter(!(.data$date %in% as.Date(c("2022-02-05", "2022-02-19", "2022-02-20", "2022-02-21", "2022-02-23")))) |>
     # add 0 for period between 2021-04-19 and 2021-12-28 when no new hosp admissions were reported
+    dplyr::filter(.data$date < as.Date("2021-04-19") | .data$date > as.Date("2021-12-28")) |>
     dplyr::bind_rows(
       data.frame(
         name = "hospitalizations",
@@ -621,7 +616,7 @@ assemble_final_datasets <- function() {
   ## pe
   icu_pe <- read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
     # exclude dates with no data
-    dplyr::filter(!.data$date %in% c("2022-02-05", "2022-02-19", "2022-02-20", "2022-02-21", "2022-02-23")) |>
+    dplyr::filter(!(.data$date %in% as.Date(c("2022-02-05", "2022-02-19", "2022-02-20", "2022-02-21", "2022-02-23")))) |>
     # handle implicit zeroes
     dplyr::transmute(
       name = "icu",
@@ -630,6 +625,7 @@ assemble_final_datasets <- function() {
       value = ifelse(is.na(.data$active_icu), 0, .data$active_icu) # assume if ICU is not mentioned, it is zero
     ) |>
     # add 0 for period between 2021-04-19 and 2021-12-28 when no new hosp admissions were reported
+    dplyr::filter(.data$date < as.Date("2021-04-19") | .data$date > as.Date("2021-12-28")) |>
     dplyr::bind_rows(
       data.frame(
         name = "icu",

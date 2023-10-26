@@ -292,6 +292,7 @@ update_reports <- function() {
   sync_report("bc_monthly_report_cumulative", "bc", "hr")
   sync_report("mb_weekly_report_2", "mb", "hr")
   sync_report("nb_weekly_report_3", "nb", "hr")
+  sync_report("nl_monthly_report", "nl", "hr")
   sync_report("ns_monthly_report", "ns", "hr")
   sync_report("sk_crisp_report", "sk", "hr")
   sync_report("on_pho_cases", "on", "hr")
