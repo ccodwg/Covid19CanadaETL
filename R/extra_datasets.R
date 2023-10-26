@@ -26,7 +26,7 @@ extra_datasets <- function() {
           cases_weekly = round(percent_positivity_weekly * tests_completed_weekly / 100),
           .data$update
         )
-      write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3)
+      write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3, na = "")
     },
     error = function(e) {
       print(e)
