@@ -46,7 +46,7 @@ dl_datasets <- function() {
       "4b214c24-8542-4d26-a850-b58fc4ef6a30", NA, NA, # h, i
       # pe
       # qc
-      "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA, # c, d
+      "3b93b663-4b3f-43b4-a23d-cbf6d149d2c5", NA, NA, # c, d, t
       "f0c25e20-2a6c-4f9a-adc3-61b28ab97245", NA, NA, # h, i
       "4e04442d-f372-4357-ba15-3b64f4e03fbe", NA, NA # vaccine_administration
       # sk

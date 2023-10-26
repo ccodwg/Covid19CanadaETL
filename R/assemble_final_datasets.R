@@ -752,7 +752,14 @@ assemble_final_datasets <- function() {
 
   ## remove regions with extra/alternate data
   tests_completed_pt <- tests_completed_pt %>%
-    dplyr::filter(!.data$region %in% c("AB", "BC", "MB", "ON", "YT"))
+    dplyr::filter(!.data$region %in% c("AB", "BC", "MB", "ON", "QC", "YT"))
+
+  ## add QC data
+  tests_completed_pt <- dplyr::bind_rows(
+    tests_completed_pt,
+    read_d("raw_data/active_ts/qc/qc_tests_completed_pt_ts.csv") |>
+      date_shift(1)
+  )
 
   ## add YT data
   tests_completed_pt <- dplyr::bind_rows(
