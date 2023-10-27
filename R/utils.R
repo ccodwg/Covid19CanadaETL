@@ -112,7 +112,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
         "deaths", "deaths_daily",
         "hospitalizations",
         "icu",
-        "tests_completed",
+        "tests_completed", "tests_completed_rvdss",
         "vaccine_coverage_dose_1", "vaccine_coverage_dose_2",
         "vaccine_coverage_dose_3", "vaccine_coverage_dose_4",
         "vaccine_administration_dose_1", "vaccine_administration_dose_2",
@@ -129,6 +129,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
         "hospitalizations" = {read_d("raw_data/active_ts/can/can_hospitalizations_pt_ts.csv")},
         "icu" = {read_d("raw_data/active_ts/can/can_icu_pt_ts.csv")},
         "tests_completed" = {read_d("raw_data/static/can/can_tests_completed_pt_ts.csv")},
+        "tests_completed_rvdss" = {read_d("raw_data/active_ts/can/can_tests_completed_pt_ts.csv")},
         "vaccine_coverage_dose_1" = {read_d(
           "raw_data/active_ts/can/can_vaccine_coverage_dose_1_pt_ts.csv", val_numeric = TRUE)},
         "vaccine_coverage_dose_2" = {read_d(
@@ -164,7 +165,7 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
       }
       # filter up to most recent date updated for each P/T
       if (keep_up_to_date) {
-        if (val %in% c("cases", "cases_daily", "deaths", "deaths_daily", "tests_completed")) {
+        if (val %in% c("cases", "cases_daily", "deaths", "deaths_daily", "tests_completed", "tests_completed_rvdss")) {
           # get unique PTs
           pts <- unique(d$region)
           pts <- pts[!pts %in% c("CAN", "RT")]

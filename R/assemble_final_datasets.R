@@ -752,20 +752,30 @@ assemble_final_datasets <- function() {
 
   ## remove regions with extra/alternate data
   tests_completed_pt <- tests_completed_pt %>%
-    dplyr::filter(!.data$region %in% c("AB", "BC", "MB", "ON", "QC", "YT"))
+    dplyr::filter(!.data$region %in% c(
+      "AB", "BC", "MB", "NS", "ON", "QC", "SK", "YT"))
 
-  ## add QC data
+  ## add data for provinces where RVDSS data are representative of all tests (MB, NS, SK)
   tests_completed_pt <- dplyr::bind_rows(
     tests_completed_pt,
-    read_d("raw_data/active_ts/qc/qc_tests_completed_pt_ts.csv") |>
-      date_shift(1)
-  )
-
-  ## add YT data
-  tests_completed_pt <- dplyr::bind_rows(
-    tests_completed_pt,
-    read_d("raw_data/static/yt/yt_tests_completed_pt_ts.csv")
-  )
+    append_daily_d(
+      get_phac_d("tests_completed", "MB", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date <= as.Date("2022-11-19")),
+      get_phac_d("tests_completed_rvdss", "MB", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date >= as.Date("2022-11-26"))
+    ),
+    append_daily_d(
+      get_phac_d("tests_completed", "NS", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date <= as.Date("2022-11-19")),
+      get_phac_d("tests_completed_rvdss", "NS", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date >= as.Date("2022-11-26"))
+    ),
+    append_daily_d(
+      get_phac_d("tests_completed", "SK", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date <= as.Date("2022-11-19")),
+      get_phac_d("tests_completed_rvdss", "SK", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date >= as.Date("2022-11-26"))
+    ))
 
   ## add AB data
   ab1 <- dplyr::bind_rows(
@@ -793,17 +803,6 @@ assemble_final_datasets <- function() {
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, bc3)
   rm(bc1, bc2, bc3) # clean up
 
-  ## add MB data (2022-11-26 and later)
-  mb1 <- get_phac_d("tests_completed", "MB", keep_up_to_date = TRUE) |>
-    # avoid overlap with new dataset
-    dplyr::filter(.data$date <= as.Date("2022-11-19"))
-  mb2 <- read_d("raw_data/reports/mb/mb_weekly_report_2.csv") %>%
-    report_pluck("tests_completed", "tests_completed", "value_daily", "pt") %>%
-    dplyr::filter(.data$date >= as.Date("2022-11-26"))
-  mb3 <- append_daily_d(mb1, mb2)
-  tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, mb3)
-  rm(mb1, mb2, mb3) # cleanup
-
   ## add ON data
   on1 <- read_d("raw_data/static/on/on_tests_completed_pt_ts.csv") |>
     dplyr::filter(.data$date <= as.Date("2023-04-01"))
@@ -814,6 +813,19 @@ assemble_final_datasets <- function() {
   # add ON back to main dataset
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, on3)
   rm(on1, on2, on3) # clean up
+
+  ## add QC data
+  tests_completed_pt <- dplyr::bind_rows(
+    tests_completed_pt,
+    read_d("raw_data/active_ts/qc/qc_tests_completed_pt_ts.csv") |>
+      date_shift(1)
+  )
+
+  ## add YT data
+  tests_completed_pt <- dplyr::bind_rows(
+    tests_completed_pt,
+    read_d("raw_data/static/yt/yt_tests_completed_pt_ts.csv")
+  )
 
   ## collate and process final dataset
   tests_completed_pt <- tests_completed_pt %>%
