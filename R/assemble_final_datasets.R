@@ -1035,6 +1035,22 @@ assemble_final_datasets <- function() {
   cases_pt <- agg2pt(cases_hr)
   deaths_pt <- agg2pt(deaths_hr)
 
+  # replace PT-level case data for some regions
+
+  ## NB
+  cases_pt <- replace_hr_phac(
+    cases_pt,
+    "cases",
+    "NB",
+    "2022-12-17")
+
+  ## SK
+  cases_pt <- replace_hr_phac(
+    cases_pt,
+    "cases",
+    "SK",
+    "2022-02-12")
+
   # replace PT-level death data for some regions
 
   ## AB
@@ -1063,7 +1079,7 @@ assemble_final_datasets <- function() {
     deaths_pt,
     "deaths",
     "SK",
-    "2022-02-07")
+    "2022-02-12")
 
   # create aggregated datasets (PT -> CAN)
   cases_can <- agg2can(cases_pt)
