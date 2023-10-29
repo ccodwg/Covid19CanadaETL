@@ -483,8 +483,9 @@ assemble_final_datasets <- function() {
 
   ## mb
   hospitalizations_mb <- dplyr::bind_rows(
-    get_covid19tracker_d("hospitalizations", "MB", to = "2021-02-03"),
-    read_d("raw_data/static/mb/mb_hospitalizations_pt_ts.csv")
+    read_d("raw_data/static/mb/mb_hospitalizations_pt_ts_1.csv") |>
+      dplyr::filter(.data$date <= as.Date("2021-02-03")),
+    read_d("raw_data/static/mb/mb_hospitalizations_pt_ts_2.csv")
   )
 
   ## nb
@@ -577,8 +578,9 @@ assemble_final_datasets <- function() {
 
   ## mb
   icu_mb <- dplyr::bind_rows(
-    get_covid19tracker_d("icu", "MB", to = "2021-02-03"),
-    read_d("raw_data/static/mb/mb_icu_pt_ts.csv")
+    read_d("raw_data/static/mb/mb_icu_pt_ts_1.csv") |>
+      dplyr::filter(.data$date <= as.Date("2021-02-03")),
+    read_d("raw_data/static/mb/mb_icu_pt_ts_2.csv")
   )
 
   ## nb
@@ -681,6 +683,13 @@ assemble_final_datasets <- function() {
   hosp_admissions_mb <- dplyr::bind_rows(mb1, mb2)
   hosp_admissions_mb <- append_daily_d(hosp_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
+
+  ## ns
+  ns1 <- read_d("raw_data/static/ns/ns_hosp_admissions_pt_ts.csv") |>
+    dplyr::mutate(value = cumsum(value_daily)) |>
+    dplyr::select(-.data$value_daily)
+  hosp_admissions_ns <- ns1
+  rm(ns1) # clean up
 
   ## on
   hosp_admissions_on <- read_d("raw_data/reports/on/on_pho_outcomes.csv") |>
