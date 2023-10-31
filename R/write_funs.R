@@ -263,7 +263,8 @@ write_dataset <- function(d, geo, name, ext = "csv") {
           d,
           out_path,
           row.names = FALSE,
-          quote = 1:(ncol(d) - 2))
+          quote = 1:(ncol(d) - 2),
+          na = "")
       } else {
         jsonlite::write_json(
           d,

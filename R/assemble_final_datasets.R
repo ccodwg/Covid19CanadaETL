@@ -699,6 +699,9 @@ assemble_final_datasets <- function() {
   hosp_admissions_ns <- append_daily_d(hosp_admissions_ns, ns3)
   rm(ns1, ns2, ns3) # clean up
 
+  ## nt
+  hosp_admissions_nt <- read_d("raw_data/static/nt/nt_hosp_admissions_pt_ts.csv")
+
   ## on
   hosp_admissions_on <- read_d("raw_data/reports/on/on_pho_outcomes.csv") |>
     dplyr::filter(.data$outcome_weekly_type == "COVID-19 hospitalizations" & is.na(.data$sub_region_1)) |>
@@ -720,6 +723,11 @@ assemble_final_datasets <- function() {
   suppressWarnings(rm(hosp_admissions_pt)) # if re-running manually
   hosp_admissions_pt <- collate_datasets("hosp_admissions") %>%
     dataset_format("pt")
+
+  ## censor daily value for first date of NT
+  ## cumulative values are given but time series does not start at the beginning
+  hosp_admissions_pt[
+    hosp_admissions_pt$region == "NT" & hosp_admissions_pt$date == as.Date("2021-08-25"), "value_daily"] <- NA
 
   ## no Canadian dataset
 
@@ -748,6 +756,9 @@ assemble_final_datasets <- function() {
   icu_admissions_mb <- append_daily_d(icu_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
 
+  ## nt
+  icu_admissions_nt <- read_d("raw_data/static/nt/nt_icu_admissions_pt_ts.csv")
+
   ## qc
   icu_admissions_qc <- read_d("raw_data/active_ts/qc/qc_icu_admissions_pt_ts.csv") |>
     date_shift(1)
@@ -756,6 +767,11 @@ assemble_final_datasets <- function() {
   suppressWarnings(rm(icu_admissions_pt)) # if re-running manually
   icu_admissions_pt <- collate_datasets("icu_admissions") %>%
     dataset_format("pt")
+
+  ## censor daily value for first date of NT
+  ## cumulative values are given but time series does not start at the beginning
+  icu_admissions_pt[
+    icu_admissions_pt$region == "NT" & icu_admissions_pt$date == as.Date("2021-09-08"), "value_daily"] <- NA
 
   ## no Canadian dataset
 
