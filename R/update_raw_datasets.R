@@ -311,7 +311,9 @@ update_reports <- function() {
   sync_report("on_pho_vaccine_coverage", "on", "hr")
 
   # no longer updated reports
+  # sync_report("bc_daily_news_release", "bc", "hr")
   # sync_report("mb_weekly_report", "mb", "hr")
+  # sync_report("nb_daily_news_release", "nb", "hr")
   # sync_report("nb_weekly_report", "nb", "hr")
   # sync_report("nb_weekly_report_2", "nb", "hr")
   # sync_report("ns_daily_news_release", "ns", "hr")

@@ -473,8 +473,10 @@ assemble_final_datasets <- function() {
 
   ## bc
   hospitalizations_bc <- dplyr::bind_rows(
-    get_covid19tracker_d("hospitalizations", "BC") |>
-      dplyr::filter(.data$date <= as.Date("2021-03-12")),
+    read_d("raw_data/reports/bc/bc_daily_news_release.csv") |>
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
+      dplyr::filter(.data$date <= as.Date("2020-03-12")),
+    get_covid19tracker_d("hospitalizations", "BC", from = "2020-03-16", to = "2021-03-12"),
     read_d("raw_data/static/bc/bc_hospitalizations_hr_ts.csv") |>
       agg2pt(raw = TRUE),
     read_d("raw_data/reports/bc/bc_monthly_report.csv") |>
@@ -490,7 +492,10 @@ assemble_final_datasets <- function() {
 
   ## nb
   hospitalizations_nb <- dplyr::bind_rows(
-    get_covid19tracker_d("hospitalizations", "NB", to = "2021-03-07"),
+    read_d("raw_data/reports/nb/nb_daily_news_release.csv") |>
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
+      dplyr::filter(.data$date <= as.Date("2020-06-29")),
+    get_covid19tracker_d("hospitalizations", "NB", from = "2020-06-30", to = "2021-03-07"),
     read_d("raw_data/static/nb/nb_hospitalizations_pt_ts_1.csv"),
     read_d("raw_data/static/nb/nb_hospitalizations_pt_ts_2.csv") |>
       dplyr::filter(.data$date <= as.Date("2022-01-20")),
@@ -506,7 +511,9 @@ assemble_final_datasets <- function() {
 
   ## ns
   hospitalizations_ns <- dplyr::bind_rows(
-    get_covid19tracker_d("hospitalizations", "NS", to = "2021-01-18"),
+    read_d("raw_data/reports/ns/ns_daily_news_release.csv") |>
+      report_pluck("hospitalizations", "active_hospitalizations", "value", "pt") |>
+      dplyr::filter(.data$date <= as.Date("2021-01-18")),
     read_d("raw_data/static/ns/ns_hospitalizations_pt_ts_1.csv"),
     read_d("raw_data/static/ns/ns_hospitalizations_pt_ts_2.csv"),
     read_d("raw_data/reports/ns/ns_weekly_report.csv") |>
@@ -568,8 +575,8 @@ assemble_final_datasets <- function() {
 
   ## bc
   icu_bc <- dplyr::bind_rows(
-    get_covid19tracker_d("icu", "BC") |>
-      dplyr::filter(.data$date <= as.Date("2021-03-12")),
+    # daily news release has an ICU case on 2020-03-10, but this value is not regularly reported until later
+    get_covid19tracker_d("icu", "BC", from = "2020-03-17", to = "2021-03-12"),
     read_d("raw_data/static/bc/bc_icu_hr_ts.csv") |>
       agg2pt(raw = TRUE),
     read_d("raw_data/reports/bc/bc_monthly_report.csv") |>
@@ -585,7 +592,10 @@ assemble_final_datasets <- function() {
 
   ## nb
   icu_nb <- dplyr::bind_rows(
-    get_covid19tracker_d("icu", "NB", to = "2021-03-07"),
+    read_d("raw_data/reports/nb/nb_daily_news_release.csv") |>
+      report_pluck("icu", "active_icu", "value", "pt") |>
+      dplyr::filter(.data$date <= as.Date("2020-06-29")),
+    get_covid19tracker_d("icu", "NB", from = "2020-06-30", to = "2021-03-07"),
     read_d("raw_data/static/nb/nb_icu_pt_ts_1.csv"),
     read_d("raw_data/static/nb/nb_icu_pt_ts_2.csv") |>
       dplyr::filter(.data$date <= as.Date("2022-01-20")),
@@ -602,7 +612,9 @@ assemble_final_datasets <- function() {
 
   ## ns
   icu_ns <- dplyr::bind_rows(
-    get_covid19tracker_d("icu", "NS", to = "2021-01-18"),
+    read_d("raw_data/reports/ns/ns_daily_news_release.csv") |>
+      report_pluck("icu", "active_icu", "value", "pt") |>
+      dplyr::filter(.data$date <= as.Date("2021-01-18")),
     read_d("raw_data/static/ns/ns_icu_pt_ts_1.csv"),
     read_d("raw_data/static/ns/ns_icu_pt_ts_2.csv"),
     read_d("raw_data/reports/ns/ns_weekly_report.csv") |>
