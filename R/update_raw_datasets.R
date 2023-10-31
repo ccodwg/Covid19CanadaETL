@@ -323,14 +323,6 @@ update_reports <- function() {
   # sync_report("sk_weekly_report", "sk", "hr")
 }
 
-#' Update covid19tracker.ca datasets
-#' @export
-update_covid19tracker <- function() {
-  cat("Updating covid19tracker.ca datasets...", fill = TRUE)
-  update_covid19tracker_dataset("hospitalizations")
-  update_covid19tracker_dataset("icu")
-}
-
 #' Update active_cumul datasets
 #' @param ds The list of datasets returned by \code{\link[Covid19CanadaETL]{dl_datasets}}.
 #' @export

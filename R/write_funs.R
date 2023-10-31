@@ -59,55 +59,6 @@ write_ts <- function(d,
   )
 }
 
-#' Download and write covid19tracker.ca hospitalization or ICU data to "raw_data/covid19tracker" directory
-#'
-#' @rdname write_funs
-#'
-#' @export
-update_covid19tracker_dataset <- function(val) {
-  tryCatch(
-    {
-      match.arg(val, c("hospitalizations", "icu"))
-      pt <- get_pt()[["region"]]
-      if (val == "hospitalizations") {
-        lapply(pt, function(x) {
-          # url <- paste0("https://api.covid19tracker.ca/reports/province/", x, "?stat=hospitalizations&fill_dates=false")
-          url <- paste0("https://api.covid19tracker.ca/reports/province/", x)
-          jsonlite::fromJSON(url)$data %>%
-            dplyr::transmute(
-              name = "hospitalizations",
-              region = x,
-              .data$date,
-              value = .data$total_hospitalizations
-            )
-        }) %>%
-          dplyr::bind_rows() %>%
-          utils::write.csv("raw_data/covid19tracker/can_hospitalizations_pt_ts.csv", row.names = FALSE)
-      } else if (val == "icu") {
-        lapply(pt, function(x) {
-          # url <- paste0("https://api.covid19tracker.ca/reports/province/", x, "?stat=criticals&fill_dates=false")
-          url <- paste0("https://api.covid19tracker.ca/reports/province/", x)
-          jsonlite::fromJSON(url)$data %>%
-            dplyr::transmute(
-              name = "icu",
-              region = x,
-              .data$date,
-              value = .data$total_criticals
-            )
-        }) %>%
-          dplyr::bind_rows() %>%
-          utils::write.csv("raw_data/covid19tracker/can_icu_pt_ts.csv", row.names = FALSE)
-      } else {
-        stop("Invalid val.")
-      }
-    },
-    error = function(e) {
-      print(e)
-      cat("Error in update_covid19tracker:", val, fill = TRUE)
-    }
-  )
-}
-
 #' Sync and write report data from Google Sheets
 #'
 #' @rdname write_funs

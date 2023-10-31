@@ -3,15 +3,12 @@
 \name{write_funs}
 \alias{write_funs}
 \alias{write_ts}
-\alias{update_covid19tracker_dataset}
 \alias{sync_report}
 \alias{sync_active_cumul}
 \alias{write_dataset}
 \title{Functions to write data}
 \usage{
 write_ts(d, dir = c("active_ts", "active_cumul"), region, val)
-
-update_covid19tracker_dataset(val)
 
 sync_report(sheet, region, geo)
 
@@ -45,8 +42,6 @@ Default: FALSE.}
 Functions to write data
 
 Write processed data to a specific directory in "raw_data"
-
-Download and write covid19tracker.ca hospitalization or ICU data to "raw_data/covid19tracker" directory
 
 Sync and write report data from Google Sheets
 
