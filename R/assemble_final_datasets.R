@@ -687,9 +687,17 @@ assemble_final_datasets <- function() {
   ## ns
   ns1 <- read_d("raw_data/static/ns/ns_hosp_admissions_pt_ts.csv") |>
     dplyr::mutate(value = cumsum(value_daily)) |>
-    dplyr::select(-.data$value_daily)
-  hosp_admissions_ns <- ns1
-  rm(ns1) # clean up
+    dplyr::select(-.data$value_daily) |>
+    # overlaps with beginning of report
+    dplyr::filter(date <= as.Date("2022-05-16"))
+  ns2 <- read_d("raw_data/reports/ns/ns_weekly_report.csv") |>
+    report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt") |>
+    dplyr::filter(date >= as.Date("2022-05-23"))
+  ns3 <- read_d("raw_data/reports/ns/ns_monthly_report.csv") |>
+    report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt")
+  hosp_admissions_ns <- append_daily_d(ns1, ns2)
+  hosp_admissions_ns <- append_daily_d(hosp_admissions_ns, ns3)
+  rm(ns1, ns2, ns3) # clean up
 
   ## on
   hosp_admissions_on <- read_d("raw_data/reports/on/on_pho_outcomes.csv") |>
@@ -759,7 +767,7 @@ assemble_final_datasets <- function() {
   ## remove regions with extra/alternate data
   tests_completed_pt <- tests_completed_pt %>%
     dplyr::filter(!.data$region %in% c(
-      "AB", "BC", "MB", "NS", "ON", "QC", "SK", "YT"))
+      "AB", "BC", "MB", "NB", "NS", "ON", "QC", "SK", "YT"))
 
   ## add data for provinces where RVDSS data are representative of all tests (MB, NS, SK)
   tests_completed_pt <- dplyr::bind_rows(
@@ -808,6 +816,20 @@ assemble_final_datasets <- function() {
   # add BC back to main dataset
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, bc3)
   rm(bc1, bc2, bc3) # clean up
+
+  ## add NB data
+  nb1 <- get_phac_d("tests_completed", "NB", keep_up_to_date = TRUE) |>
+    # avoid overlap with new dataset
+    dplyr::filter(.data$date <= as.Date("2022-11-19"))
+  nb2 <- read_d("raw_data/reports/nb/nb_weekly_report.csv") |>
+    report_pluck("tests_completed", "new_tests_completed", "value_daily", "pt") |>
+    dplyr::filter(.data$date >= as.Date("2022-11-26"))
+  nb3 <- read_d("raw_data/reports/nb/nb_weekly_report_2.csv") |>
+    report_pluck("tests_completed", "tests_completed", "value_daily", "pt")
+  nb4 <- append_daily_d(nb1, nb2)
+  nb4 <- append_daily_d(nb4, nb3)
+  tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, nb4)
+  rm(nb1, nb2, nb3, nb4) # clean up
 
   ## add ON data
   on1 <- read_d("raw_data/static/on/on_tests_completed_pt_ts.csv") |>
