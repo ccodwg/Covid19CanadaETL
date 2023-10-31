@@ -482,6 +482,9 @@ assemble_final_datasets <- function() {
     read_d("raw_data/reports/bc/bc_monthly_report.csv") |>
       report_pluck("hospitalizations", "active_hospitalizations", "value", "pt")
   )
+  # remove seemingly erroneous data (unexplained spikes)
+  hospitalizations_bc <- hospitalizations_bc[
+    !hospitalizations_bc$date %in% as.Date(c("2021-04-01", "2021-05-05", "2022-04-28", "2022-08-18")), ]
 
   ## mb
   hospitalizations_mb <- dplyr::bind_rows(
@@ -576,12 +579,16 @@ assemble_final_datasets <- function() {
   ## bc
   icu_bc <- dplyr::bind_rows(
     # daily news release has an ICU case on 2020-03-10, but this value is not regularly reported until later
+    # so it is excluded here
     get_covid19tracker_d("icu", "BC", from = "2020-03-17", to = "2021-03-12"),
     read_d("raw_data/static/bc/bc_icu_hr_ts.csv") |>
       agg2pt(raw = TRUE),
     read_d("raw_data/reports/bc/bc_monthly_report.csv") |>
       report_pluck("icu", "active_icu", "value", "pt")
   )
+  # remove seemingly erroneous data (unexplained spikes)
+  icu_bc <- icu_bc[
+    !icu_bc$date %in% as.Date(c("2021-04-01", "2021-05-05", "2022-04-28", "2022-08-18")), ]
 
   ## mb
   icu_mb <- dplyr::bind_rows(
