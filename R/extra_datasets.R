@@ -227,4 +227,23 @@ extra_datasets <- function() {
       cat("Error in updating individual-level PHAC dataset:", fill = TRUE)
     }
   )
+
+  ## hosp/ICU extra data report
+  tryCatch(
+    {
+      d <- googlesheets4::read_sheet(
+        ss = "1ZTUb3fVzi6CLZAbU3lj6T6FTzl5Aq-arBNL49ru3VLo",
+        sheet = "hospital_icu_extra",
+      )
+      utils::write.csv(
+        d,
+        file.path("extra_data", "hospital_icu_extra", "hospital_icu_extra.csv"),
+        row.names = FALSE,
+        na = "")
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in updating hospital/ICU extra data report:", fill = TRUE)
+    }
+  )
 }
