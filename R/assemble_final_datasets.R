@@ -743,8 +743,10 @@ assemble_final_datasets <- function() {
   hosp_admissions_pt <- collate_datasets("hosp_admissions") %>%
     dataset_format("pt")
 
-  ## censor daily value for first date of NT
+  ## censor daily value for first date of several PTs: MB, NT
   ## cumulative values are given but time series does not start at the beginning
+  hosp_admissions_pt[
+    hosp_admissions_pt$region == "MB" & hosp_admissions_pt$date == as.Date("2020-05-16"), "value_daily"] <- NA
   hosp_admissions_pt[
     hosp_admissions_pt$region == "NT" & hosp_admissions_pt$date == as.Date("2021-08-25"), "value_daily"] <- NA
 
@@ -787,8 +789,10 @@ assemble_final_datasets <- function() {
   icu_admissions_pt <- collate_datasets("icu_admissions") %>%
     dataset_format("pt")
 
-  ## censor daily value for first date of NT
+  ## censor daily value for first date of several PTs: MB, NT
   ## cumulative values are given but time series does not start at the beginning
+  icu_admissions_pt[
+    icu_admissions_pt$region == "MB" & icu_admissions_pt$date == as.Date("2020-05-16"), "value_daily"] <- NA
   icu_admissions_pt[
     icu_admissions_pt$region == "NT" & icu_admissions_pt$date == as.Date("2021-09-08"), "value_daily"] <- NA
 
