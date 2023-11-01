@@ -802,7 +802,7 @@ assemble_final_datasets <- function() {
   ## remove regions with extra/alternate data
   tests_completed_pt <- tests_completed_pt %>%
     dplyr::filter(!.data$region %in% c(
-      "AB", "BC", "MB", "NB", "NS", "ON", "QC", "SK", "YT"))
+      "AB", "BC", "MB", "NB", "NS", "ON", "PE", "QC", "SK", "YT"))
 
   ## add data for provinces where RVDSS data are representative of all tests (MB, NS, SK)
   tests_completed_pt <- dplyr::bind_rows(
@@ -876,6 +876,16 @@ assemble_final_datasets <- function() {
   # add ON back to main dataset
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, on3)
   rm(on1, on2, on3) # clean up
+
+  ## add PE data
+  tests_completed_pt <- dplyr::bind_rows(
+    tests_completed_pt,
+    append_daily_d(
+      get_phac_d("tests_completed", "PE", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date <= as.Date("2022-08-27")),
+      get_phac_d("tests_completed_rvdss", "PE", keep_up_to_date = TRUE) |>
+        dplyr::filter(.data$date >= as.Date("2022-09-03"))
+  ))
 
   ## add QC data
   tests_completed_pt <- dplyr::bind_rows(
