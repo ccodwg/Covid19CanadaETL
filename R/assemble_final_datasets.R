@@ -729,7 +729,7 @@ assemble_final_datasets <- function() {
 
   ## ns
   ns1 <- read_d("raw_data/static/ns/ns_hosp_admissions_pt_ts.csv") |>
-    dplyr::mutate(value = cumsum(value_daily)) |>
+    dplyr::mutate(value = cumsum(.data$value_daily)) |>
     dplyr::select(-.data$value_daily) |>
     # overlaps with beginning of report
     dplyr::filter(date <= as.Date("2022-05-16"))

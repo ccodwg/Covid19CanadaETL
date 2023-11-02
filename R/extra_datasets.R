@@ -14,7 +14,7 @@ extra_datasets <- function() {
       # load data
       d <- read_d("raw_data/active_ts/can/can_wastewater_copies_per_ml_subhr_ts.csv", val_numeric = TRUE)
       # write dataset
-      write.csv(d, file.path("extra_data", "phac_wastewater", "phac_wastewater.csv"), row.names = FALSE, quote = 1:7, na = "")
+      utils::write.csv(d, file.path("extra_data", "phac_wastewater", "phac_wastewater.csv"), row.names = FALSE, quote = 1:7, na = "")
     },
     error = function(e) {
       cat("Error in updating PHAC wastewater dataset:", fill = TRUE)
@@ -35,12 +35,12 @@ extra_datasets <- function() {
             .data$prname == "Nunavut" ~ "NU"),
           date_start = as.Date(.data$date) - 6,
           date_end = as.Date(.data$date),
-          tests_completed_weekly = numtests_weekly,
-          percent_positivity_weekly = percentpositivity_weekly,
-          cases_weekly = round(percent_positivity_weekly * tests_completed_weekly / 100),
+          tests_completed_weekly = .data$numtests_weekly,
+          percent_positivity_weekly = .data$percentpositivity_weekly,
+          cases_weekly = round(.data$percent_positivity_weekly * .data$tests_completed_weekly / 100),
           .data$update
         )
-      write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3, na = "")
+      utils::write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3, na = "")
     },
     error = function(e) {
       cat("Error in updating territories data:", fill = TRUE)
@@ -298,7 +298,7 @@ extra_datasets <- function() {
           ) |>
           tidyr::pivot_wider(names_from = .data$characteristics, values_from = .data$value) |>
           # sort by region (CAN first) and date
-          dplyr::arrange(dplyr::if_else(region == "CAN", 0, 1), .data$region, .data$date)
+          dplyr::arrange(dplyr::if_else(.data$region == "CAN", 0, 1), .data$region, .data$date)
         # write dataset
         utils::write.csv(statcan, file.path("extra_data", "statcan_excess_mortality", "statcan_excess_mortality.csv"), row.names = FALSE, quote = 1:2)
         # write new release date
