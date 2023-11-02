@@ -29,22 +29,29 @@ extra_datasets <- function() {
       write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3, na = "")
     },
     error = function(e) {
+      cat("Error in updating territories data:", fill = TRUE)
       print(e)
-      cat("Error in downloading territories data", fill = TRUE)
     }
   )
 
   # sk biweekly HR-level case snapshots
+  tryCatch(
+    {
+      ## process
+      sk <- read_d("raw_data/reports/sk/sk_crisp_report.csv") |>
+        dplyr::transmute(.data$date_start, .data$date_end, .data$region, .data$sub_region_1, cases_weekly = .data$cases) |>
+        dplyr::filter(.data$date_start >= as.Date("2022-12-25") & !is.na(.data$sub_region_1) & !is.na(.data$cases_weekly)) |>
+        convert_hr_names()
 
-  ## process
-  sk <- read_d("raw_data/reports/sk/sk_crisp_report.csv") |>
-    dplyr::transmute(.data$date_start, .data$date_end, .data$region, .data$sub_region_1, cases_weekly = .data$cases) |>
-    dplyr::filter(.data$date_start >= as.Date("2022-12-25") & !is.na(.data$sub_region_1) & !is.na(.data$cases_weekly)) |>
-    convert_hr_names()
-
-  ## write file
-  utils::write.csv(sk, file.path("extra_data", "sk_biweekly_cases_hr", "sk_biweekly_cases_hr.csv"), row.names = FALSE, quote = 1:4)
-  rm(sk) # clean up
+      ## write file
+      utils::write.csv(sk, file.path("extra_data", "sk_biweekly_cases_hr", "sk_biweekly_cases_hr.csv"), row.names = FALSE, quote = 1:4)
+      rm(sk) # clean up
+    },
+    error = function(e) {
+      cat("Error in updating SK biweekly HR-level case snapshots:", fill = TRUE)
+      print(e)
+    }
+  )
 
   # PHAC individual-level data
 
@@ -223,8 +230,8 @@ extra_datasets <- function() {
       }
     },
     error = function(e) {
-      print(e)
       cat("Error in updating individual-level PHAC dataset:", fill = TRUE)
+      print(e)
     }
   )
 
@@ -244,6 +251,33 @@ extra_datasets <- function() {
     error = function(e) {
       print(e)
       cat("Error in updating hospital/ICU extra data report:", fill = TRUE)
+    }
+  )
+
+  ## NS Respiratory Watch extra data
+  tryCatch(
+    {
+      d <- read_d("raw_data/reports/ns/ns_respiratory_watch_report.csv")
+      d <- d |>
+        dplyr::transmute(
+          .data$date_start,
+          .data$date_end,
+          .data$region,
+          .data$sub_region_1,
+          .data$cases,
+          .data$deaths,
+          .data$hosp_admissions,
+          .data$icu_admissions
+        )
+      utils::write.csv(
+        d,
+        file.path("extra_data", "ns_extra_respiratory_watch", "ns_extra_respiratory_watch.csv"),
+        row.names = FALSE,
+        na = "")
+    },
+    error = function(e) {
+      cat("Error in updating NS Respiratory Watch extra data:", fill = TRUE)
+      print(e)
     }
   )
 }
