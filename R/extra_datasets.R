@@ -68,8 +68,6 @@ extra_datasets <- function() {
   )
 
   # PHAC individual-level data
-
-  ## wrap function in error handling, as downloads are prone to failing
   tryCatch(
     {
       ## check if release date has changed
@@ -245,6 +243,70 @@ extra_datasets <- function() {
     },
     error = function(e) {
       cat("Error in updating individual-level PHAC dataset:", fill = TRUE)
+      print(e)
+    }
+  )
+
+  ## StatCan excess mortality data
+  tryCatch(
+    {
+      ## check if release date has changed
+      rd <- readLines(file.path("extra_data", "statcan_excess_mortality", "release_date.txt"))
+      if (length(rd) == 0) rd <- ""
+      rd_new <- rvest::read_html("https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=1310078401") |>
+        rvest::html_text2() |>
+        stringr::str_extract("(?<=Release date: )(\\d{4}-\\d{2}-\\d{2})")
+      if (rd_new == rd) {
+        # no update required
+      } else {
+        ## download file
+        tmp <- tempfile()
+        utils::download.file("https://www150.statcan.gc.ca/n1/tbl/csv/13100784-eng.zip", destfile = tmp)
+        statcan <- readr::read_csv(unz(tmp, filename = "13100784.csv"), col_types = readr::cols()) # silently
+        # process data
+        statcan <- statcan |>
+          dplyr::transmute(
+            region = dplyr::case_when(
+              .data$GEO == "Canada, place of occurrence" ~ "CAN",
+              .data$GEO == "Newfoundland and Labrador, place of occurrence" ~ "NL",
+              .data$GEO == "Prince Edward Island, place of occurrence" ~ "PE",
+              .data$GEO == "Nova Scotia, place of occurrence" ~ "NS",
+              .data$GEO == "New Brunswick, place of occurrence" ~ "NB",
+              .data$GEO == "Quebec, place of occurrence" ~ "QC",
+              .data$GEO == "Ontario, place of occurrence" ~ "ON",
+              .data$GEO == "Manitoba, place of occurrence" ~ "MB",
+              .data$GEO == "Saskatchewan, place of occurrence" ~ "SK",
+              .data$GEO == "Alberta, place of occurrence" ~ "AB",
+              .data$GEO == "British Columbia, place of occurrence" ~ "BC",
+              .data$GEO == "Yukon, place of occurrence" ~ "YT",
+              .data$GEO == "Northwest Territories, place of occurrence" ~ "NT",
+              .data$GEO == "Nunavut, place of occurrence" ~ "NU"
+            ),
+            date = .data$REF_DATE,
+            characteristics = dplyr::case_when(
+              .data$Characteristics == "Adjusted number of deaths" ~ "adjusted_num_of_deaths",
+              .data$Characteristics == "Lower 95% prediction interval of adjusted number of deaths" ~ "adjusted_num_of_deaths_pred_interval_95_lower",
+              .data$Characteristics == "Upper 95% prediction interval of adjusted number of deaths" ~ "adjusted_num_of_deaths_pred_interval_95_upper",
+              .data$Characteristics == "Expected number of deaths" ~ "expected_num_of_deaths",
+              .data$Characteristics == "Lower 95% prediction interval of expected number of deaths" ~ "expected_num_of_deaths_pred_interval_95_lower",
+              .data$Characteristics == "Upper 95%prediction interval of expected number of deaths" ~ "expected_num_of_deaths_pred_interval_95_upper",
+              .data$Characteristics == "Excess mortality estimate" ~ "excess_mortality_est",
+              .data$Characteristics == "Lower 95% prediction interval of excess mortality estimate" ~ "excess_mortality_est_pred_interval_95_lower",
+              .data$Characteristics == "Upper 95% prediction interval of excess mortality estimate" ~ "excess_mortality_est_pred_interval_95_upper"
+            ),
+            value = .data$VALUE
+          ) |>
+          tidyr::pivot_wider(names_from = .data$characteristics, values_from = .data$value) |>
+          # sort by region (CAN first) and date
+          dplyr::arrange(dplyr::if_else(region == "CAN", 0, 1), .data$region, .data$date)
+        # write dataset
+        utils::write.csv(statcan, file.path("extra_data", "statcan_excess_mortality", "statcan_excess_mortality.csv"), row.names = FALSE, quote = 1:2)
+        # write new release date
+        writeLines(as.character(rd_new), file.path("extra_data", "statcan_excess_mortality", "release_date.txt"))
+      }
+    },
+    error = function(e) {
+      cat("Error in updating StatCan excess mortality data:", fill = TRUE)
       print(e)
     }
   )
