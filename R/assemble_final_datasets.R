@@ -713,6 +713,20 @@ assemble_final_datasets <- function() {
   hosp_admissions_mb <- append_daily_d(hosp_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
 
+  ## nb
+  hosp_admissions_nb <- read_d("raw_data/reports/nb/nb_weekly_report.csv") |>
+    report_pluck("hosp_admissions", "cumulative_hosp_admissions", "value", "pt")
+  hosp_admissions_nb <- append_daily_d(
+    hosp_admissions_nb,
+    read_d("raw_data/reports/nb/nb_weekly_report_2.csv") |>
+      report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt")
+  )
+  hosp_admissions_nb <- append_daily_d(
+    hosp_admissions_nb,
+    read_d("raw_data/reports/nb/nb_weekly_report_3.csv") |>
+      report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt")
+  )
+
   ## ns
   ns1 <- read_d("raw_data/static/ns/ns_hosp_admissions_pt_ts.csv") |>
     dplyr::mutate(value = cumsum(value_daily)) |>
@@ -745,6 +759,21 @@ assemble_final_datasets <- function() {
       .data$date,
       value = cumsum(.data$value_daily))
 
+  ## sk
+  hosp_admissions_sk <- append_daily_d(
+    read_d("raw_data/reports/sk/sk_monthly_report.csv") |>
+      report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt") |>
+      report_recent() |>
+      dplyr::transmute(
+        .data$name,
+        .data$region,
+        .data$date,
+        value = cumsum(.data$value_daily)),
+    read_d("raw_data/reports/sk/sk_crisp_report.csv") |>
+      report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt") |>
+      report_recent()
+    )
+
   ## qc
   hosp_admissions_qc <- read_d("raw_data/active_ts/qc/qc_hosp_admissions_pt_ts.csv") |>
     date_shift(1)
@@ -757,10 +786,12 @@ assemble_final_datasets <- function() {
   hosp_admissions_pt <- collate_datasets("hosp_admissions") %>%
     dataset_format("pt")
 
-  ## censor daily value for first date of several PTs: MB, NT
+  ## censor daily value for first date of several PTs: MB, NB, NT
   ## cumulative values are given but time series does not start at the beginning
   hosp_admissions_pt[
     hosp_admissions_pt$region == "MB" & hosp_admissions_pt$date == as.Date("2020-05-16"), "value_daily"] <- NA
+  hosp_admissions_pt[
+    hosp_admissions_pt$region == "NB" & hosp_admissions_pt$date == as.Date("2022-04-02"), "value_daily"] <- NA
   hosp_admissions_pt[
     hosp_admissions_pt$region == "NT" & hosp_admissions_pt$date == as.Date("2021-08-25"), "value_daily"] <- NA
 
@@ -791,6 +822,20 @@ assemble_final_datasets <- function() {
   icu_admissions_mb <- append_daily_d(icu_admissions_mb, mb3)
   rm(mb1, mb2, mb3) # clean up
 
+  ## nb
+  icu_admissions_nb <- read_d("raw_data/reports/nb/nb_weekly_report.csv") |>
+    report_pluck("icu_admissions", "cumulative_icu_admissions", "value", "pt")
+  icu_admissions_nb <- append_daily_d(
+    icu_admissions_nb,
+    read_d("raw_data/reports/nb/nb_weekly_report_2.csv") |>
+      report_pluck("icu_admissions", "new_icu", "value_daily", "pt")
+  )
+  icu_admissions_nb <- append_daily_d(
+    icu_admissions_nb,
+    read_d("raw_data/reports/nb/nb_weekly_report_3.csv") |>
+      report_pluck("icu_admissions", "new_icu", "value_daily", "pt")
+  )
+
   ## nt
   icu_admissions_nt <- read_d("raw_data/static/nt/nt_icu_admissions_pt_ts.csv")
 
@@ -798,15 +843,32 @@ assemble_final_datasets <- function() {
   icu_admissions_qc <- read_d("raw_data/active_ts/qc/qc_icu_admissions_pt_ts.csv") |>
     date_shift(1)
 
+  ## sk
+  icu_admissions_sk <- append_daily_d(
+    read_d("raw_data/reports/sk/sk_monthly_report.csv") |>
+      report_pluck("icu_admissions", "new_icu", "value_daily", "pt") |>
+      report_recent() |>
+      dplyr::transmute(
+        .data$name,
+        .data$region,
+        .data$date,
+        value = cumsum(.data$value_daily)),
+    read_d("raw_data/reports/sk/sk_crisp_report.csv") |>
+      report_pluck("icu_admissions", "new_icu", "value_daily", "pt") |>
+      report_recent()
+  )
+
   ## collate and process final dataset
   suppressWarnings(rm(icu_admissions_pt)) # if re-running manually
   icu_admissions_pt <- collate_datasets("icu_admissions") %>%
     dataset_format("pt")
 
-  ## censor daily value for first date of several PTs: MB, NT
+  ## censor daily value for first date of several PTs: MB, NB, NT
   ## cumulative values are given but time series does not start at the beginning
   icu_admissions_pt[
     icu_admissions_pt$region == "MB" & icu_admissions_pt$date == as.Date("2020-05-16"), "value_daily"] <- NA
+  icu_admissions_pt[
+    icu_admissions_pt$region == "NB" & icu_admissions_pt$date == as.Date("2022-04-02"), "value_daily"] <- NA
   icu_admissions_pt[
     icu_admissions_pt$region == "NT" & icu_admissions_pt$date == as.Date("2021-09-08"), "value_daily"] <- NA
 
