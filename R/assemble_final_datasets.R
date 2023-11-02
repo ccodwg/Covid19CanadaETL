@@ -121,7 +121,12 @@ assemble_final_datasets <- function() {
     report_pluck("cases", "cases", "value_daily", "pt") %>%
     add_hr_col("Unknown")
   cases_ns <- append_daily_d(cases_ns, ns6)
-  rm(ns1, ns2, ns3, ns4, ns5, ns6) # cleanup
+  # slight overlap between end of last report (2023-08-31) and beginning of this report (2023-08-27)
+  ns7 <- read_d("raw_data/reports/ns/ns_respiratory_watch_report.csv") |>
+    report_pluck("cases", "cases", "value_daily", "pt") |>
+    add_hr_col("Unknown")
+  cases_ns <- append_daily_d(cases_ns, ns7)
+  rm(ns1, ns2, ns3, ns4, ns5, ns6, ns7) # cleanup
 
   ## nt
   cases_nt <- dplyr::bind_rows(
@@ -349,7 +354,12 @@ assemble_final_datasets <- function() {
         report_pluck("deaths", "deaths", "value_daily", "pt") %>%
         add_hr_col("Unknown")
       deaths_ns <- append_daily_d(deaths_ns, ns6)
-      rm(ns1, ns2, ns3, ns4, ns5, ns6) # cleanup
+      # slight overlap between end of last report (2023-08-31) and beginning of this report (2023-08-27)
+      ns7 <- read_d("raw_data/reports/ns/ns_respiratory_watch_report.csv") |>
+        report_pluck("deaths", "deaths", "value_daily", "pt") |>
+        add_hr_col("Unknown")
+      deaths_ns <- append_daily_d(deaths_ns, ns7)
+      rm(ns1, ns2, ns3, ns4, ns5, ns6, ns7) # cleanup
     },
     error = function(e) {
       print(e)
@@ -716,7 +726,11 @@ assemble_final_datasets <- function() {
     report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt")
   hosp_admissions_ns <- append_daily_d(ns1, ns2)
   hosp_admissions_ns <- append_daily_d(hosp_admissions_ns, ns3)
-  rm(ns1, ns2, ns3) # clean up
+  # slight overlap between end of last report (2023-08-31) and beginning of this report (2023-08-27)
+  ns4 <- read_d("raw_data/reports/ns/ns_respiratory_watch_report.csv") |>
+    report_pluck("hosp_admissions", "hosp_admissions", "value_daily", "pt")
+  hosp_admissions_ns <- append_daily_d(hosp_admissions_ns, ns4)
+  rm(ns1, ns2, ns3, ns4) # clean up
 
   ## nt
   hosp_admissions_nt <- read_d("raw_data/static/nt/nt_hosp_admissions_pt_ts.csv")
