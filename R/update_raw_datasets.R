@@ -391,9 +391,6 @@ update_raw_datasets <- function(skip_raw_update = FALSE) {
   # update reports datasets
   update_reports()
 
-  # update covid19tracker.ca datasets
-  update_covid19tracker()
-
   # update active_cumul datasets
   update_active_cumul(ds)
 
