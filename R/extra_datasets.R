@@ -8,6 +8,20 @@ extra_datasets <- function() {
   # announce start
   cat("Assembling extra datasets...", fill = TRUE)
 
+  # PHAC wastewater dataset
+  tryCatch(
+    {
+      # load data
+      d <- read_d("raw_data/active_ts/can/can_wastewater_copies_per_ml_subhr_ts.csv", val_numeric = TRUE)
+      # write dataset
+      write.csv(d, file.path("extra_data", "phac_wastewater", "phac_wastewater.csv"), row.names = FALSE, quote = 1:7, na = "")
+    },
+    error = function(e) {
+      cat("Error in updating PHAC wastewater dataset:", fill = TRUE)
+      print(e)
+    }
+  )
+
   # territories: case and testing data from RVDSS since week ending 2022-09-03
   tryCatch(
     {
