@@ -87,7 +87,7 @@ assemble_final_datasets <- function() {
       convert_hr_names(),
     read_d("raw_data/static/nl/nl_cases_hr_ts.csv") %>%
       convert_hr_names(),
-    read_d("raw_data/active_ts/nl/nl_cases_pt_ts.csv") %>%
+    read_d("raw_data/static/nl/nl_cases_pt_ts.csv") %>%
       dplyr::filter(.data$date >= as.Date("2022-03-12")) %>%
       dplyr::transmute(
         name = .data$name,
@@ -97,6 +97,13 @@ assemble_final_datasets <- function() {
         value = cumsum(.data$value_daily))
   ) %>%
     convert_hr_names()
+  cases_nl <- append_daily_d(
+    cases_nl,
+    read_d("raw_data/active_ts/nl/nl_cases_pt_ts.csv") |>
+      dplyr::filter(.data$date >= as.Date("2023-10-28")) |>
+      add_hr_col("Unknown") |>
+      convert_hr_names()
+    )
 
   ## ns
   ns1 <- read_d("raw_data/static/ns/ns_cases_hr_ts_1.csv")
