@@ -325,7 +325,14 @@ assemble_final_datasets <- function() {
     report_pluck("deaths", "deaths", "value_daily", "hr") %>%
     convert_hr_names()
   deaths_nl <- append_daily_d(deaths_nl, nl1)
-  rm(nl1) # clean up
+  nl2 <- read_d("raw_data/reports/nl/nl_respiratory_report.csv") |>
+    report_pluck("deaths", "deaths", "value_daily", "pt") |>
+    dplyr::transmute(
+      .data$name, .data$region, .data$date, value = cumsum(.data$value_daily)) |>
+    add_hr_col("Unknown") |>
+    convert_hr_names()
+  deaths_nl <- dplyr::bind_rows(deaths_nl, nl2)
+  rm(nl1, nl2) # clean up
 
   ## ns
   tryCatch(
