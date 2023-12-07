@@ -568,9 +568,9 @@ assemble_final_datasets <- function() {
 
   ## qc
   hospitalizations_qc <- dplyr::bind_rows(
-    read_d("raw_data/static/qc/qc_hospitalizations_pt_ts.csv") |>
+    read_d("raw_data/static/qc/qc_hospitalizations_pt_ts_1.csv") |>
       dplyr::filter(.data$date <= as.Date("2020-04-09")),
-    read_d("raw_data/active_ts/qc/qc_hospitalizations_pt_ts.csv")) |>
+    read_d("raw_data/static/qc/qc_hospitalizations_pt_ts_2.csv")) |>
     date_shift(1) # shift both datasets
 
   ## sk
@@ -679,9 +679,9 @@ assemble_final_datasets <- function() {
 
   ## qc
   icu_qc <- dplyr::bind_rows(
-    read_d("raw_data/static/qc/qc_icu_pt_ts.csv") |>
+    read_d("raw_data/static/qc/qc_icu_pt_ts_1.csv") |>
       dplyr::filter(.data$date <= as.Date("2020-04-09")),
-    read_d("raw_data/active_ts/qc/qc_icu_pt_ts.csv")) |>
+    read_d("raw_data/static/qc/qc_icu_pt_ts_2.csv")) |>
     date_shift(1) # shift both datasets
 
   ## sk
@@ -789,7 +789,7 @@ assemble_final_datasets <- function() {
     )
 
   ## qc
-  hosp_admissions_qc <- read_d("raw_data/active_ts/qc/qc_hosp_admissions_pt_ts.csv") |>
+  hosp_admissions_qc <- read_d("raw_data/static/qc/qc_hosp_admissions_pt_ts.csv") |>
     date_shift(1)
 
   ## yt
@@ -854,7 +854,7 @@ assemble_final_datasets <- function() {
   icu_admissions_nt <- read_d("raw_data/static/nt/nt_icu_admissions_pt_ts.csv")
 
   ## qc
-  icu_admissions_qc <- read_d("raw_data/active_ts/qc/qc_icu_admissions_pt_ts.csv") |>
+  icu_admissions_qc <- read_d("raw_data/static/qc/qc_icu_admissions_pt_ts.csv") |>
     date_shift(1)
 
   ## sk
