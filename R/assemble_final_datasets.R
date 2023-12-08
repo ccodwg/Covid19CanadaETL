@@ -773,6 +773,16 @@ assemble_final_datasets <- function() {
       .data$date,
       value = cumsum(.data$value_daily))
 
+  ## pe
+  hosp_admissions_pe <- dplyr::bind_rows(
+    read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
+      report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt") |>
+      dplyr::transmute(.data$name, .data$region, .data$date, value = cumsum(.data$value_daily)),
+    read_d("raw_data/static/pe/pe_hosp_admissions_pt_ts.csv"),
+    read_d("raw_data/reports/pe/pe_respiratory_illness_report.csv") |>
+      report_pluck("hosp_admissions", "cumulative_hosp_admissions", "value", "pt")
+  )
+
   ## sk
   hosp_admissions_sk <- append_daily_d(
     read_d("raw_data/reports/sk/sk_monthly_report.csv") |>
@@ -852,6 +862,16 @@ assemble_final_datasets <- function() {
 
   ## nt
   icu_admissions_nt <- read_d("raw_data/static/nt/nt_icu_admissions_pt_ts.csv")
+
+  ## pe
+  icu_admissions_pe <- dplyr::bind_rows(
+    read_d("raw_data/reports/pe/pe_daily_news_release.csv") |>
+      report_pluck("icu_admissions", "new_icu", "value_daily", "pt") |>
+      dplyr::transmute(.data$name, .data$region, .data$date, value = cumsum(.data$value_daily)),
+    read_d("raw_data/static/pe/pe_icu_admissions_pt_ts.csv"),
+    read_d("raw_data/reports/pe/pe_respiratory_illness_report.csv") |>
+      report_pluck("icu_admissions", "cumulative_icu_admissions", "value", "pt")
+  )
 
   ## qc
   icu_admissions_qc <- read_d("raw_data/static/qc/qc_icu_admissions_pt_ts.csv") |>
