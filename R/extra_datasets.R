@@ -8,11 +8,24 @@ extra_datasets <- function() {
   # announce start
   cat("Assembling extra datasets...", fill = TRUE)
 
+  # define maximum date for dataset
+  dataset_max_date <- as.Date("2023-12-31")
+
+  # function: filter for maximum date
+  filter_max_date <- function(d, date_col = "date") {
+    # ensure date col is correct type
+    d[[date_col]] <- as.Date(d[[date_col]])
+    # filter for maximum date
+    dplyr::filter(d, .data[[date_col]] <= dataset_max_date)
+  }
+
   # PHAC wastewater dataset
   tryCatch(
     {
       # load data
       d <- read_d("raw_data/active_ts/can/can_wastewater_copies_per_ml_subhr_ts.csv", val_numeric = TRUE)
+      # max date
+      d <- filter_max_date(d)
       # write dataset
       utils::write.csv(d, file.path("extra_data", "phac_wastewater", "phac_wastewater.csv"), row.names = FALSE, quote = 1:7, na = "")
     },
@@ -40,6 +53,9 @@ extra_datasets <- function() {
           cases_weekly = round(.data$percent_positivity_weekly * .data$tests_completed_weekly / 100),
           .data$update
         )
+      # max date
+      ter <- filter_max_date(ter, "date_end")
+      # write dataset
       utils::write.csv(ter, file.path("extra_data", "territories_rvdss_since_2022-09-03", "territories_rvdss_since_2022-09-03.csv"), row.names = FALSE, quote = 1:3, na = "")
     },
     error = function(e) {
@@ -51,13 +67,14 @@ extra_datasets <- function() {
   # sk biweekly HR-level case snapshots
   tryCatch(
     {
-      ## process
+      # process
       sk <- read_d("raw_data/reports/sk/sk_crisp_report.csv") |>
         dplyr::transmute(.data$date_start, .data$date_end, .data$region, .data$sub_region_1, cases_weekly = .data$cases) |>
         dplyr::filter(.data$date_start >= as.Date("2022-12-25") & !is.na(.data$sub_region_1) & !is.na(.data$cases_weekly)) |>
         convert_hr_names()
-
-      ## write file
+      # max date
+      sk <- filter_max_date(sk, "date_end")
+      # write file
       utils::write.csv(sk, file.path("extra_data", "sk_biweekly_cases_hr", "sk_biweekly_cases_hr.csv"), row.names = FALSE, quote = 1:4)
       rm(sk) # clean up
     },
@@ -299,6 +316,8 @@ extra_datasets <- function() {
           tidyr::pivot_wider(names_from = .data$characteristics, values_from = .data$value) |>
           # sort by region (CAN first) and date
           dplyr::arrange(dplyr::if_else(.data$region == "CAN", 0, 1), .data$region, .data$date)
+        # max date
+        statcan <- filter_max_date(statcan)
         # write dataset
         utils::write.csv(statcan, file.path("extra_data", "statcan_excess_mortality", "statcan_excess_mortality.csv"), row.names = FALSE, quote = 1:2)
         # write new release date
@@ -314,10 +333,14 @@ extra_datasets <- function() {
   ## hosp/ICU extra data report
   tryCatch(
     {
+      # process
       d <- googlesheets4::read_sheet(
         ss = "1ZTUb3fVzi6CLZAbU3lj6T6FTzl5Aq-arBNL49ru3VLo",
         sheet = "hospital_icu_extra",
       )
+      # max date
+      d <- filter_max_date(d)
+      # write dataset
       utils::write.csv(
         d,
         file.path("extra_data", "hospital_icu_extra", "hospital_icu_extra.csv"),
@@ -345,6 +368,9 @@ extra_datasets <- function() {
           .data$hosp_admissions,
           .data$icu_admissions
         )
+      # max date
+      d <- filter_max_date(d, "date_end")
+      # write dataset
       utils::write.csv(
         d,
         file.path("extra_data", "ns_extra_respiratory_watch", "ns_extra_respiratory_watch.csv"),

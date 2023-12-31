@@ -201,6 +201,10 @@ write_dataset <- function(d, geo, name, ext = "csv") {
       match.arg(ext, c("csv", "json"), several.ok = FALSE)
       # construct path
       out_path <- file.path("data", geo, paste(name, ext, sep = "."))
+      # set dataset max date (2023-12-31) for CSV datasets
+      if (ext == "csv") {
+        d <- dplyr::filter(d, .data$date <= as.Date("2023-12-31"))
+      }
       # check maximum date: stop with error if max date is greater than current date
       if (ext == "csv") {
         date_max <- max(d$date)
