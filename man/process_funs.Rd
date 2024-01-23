@@ -9,6 +9,7 @@
 \alias{add_as_of_date}
 \alias{report_pluck}
 \alias{report_recent}
+\alias{max_date}
 \alias{append_daily_d}
 \alias{collate_datasets}
 \alias{add_hr_col}
@@ -31,6 +32,8 @@ add_as_of_date(d, as_of_date)
 report_pluck(d, name, val, out_col, geo)
 
 report_recent(d)
+
+max_date(d, max_date)
 
 append_daily_d(d1, d2)
 
@@ -62,6 +65,8 @@ dataset_format(d, geo = c("pt", "hr", "sub-hr"), digits)
 \item{out_col}{The name of the value column in the output dataset.}
 
 \item{geo}{The geographic level of the data. One of "pt", "hr", "sub-hr".}
+
+\item{max_date}{The maximum date to trim the output dataset to.}
 
 \item{d1}{Dataset to append to. A cumulative value dataset.}
 

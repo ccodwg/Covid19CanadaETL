@@ -193,6 +193,10 @@ get_phac_d <- function(val, region, exclude_repatriated = TRUE, keep_up_to_date 
           warning("keep_up_to_date = TRUE is not supported with this value, ignoring...")
         }
       }
+      # filter weekly data to max date (2023-12-30)
+      if (val %in% c("cases", "deaths", "tests_completed", "tests_completed_rvdss")) {
+        d <- d[d$date <= as.Date("2023-12-30"), ]
+      }
       # return data
       d
     },

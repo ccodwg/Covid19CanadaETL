@@ -41,6 +41,8 @@ assemble_final_datasets <- function() {
   ab8 <- dplyr::bind_rows(ab6, ab7)
   cases_ab <- append_daily_d(cases_ab, ab8)
   rm(ab1, ab2, ab3, ab4, ab5, ab6, ab6_pt, ab7, ab8) # clean up
+  # trim to max date
+  cases_ab <- max_date(cases_ab, "2023-12-30")
 
   ## bc
   cases_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
@@ -80,6 +82,8 @@ assemble_final_datasets <- function() {
   cases_nb <- append_daily_d(cases_nb, nb1)
   cases_nb <- append_daily_d(cases_nb, nb2)
   rm(nb1, nb2) # cleanup
+  # trim to max date
+  cases_nb <- max_date(cases_nb, "2023-12-30")
 
   ## nl
   cases_nl <- dplyr::bind_rows(
@@ -104,6 +108,8 @@ assemble_final_datasets <- function() {
       add_hr_col("Unknown") |>
       convert_hr_names()
     )
+  # trim to max date
+  cases_nl <- max_date(cases_nl, "2023-12-30")
 
   ## ns
   ns1 <- read_d("raw_data/static/ns/ns_cases_hr_ts_1.csv")
@@ -168,6 +174,8 @@ assemble_final_datasets <- function() {
       add_hr_col("Prince Edward Island") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
+  # trim to max date
+  cases_pe <- max_date(cases_pe, "2023-12-30")
 
   ## qc
   tryCatch(
@@ -203,6 +211,8 @@ assemble_final_datasets <- function() {
           sub_region_1 = ifelse(.data$sub_region_1 == "Not Assigned", "Unknown", .data$sub_region_1))
       cases_sk <- append_daily_d(cases_sk, sk3)
       rm(sk1, sk2, sk3) # cleanup
+      # trim to max date
+      cases_sk <- max_date(cases_sk, "2023-12-30")
     },
     error = function(e) {
       print(e)
@@ -255,6 +265,8 @@ assemble_final_datasets <- function() {
       .data$name, .data$region, .data$sub_region_1, .data$date, value = .data$value + .data$value2)
   deaths_ab <- dplyr::bind_rows(deaths_ab, ab4)
   rm(ab1, ab2, ab2_max, ab3, ab_max, ab4) # clean up
+  # trim to max date
+  deaths_ab <- max_date(deaths_ab, "2023-12-30")
 
   ## bc
   deaths_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
@@ -412,6 +424,8 @@ assemble_final_datasets <- function() {
     convert_hr_names()
   deaths_on <- append_daily_d(on1, on2)
   rm(on1, on2) # clean up
+  # trim to max date
+  deaths_on <- max_date(deaths_on, "2023-12-30")
 
   ## pe
   deaths_pe <- dplyr::bind_rows(
@@ -421,6 +435,8 @@ assemble_final_datasets <- function() {
       add_hr_col("Prince Edward Island") %>%
       dplyr::filter(.data$date >= as.Date("2022-06-11"))
   )
+  # trim to max date
+  deaths_pe <- max_date(deaths_pe, "2023-12-30")
 
   ## qc
   tryCatch(
@@ -470,6 +486,8 @@ assemble_final_datasets <- function() {
       cat("Error in processing pipeline", fill = TRUE)
     }
   )
+  # trim to max date
+  deaths_sk <- max_date(deaths_sk, "2023-12-30")
 
   ## yt
   deaths_yt <- dplyr::bind_rows(
@@ -509,6 +527,8 @@ assemble_final_datasets <- function() {
   # remove seemingly erroneous data (unexplained spikes)
   hospitalizations_bc <- hospitalizations_bc[
     !hospitalizations_bc$date %in% as.Date(c("2021-04-01", "2021-05-05", "2022-04-28", "2022-08-18")), ]
+  # trim to max date
+  hospitalizations_bc <- max_date(hospitalizations_bc, "2023-12-21")
 
   ## mb
   hospitalizations_mb <- dplyr::bind_rows(
@@ -613,6 +633,8 @@ assemble_final_datasets <- function() {
   # remove seemingly erroneous data (unexplained spikes)
   icu_bc <- icu_bc[
     !icu_bc$date %in% as.Date(c("2021-04-01", "2021-05-05", "2022-04-28", "2022-08-18")), ]
+  # trim to max date
+  icu_bc <- max_date(icu_bc, "2023-12-21")
 
   ## mb
   icu_mb <- dplyr::bind_rows(
@@ -711,6 +733,8 @@ assemble_final_datasets <- function() {
       .data$region,
       .data$date,
       value = cumsum(.data$value_daily))
+  # trim to max date
+  hosp_admissions_ab <- max_date(hosp_admissions_ab, "2023-12-30")
 
   ## bc
   hosp_admissions_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
@@ -772,6 +796,8 @@ assemble_final_datasets <- function() {
       .data$region,
       .data$date,
       value = cumsum(.data$value_daily))
+  # trim to max date
+  hosp_admissions_on <- max_date(hosp_admissions_on, "2023-12-30")
 
   ## pe
   hosp_admissions_pe <- dplyr::bind_rows(
@@ -797,6 +823,8 @@ assemble_final_datasets <- function() {
       report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt") |>
       report_recent()
     )
+  # trim to max date
+  hosp_admissions_sk <- max_date(hosp_admissions_sk, "2023-12-30")
 
   ## qc
   hosp_admissions_qc <- read_d("raw_data/static/qc/qc_hosp_admissions_pt_ts.csv") |>
@@ -830,6 +858,8 @@ assemble_final_datasets <- function() {
       .data$region,
       .data$date,
       value = cumsum(.data$value_daily))
+  # trim to max date
+  icu_admissions_ab <- max_date(icu_admissions_ab, "2023-12-30")
 
   ## bc
   icu_admissions_bc  <- read_d("raw_data/reports/bc/bc_monthly_report_cumulative.csv") |>
@@ -891,6 +921,8 @@ assemble_final_datasets <- function() {
       report_pluck("icu_admissions", "new_icu", "value_daily", "pt") |>
       report_recent()
   )
+  # trim to max date
+  icu_admissions_sk <- max_date(icu_admissions_sk, "2023-12-30")
 
   ## collate and process final dataset
   suppressWarnings(rm(icu_admissions_pt)) # if re-running manually
@@ -990,6 +1022,8 @@ assemble_final_datasets <- function() {
   # add ON back to main dataset
   tests_completed_pt <- dplyr::bind_rows(tests_completed_pt, on3)
   rm(on1, on2, on3) # clean up
+  # trim to max date
+  tests_completed_pt <- max_date(tests_completed_pt, "2023-12-30")
 
   ## add PE data
   tests_completed_pt <- dplyr::bind_rows(

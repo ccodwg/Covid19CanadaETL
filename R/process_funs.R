@@ -19,6 +19,7 @@
 #' @param geo The geographic level of the data. One of "pt", "hr", "sub-hr".
 #' @param d1 Dataset to append to. A cumulative value dataset.
 #' @param d2 Dataset being appended. A daily value dataset.
+#' @param max_date The maximum date to trim the output dataset to.
 #'
 #' @name process_funs
 NULL
@@ -214,6 +215,24 @@ report_recent <- function(d) {
   )
 }
 
+#' Filter a dataset to a maximum date
+#'
+#' @rdname process_funs
+#'
+#' @export
+max_date <- function(d, max_date) {
+  tryCatch(
+    {
+      d %>%
+        dplyr::filter(.data$date <= as.Date(max_date))
+    },
+    error = function(e) {
+      print(e)
+      cat("Error in max_date", fill = TRUE)
+    }
+  )
+}
+
 #' Append a daily value dataset to a cumulative value dataset
 #'
 #' @rdname process_funs
@@ -400,6 +419,8 @@ agg2can <- function(d) {
 agg2can_completeness <- function(d) {
   tryCatch(
     {
+      # limit to maximum date (2023-12-31)
+      d <- d[d$date <= as.Date("2023-12-31"), ]
       # get region values for each date
       out_pt <- split(d$region, d$date)
       # count number of regions for each date
