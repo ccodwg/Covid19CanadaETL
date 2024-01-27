@@ -1058,28 +1058,44 @@ assemble_final_datasets <- function() {
   vaccine_coverage_dose_1_pt <- get_phac_d("vaccine_coverage_dose_1", "all") |>
     # censor Quebec after 2022-07-17
     dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
+    # censor other PTs after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_2_pt <- get_phac_d("vaccine_coverage_dose_2", "all") |>
     # censor Quebec after 2022-07-17
     dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
+    # censor other PTs after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_3_pt <- get_phac_d("vaccine_coverage_dose_3", "all") |>
     # censor Quebec after 2022-07-17
     dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
+    # censor other PTs after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
   vaccine_coverage_dose_4_pt <- get_phac_d("vaccine_coverage_dose_4", "all") |>
     # censor Quebec after 2022-07-17
     dplyr::filter(!(.data$region == "QC" & date > as.Date("2022-07-17"))) |>
+    # censor other PTs after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
 
   ## Canadian datasets (NOT an aggregate of PT datasets)
-  vaccine_coverage_dose_1_can <- get_phac_d("vaccine_coverage_dose_1", "CAN") %>%
+  vaccine_coverage_dose_1_can <- get_phac_d("vaccine_coverage_dose_1", "CAN") |>
+    # censor after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
-  vaccine_coverage_dose_2_can <- get_phac_d("vaccine_coverage_dose_2", "CAN") %>%
+  vaccine_coverage_dose_2_can <- get_phac_d("vaccine_coverage_dose_2", "CAN") |>
+    # censor after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
-  vaccine_coverage_dose_3_can <- get_phac_d("vaccine_coverage_dose_3", "CAN") %>%
+  vaccine_coverage_dose_3_can <- get_phac_d("vaccine_coverage_dose_3", "CAN") |>
+    # censor after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
-  vaccine_coverage_dose_4_can <- get_phac_d("vaccine_coverage_dose_4", "CAN") %>%
+  vaccine_coverage_dose_4_can <- get_phac_d("vaccine_coverage_dose_4", "CAN") |>
+    # censor after 2023-09-10
+    max_date("2023-09-10") |>
     dataset_format("pt", digits = 2)
 
   # vaccine_administration dataset
