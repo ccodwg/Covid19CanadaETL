@@ -1133,6 +1133,8 @@ assemble_final_datasets <- function() {
     ) |>
     # filter to Saturday to match PHAC dataset
     dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    # filter to max date (2023-12-03)
+    max_date("2023-12-03") |>
     dataset_format("pt")
 
   ## dose 2
@@ -1160,6 +1162,8 @@ assemble_final_datasets <- function() {
     ) |>
     # filter to Saturday to match PHAC dataset
     dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    # filter to max date (2023-12-03)
+    max_date("2023-12-03") |>
     dataset_format("pt")
 
   ## dose 3
@@ -1181,6 +1185,8 @@ assemble_final_datasets <- function() {
     ) |>
     # filter to Saturday to match PHAC dataset
     dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    # filter to max date (2023-12-03)
+    max_date("2023-12-03") |>
     dataset_format("pt")
 
   ## dose 4
@@ -1198,6 +1204,8 @@ assemble_final_datasets <- function() {
     ) |>
     # filter to Saturday to match PHAC dataset
     dplyr::filter(lubridate::wday(.data$date) == 7) |>
+    # filter to max date (2023-12-03)
+    max_date("2023-12-03") |>
     dataset_format("pt")
 
   # dose 5+
@@ -1215,6 +1223,8 @@ assemble_final_datasets <- function() {
     ) |>
     # filter to Saturday to match PHAC dataset
     dplyr::filter(lubridate::wday(.data$date) == 7) |>
+      # filter to max date (2023-12-03)
+      max_date("2023-12-03") |>
     dataset_format("pt")
 
   ## total doses
@@ -1244,6 +1254,8 @@ assemble_final_datasets <- function() {
       value = sum(.data$dose_1, .data$dose_2, .data$dose_3, .data$dose_4, .data$dose_5plus, na.rm = TRUE)
     ) |>
     dplyr::ungroup() |>
+    # filter to max date (2023-12-03)
+    max_date("2023-12-03") |>
     dataset_format("pt")
 
   # vaccine_distribution dataset
