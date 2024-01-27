@@ -105,11 +105,11 @@ extra_datasets <- function() {
 
         ## get values for episode week group from metadata webpage
         ewg <- rvest::read_html("https://www150.statcan.gc.ca/n1/pub/13-26-0002/132600022020001-eng.htm") |>
-          rvest::html_element(xpath = "//h2[contains(text(), 'Information on the Episode Week Group Indicator')]/following::table[1]") |>
+          rvest::html_element(xpath = "//table[caption[contains(., 'Information on the Episode Week Group Indicator')]]") |>
           rvest::html_table()
         ewg <- ewg[1:nrow(ewg) - 1, ] # remove 'not applicable'
         ewg <- stats::setNames(
-          paste0("Weeks ", ewg$`Episode weeks grouped`, ", grouped with week ", ewg$`Grouped with episode week`, ", 20", ewg$`Episode year`),
+          paste0("Weeks ", ewg$`Episode weeks grouped`, ", grouped with week ", ewg$`Grouped with episode week`, ", 20", ewg$`Episode Year`),
           as.integer(ewg$`Episode week group`))
         ewg[1] <- "No grouping"
 
@@ -165,7 +165,7 @@ extra_datasets <- function() {
             ), levels = c("Yes", "No", "Not Stated"))
           )
         # create lookup table of episode week dates
-        dates <- dplyr::select(.data$phac, .data$episode_year, .data$episode_week) |>
+        dates <- dplyr::select(phac, c("episode_year", "episode_week")) |>
           dplyr::distinct()
         names(dates) <- c("episode_year", "episode_week")
         dates$episode_year <- suppressWarnings(as.integer(dates$episode_year))
