@@ -180,7 +180,7 @@ assemble_final_datasets <- function() {
   ## qc
   tryCatch(
     {
-      cases_qc <- read_d("raw_data/active_ts/qc/qc_cases_hr_ts.csv") %>%
+      cases_qc <- read_d("raw_data/static/qc/qc_cases_hr_ts.csv") %>%
         dplyr::mutate(
           sub_region_1 = ifelse(.data$sub_region_1 %in% c("Inconnu", "Hors Qu\u00E9bec"),
                                 "Unknown", .data$sub_region_1)) %>%
@@ -441,7 +441,7 @@ assemble_final_datasets <- function() {
   ## qc
   tryCatch(
     {
-      deaths_qc <- read_d("raw_data/active_ts/qc/qc_deaths_hr_ts.csv") %>%
+      deaths_qc <- read_d("raw_data/static/qc/qc_deaths_hr_ts.csv") %>%
         dplyr::mutate(
           sub_region_1 = ifelse(.data$sub_region_1 %in% c("Inconnu", "Hors Qu\u00E9bec"),
                                 "Unknown", .data$sub_region_1)) %>%
@@ -1038,7 +1038,7 @@ assemble_final_datasets <- function() {
   ## add QC data
   tests_completed_pt <- dplyr::bind_rows(
     tests_completed_pt,
-    read_d("raw_data/active_ts/qc/qc_tests_completed_pt_ts.csv") |>
+    read_d("raw_data/static/qc/qc_tests_completed_pt_ts.csv") |>
       date_shift(1)
   )
 
