@@ -553,7 +553,8 @@ assemble_final_datasets <- function() {
 
   ## nl
   hospitalizations_nl <- dplyr::bind_rows(
-    read_d("raw_data/static/nl/nl_hospitalizations_pt_ts.csv")
+    read_d("raw_data/static/nl/nl_hospitalizations_pt_ts_1.csv"),
+    read_d("raw_data/static/nl/nl_hospitalizations_pt_ts_2.csv"),
   )
 
   ## ns
@@ -660,7 +661,8 @@ assemble_final_datasets <- function() {
   ## nl
   icu_nl <- dplyr::bind_rows(
     get_covid19tracker_d("icu", "NL", from = "2020-03-29", to = "2021-03-15"),
-    read_d("raw_data/static/nl/nl_icu_pt_ts.csv")
+    read_d("raw_data/static/nl/nl_icu_pt_ts_1.csv"),
+    read_d("raw_data/static/nl/nl_icu_pt_ts_2.csv"),
   )
 
   ## ns
