@@ -1,12 +1,18 @@
 #' Assemble and write extra datasets for CovidTimelineCanada
 #'
 #' @importFrom rlang .data
+#' @param skip_extra_update If TRUE, skip updating extra datasets. Default: FALSE.
 #'
 #' @export
-extra_datasets <- function() {
+extra_datasets <- function(skip_extra_update = FALSE) {
 
   # announce start
-  cat("Assembling extra datasets...", fill = TRUE)
+  if (skip_extra_update) {
+    cat("Skipping update of extra datasets...", fill = TRUE)
+    return(invisible(NULL))
+  } else {
+    cat("Assembling extra datasets", fill = TRUE)
+  }
 
   # define maximum date for dataset
   dataset_max_date <- as.Date("2023-12-31")

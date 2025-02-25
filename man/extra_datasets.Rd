@@ -4,7 +4,10 @@
 \alias{extra_datasets}
 \title{Assemble and write extra datasets for CovidTimelineCanada}
 \usage{
-extra_datasets()
+extra_datasets(skip_extra_update = FALSE)
+}
+\arguments{
+\item{skip_extra_update}{If TRUE, skip updating extra datasets. Default: FALSE.}
 }
 \description{
 Assemble and write extra datasets for CovidTimelineCanada

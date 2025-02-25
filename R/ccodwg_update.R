@@ -5,9 +5,10 @@
 #' @param path Alternative to email authentication. JSON identifying service
 #' account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.
 #' @param skip_raw_update If TRUE, skip updating raw datasets and just assemble final datasets. Default: FALSE.
+#' @param skip_extra_update If TRUE, skip updating extra datasets. Default: FALSE.
 #'
 #' @export
-ccodwg_update <- function(email = NULL, path = NULL, skip_raw_update = FALSE) {
+ccodwg_update <- function(email = NULL, path = NULL, skip_raw_update = FALSE, skip_extra_update = FALSE) {
 
   # setup log file
   log_path <- file.path(tempdir(), "COVID19CanadaETL.log")
@@ -33,7 +34,7 @@ ccodwg_update <- function(email = NULL, path = NULL, skip_raw_update = FALSE) {
   diff_datasets()
 
   # assemble and write extra datasets
-  extra_datasets()
+  extra_datasets(skip_extra_update)
 
   # load error log
   error_log <- readLines(log_path)

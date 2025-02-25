@@ -4,7 +4,12 @@
 \alias{ccodwg_update}
 \title{Perform update of CovidTimelineCanada}
 \usage{
-ccodwg_update(email = NULL, path = NULL, skip_raw_update = FALSE)
+ccodwg_update(
+  email = NULL,
+  path = NULL,
+  skip_raw_update = FALSE,
+  skip_extra_update = FALSE
+)
 }
 \arguments{
 \item{email}{The email to authenticate with Google Sheets. If not provided,
@@ -14,6 +19,8 @@ manual authentication will be requested.}
 account (e.g., file path to JSON). See \code{\link[googlesheets4]{gs4_auth}}.}
 
 \item{skip_raw_update}{If TRUE, skip updating raw datasets and just assemble final datasets. Default: FALSE.}
+
+\item{skip_extra_update}{If TRUE, skip updating extra datasets. Default: FALSE.}
 }
 \description{
 Perform update of CovidTimelineCanada
