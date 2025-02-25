@@ -767,6 +767,24 @@ assemble_final_datasets <- function() {
       report_pluck("hosp_admissions", "new_hospitalizations", "value_daily", "pt")
   )
 
+  ## nl
+  hosp_admissions_nl <- read_d("raw_data/reports/nl/nl_monthly_report.csv") %>%
+    report_pluck("hosp_admissions", "hosp_admissions", "value_daily", "hr") %>%
+    dplyr::filter(.data$date <= as.Date("2023-08-26")) %>%
+    dplyr::group_by(.data$sub_region_1) %>%
+    dplyr::transmute(
+      .data$name,
+      .data$region,
+      .data$date,
+      value = cumsum(.data$value_daily)
+    ) %>%
+    dplyr::ungroup() %>%
+    agg2pt(raw = TRUE)
+  hosp_admissions_nl <- append_daily_d(
+    hosp_admissions_nl,
+    read_d("raw_data/static/nl/nl_hosp_admissions_pt_ts.csv")
+  )
+
   ## ns
   ns1 <- read_d("raw_data/static/ns/ns_hosp_admissions_pt_ts.csv") |>
     dplyr::mutate(value = cumsum(.data$value_daily)) |>
@@ -890,6 +908,23 @@ assemble_final_datasets <- function() {
     icu_admissions_nb,
     read_d("raw_data/reports/nb/nb_weekly_report_3.csv") |>
       report_pluck("icu_admissions", "new_icu", "value_daily", "pt")
+  )
+
+  icu_admissions_nl <- read_d("raw_data/reports/nl/nl_monthly_report.csv") %>%
+    report_pluck("icu_admissions", "icu_admissions", "value_daily", "hr") %>%
+    dplyr::filter(.data$date <= as.Date("2023-08-26")) %>%
+    dplyr::group_by(.data$sub_region_1) %>%
+    dplyr::transmute(
+      .data$name,
+      .data$region,
+      .data$date,
+      value = cumsum(.data$value_daily)
+    ) %>%
+    dplyr::ungroup() %>%
+    agg2pt(raw = TRUE)
+  icu_admissions_nl <- append_daily_d(
+    icu_admissions_nl,
+    read_d("raw_data/static/nl/nl_icu_admissions_pt_ts.csv")
   )
 
   ## nt
