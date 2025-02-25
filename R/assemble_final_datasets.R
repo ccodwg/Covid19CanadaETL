@@ -291,7 +291,7 @@ assemble_final_datasets <- function() {
         add_hr_col("Unknown") %>%
         dplyr::mutate(value = .data$value - deaths_hr) # subtract deaths assigned to a health region
       mb3 <- get_phac_d("deaths", "MB", keep_up_to_date = TRUE) %>%
-        dplyr::filter(.data$date >= as.Date("2022-11-12")) %>%
+        dplyr::filter(.data$date >= as.Date("2022-11-12") & .data$date <= as.Date("2023-12-09")) %>%
         add_hr_col("Unknown") %>%
         dplyr::mutate(value = .data$value - deaths_hr) # subtract deaths assigned to a health region
       deaths_mb <- dplyr::bind_rows(mb1, mb2, mb3)
