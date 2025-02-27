@@ -30,9 +30,6 @@ ccodwg_update <- function(email = NULL, path = NULL, skip_raw_update = FALSE, sk
   # assemble and write final datasets
   assemble_final_datasets()
 
-  # update diffs datasets
-  diff_datasets()
-
   # assemble and write extra datasets
   extra_datasets(skip_extra_update)
 
